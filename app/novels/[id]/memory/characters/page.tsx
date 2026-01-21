@@ -97,13 +97,13 @@ export default async function CharactersPage({ params }: { params: Promise<{ id:
 
                 <div>
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">性格</h3>
-                  <p className="text-gray-800 dark:text-gray-200">{character.personality}</p>
+                  <p className="text-gray-800 dark:text-gray-200">{character.personality || '暂无'}</p>
                 </div>
 
                 <div>
                   <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">能力</h3>
                   <div className="flex flex-wrap gap-2">
-                    {character.abilities.map((ability, index) => (
+                    {(character.abilities || []).map((ability, index) => (
                       <span
                         key={index}
                         className="px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-200 text-sm border border-amber-300 dark:border-amber-700"
