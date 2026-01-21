@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { query, queryOne } from '@/lib/db';
 import { getAIService } from '@/lib/ai/factory';
 import { Novel, Chapter, Character, WorldSetting, Foreshadowing } from '@/lib/types';
-import { lightRAGClient } from '@/lib/lightrag/client';
+import { getLightRAGClient } from '@/lib/lightrag/client';
 
 export async function POST(
   request: Request,
@@ -31,9 +31,10 @@ export async function POST(
     // 1. 查询 LightRAG 获取相关上下文
     let ragContext = '';
     try {
-      const ragResult = await lightRAGClient.query(outline, 'hybrid');
-      if (ragResult) {
-        ragContext = ragResult;
+      const lightRAGClient = getLightRAGClient();
+      const ragResult = await lightRAGClient.query({ query: outline, mode: 'hybrid' });
+      if (ragResult && ragResult.response) {
+        ragContext = ragResult.response;
       }
     } catch (error) {
       console.warn('LightRAG query failed:', error);

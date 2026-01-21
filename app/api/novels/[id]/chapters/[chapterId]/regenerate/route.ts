@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { query, queryOne } from '@/lib/db';
 import { getAIService } from '@/lib/ai/factory';
 import { Novel, Chapter, Character, WorldSetting, Foreshadowing } from '@/lib/types';
-import { lightRAGClient } from '@/lib/lightrag/client';
+import { getLightRAGClient } from '@/lib/lightrag/client';
 
 export async function POST(
   request: Request,
@@ -37,9 +37,13 @@ export async function POST(
     // 检索相关记忆
     let ragContext = '';
     try {
-      const ragResult = await lightRAGClient.query(chapter.outline || chapter.content.substring(0, 200), 'hybrid');
-      if (ragResult) {
-        ragContext = ragResult;
+      const lightRAGClient = getLightRAGClient();
+      const ragResult = await lightRAGClient.query({
+        query: chapter.outline || chapter.content.substring(0, 200),
+        mode: 'hybrid'
+      });
+      if (ragResult && ragResult.response) {
+        ragContext = ragResult.response;
       }
     } catch (error) {
       console.warn('LightRAG query failed:', error);
