@@ -189,6 +189,17 @@ export async function POST(
       console.warn('Auto character extraction failed:', error);
     }
 
+    // 自动上传到LightRAG
+    try {
+      const lightRAGClient = getLightRAGClient();
+      await lightRAGClient.uploadDocument({
+        content: response.content,
+        description: `${novel.title} - 第${nextChapterNumber}章`
+      });
+    } catch (error) {
+      console.warn('Auto LightRAG upload failed:', error);
+    }
+
     return NextResponse.json(chapter);
   } catch (error) {
     console.error('Failed to generate chapter:', error);

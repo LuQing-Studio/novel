@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { ReviewChapterButton } from '@/components/ReviewChapterButton';
 import { EditChapterButton } from '@/components/EditChapterButton';
+import { VersionHistoryButton } from '@/components/VersionHistoryButton';
+import { AutoExtractButton } from '@/components/AutoExtractButton';
 import { Novel, Chapter } from '@/lib/types';
 
 async function getNovel(id: string): Promise<Novel | null> {
@@ -107,6 +109,8 @@ export default async function ChapterPage({
         {/* Review Section */}
         <div className="mb-8 space-y-4">
           <EditChapterButton novelId={id} chapterId={chapterId} initialContent={chapter.content} />
+          <VersionHistoryButton novelId={id} chapterId={chapterId} />
+          <AutoExtractButton novelId={id} chapterId={chapterId} />
           <ReviewChapterButton novelId={id} chapterId={chapterId} />
         </div>
 

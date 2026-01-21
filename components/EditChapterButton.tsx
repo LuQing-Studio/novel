@@ -16,6 +16,17 @@ export function EditChapterButton({ novelId, chapterId, initialContent }: {
   const handleSave = async () => {
     setSaving(true);
     try {
+      // 保存版本历史
+      await fetch(`/api/novels/${novelId}/chapters/${chapterId}/versions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: initialContent,
+          changeDescription: '保存编辑前版本'
+        }),
+      });
+
+      // 更新章节内容
       const res = await fetch(`/api/novels/${novelId}/chapters/${chapterId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },

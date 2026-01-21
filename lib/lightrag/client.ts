@@ -50,7 +50,7 @@ export class LightRAGClient {
     };
 
     if (this.config.apiKey) {
-      headers['Authorization'] = `Bearer ${this.config.apiKey}`;
+      headers['X-API-Key'] = this.config.apiKey;
     }
 
     const response = await fetch(url, {
@@ -74,9 +74,12 @@ export class LightRAGClient {
   }
 
   async uploadDocument(request: DocumentUploadRequest): Promise<{ message: string }> {
-    return this.request<{ message: string }>('/documents/upload', {
+    return this.request<{ message: string }>('/documents/text', {
       method: 'POST',
-      body: JSON.stringify(request),
+      body: JSON.stringify({
+        text: request.content,
+        description: request.description
+      }),
     });
   }
 

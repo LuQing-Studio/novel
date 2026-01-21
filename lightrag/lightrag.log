@@ -1,0 +1,597 @@
+2026-01-22 05:40:25,075 - lightrag - INFO - OpenAI LLM Options: {}
+2026-01-22 05:40:25,253 - lightrag - INFO - Embedding config: binding=openai model=BAAI/bge-m3 embedding_dim=1024 max_token_size=8192
+2026-01-22 05:40:25,253 - lightrag - INFO - Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=openai)
+2026-01-22 05:40:25,253 - lightrag - INFO - Embedding max_token_size: 8192 (from openai provider default)
+2026-01-22 05:40:25,253 - lightrag - INFO - Reranking is disabled
+2026-01-22 05:40:25,413 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 05:40:25,413 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 05:40:25,413 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 05:40:25,472 - lightrag - INFO - WebUI assets mounted at /webui
+2026-01-22 05:40:25,495 - uvicorn.error - INFO - Started server process [58203]
+2026-01-22 05:40:25,495 - uvicorn.error - INFO - Waiting for application startup.
+2026-01-22 05:40:25,495 - lightrag - INFO - PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
+2026-01-22 05:40:25,522 - lightrag - INFO - PostgreSQL, VECTOR extension enabled
+2026-01-22 05:40:25,544 - lightrag - INFO - PostgreSQL, Connected to database at localhost:5432/novle without SSL
+2026-01-22 05:40:25,569 - lightrag - INFO - chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:40:25,569 - lightrag - INFO - cache_type column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:40:25,569 - lightrag - INFO - queryparam column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:40:25,569 - lightrag - INFO - mode column does not exist in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:40:25,571 - lightrag - INFO - chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:40:25,572 - lightrag - INFO - llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+2026-01-22 05:40:25,577 - lightrag - INFO - track_id column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:40:25,577 - lightrag - INFO - Index on track_id column already exists for LIGHTRAG_DOC_STATUS table
+2026-01-22 05:40:25,578 - lightrag - INFO - metadata column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:40:25,579 - lightrag - INFO - error_msg column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:40:25,585 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_entity_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 05:40:25,586 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:40:25,587 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_relation_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 05:40:25,588 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:40:25,589 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 05:40:25,590 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:40:25,590 - lightrag - INFO - [novel] PostgreSQL Graph initialized: graph_name='novel_chunk_entity_relation'
+2026-01-22 05:40:25,590 - lightrag - WARNING - Could not create AGE extension: extension "age" is not available
+DETAIL:  Could not open extension control file "/usr/share/postgresql/16/extension/age.control": No such file or directory.
+HINT:  The extension must first be installed on the system where PostgreSQL is running.
+2026-01-22 05:40:25,591 - lightrag - ERROR - PostgreSQL database,
+sql:SELECT create_graph('novel_chunk_entity_relation'),
+data:None,
+error:function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2026-01-22 05:40:25,598 - uvicorn.error - ERROR - Traceback (most recent call last):
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/api/lightrag_server.py", line 358, in lifespan
+    await rag.initialize_storages()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/lightrag.py", line 705, in initialize_storages
+    await storage.initialize()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 3968, in initialize
+    await self.db.execute(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 1688, in execute
+    await self._run_with_retry(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 452, in _run_with_retry
+    async for attempt in AsyncRetrying(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 166, in __anext__
+    do = await self.iter(retry_state=self._retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 153, in iter
+    result = await action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/_utils.py", line 99, in inner
+    return call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/__init__.py", line 400, in <lambda>
+    self._add_action_func(lambda rs: rs.outcome.result())
+                                     ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 464, in _run_with_retry
+    await self.configure_age(connection, graph_name)
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 505, in configure_age
+    await connection.execute(  # type: ignore
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/asyncpg/connection.py", line 354, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 369, in query
+asyncpg.exceptions.UndefinedFunctionError: function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+
+2026-01-22 05:40:25,598 - uvicorn.error - ERROR - Application startup failed. Exiting.
+2026-01-22 05:40:58,076 - lightrag - INFO - OpenAI LLM Options: {}
+2026-01-22 05:40:58,219 - lightrag - INFO - Embedding config: binding=openai model=BAAI/bge-m3 embedding_dim=1024 max_token_size=8192
+2026-01-22 05:40:58,219 - lightrag - INFO - Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=openai)
+2026-01-22 05:40:58,219 - lightrag - INFO - Embedding max_token_size: 8192 (from openai provider default)
+2026-01-22 05:40:58,219 - lightrag - INFO - Reranking is disabled
+2026-01-22 05:40:58,366 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 05:40:58,366 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 05:40:58,366 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 05:40:58,424 - lightrag - INFO - WebUI assets mounted at /webui
+2026-01-22 05:40:58,447 - uvicorn.error - INFO - Started server process [58356]
+2026-01-22 05:40:58,447 - uvicorn.error - INFO - Waiting for application startup.
+2026-01-22 05:40:58,447 - lightrag - INFO - PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
+2026-01-22 05:40:58,464 - lightrag - INFO - PostgreSQL, VECTOR extension enabled
+2026-01-22 05:40:58,480 - lightrag - INFO - PostgreSQL, Connected to database at localhost:5432/novle without SSL
+2026-01-22 05:40:58,501 - lightrag - INFO - chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:40:58,501 - lightrag - INFO - cache_type column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:40:58,501 - lightrag - INFO - queryparam column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:40:58,501 - lightrag - INFO - mode column does not exist in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:40:58,504 - lightrag - INFO - chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:40:58,505 - lightrag - INFO - llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+2026-01-22 05:40:58,509 - lightrag - INFO - track_id column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:40:58,509 - lightrag - INFO - Index on track_id column already exists for LIGHTRAG_DOC_STATUS table
+2026-01-22 05:40:58,510 - lightrag - INFO - metadata column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:40:58,511 - lightrag - INFO - error_msg column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:40:58,516 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_entity_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 05:40:58,518 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:40:58,519 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_relation_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 05:40:58,520 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:40:58,521 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 05:40:58,522 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:40:58,522 - lightrag - INFO - [novel] PostgreSQL Graph initialized: graph_name='novel_chunk_entity_relation'
+2026-01-22 05:40:58,522 - lightrag - WARNING - Could not create AGE extension: extension "age" is not available
+DETAIL:  Could not open extension control file "/usr/share/postgresql/16/extension/age.control": No such file or directory.
+HINT:  The extension must first be installed on the system where PostgreSQL is running.
+2026-01-22 05:40:58,523 - lightrag - ERROR - PostgreSQL database,
+sql:SELECT create_graph('novel_chunk_entity_relation'),
+data:None,
+error:function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2026-01-22 05:40:58,530 - uvicorn.error - ERROR - Traceback (most recent call last):
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/api/lightrag_server.py", line 358, in lifespan
+    await rag.initialize_storages()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/lightrag.py", line 705, in initialize_storages
+    await storage.initialize()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 3968, in initialize
+    await self.db.execute(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 1688, in execute
+    await self._run_with_retry(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 452, in _run_with_retry
+    async for attempt in AsyncRetrying(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 166, in __anext__
+    do = await self.iter(retry_state=self._retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 153, in iter
+    result = await action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/_utils.py", line 99, in inner
+    return call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/__init__.py", line 400, in <lambda>
+    self._add_action_func(lambda rs: rs.outcome.result())
+                                     ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 464, in _run_with_retry
+    await self.configure_age(connection, graph_name)
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 505, in configure_age
+    await connection.execute(  # type: ignore
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/asyncpg/connection.py", line 354, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 369, in query
+asyncpg.exceptions.UndefinedFunctionError: function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+
+2026-01-22 05:40:58,530 - uvicorn.error - ERROR - Application startup failed. Exiting.
+2026-01-22 05:41:04,306 - lightrag - INFO - OpenAI LLM Options: {}
+2026-01-22 05:41:04,401 - lightrag - INFO - Embedding config: binding=openai model=BAAI/bge-m3 embedding_dim=1024 max_token_size=8192
+2026-01-22 05:41:04,401 - lightrag - INFO - Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=openai)
+2026-01-22 05:41:04,401 - lightrag - INFO - Embedding max_token_size: 8192 (from openai provider default)
+2026-01-22 05:41:04,401 - lightrag - INFO - Reranking is disabled
+2026-01-22 05:41:04,543 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 05:41:04,543 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 05:41:04,543 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 05:41:04,598 - lightrag - INFO - WebUI assets mounted at /webui
+2026-01-22 05:41:04,609 - uvicorn.error - INFO - Started server process [58406]
+2026-01-22 05:41:04,609 - uvicorn.error - INFO - Waiting for application startup.
+2026-01-22 05:41:04,609 - lightrag - INFO - PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
+2026-01-22 05:41:04,624 - lightrag - INFO - PostgreSQL, VECTOR extension enabled
+2026-01-22 05:41:04,641 - lightrag - INFO - PostgreSQL, Connected to database at localhost:5432/novle without SSL
+2026-01-22 05:41:04,663 - lightrag - INFO - chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:41:04,663 - lightrag - INFO - cache_type column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:41:04,663 - lightrag - INFO - queryparam column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:41:04,663 - lightrag - INFO - mode column does not exist in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:41:04,667 - lightrag - INFO - chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:41:04,668 - lightrag - INFO - llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+2026-01-22 05:41:04,673 - lightrag - INFO - track_id column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:41:04,673 - lightrag - INFO - Index on track_id column already exists for LIGHTRAG_DOC_STATUS table
+2026-01-22 05:41:04,674 - lightrag - INFO - metadata column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:41:04,675 - lightrag - INFO - error_msg column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:41:04,680 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_entity_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 05:41:04,681 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:41:04,682 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_relation_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 05:41:04,683 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:41:04,684 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 05:41:04,685 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:41:04,685 - lightrag - INFO - [novel] PostgreSQL Graph initialized: graph_name='novel_chunk_entity_relation'
+2026-01-22 05:41:04,685 - lightrag - WARNING - Could not create AGE extension: extension "age" is not available
+DETAIL:  Could not open extension control file "/usr/share/postgresql/16/extension/age.control": No such file or directory.
+HINT:  The extension must first be installed on the system where PostgreSQL is running.
+2026-01-22 05:41:04,686 - lightrag - ERROR - PostgreSQL database,
+sql:SELECT create_graph('novel_chunk_entity_relation'),
+data:None,
+error:function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2026-01-22 05:41:04,688 - uvicorn.error - ERROR - Traceback (most recent call last):
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/api/lightrag_server.py", line 358, in lifespan
+    await rag.initialize_storages()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/lightrag.py", line 705, in initialize_storages
+    await storage.initialize()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 3968, in initialize
+    await self.db.execute(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 1688, in execute
+    await self._run_with_retry(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 452, in _run_with_retry
+    async for attempt in AsyncRetrying(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 166, in __anext__
+    do = await self.iter(retry_state=self._retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 153, in iter
+    result = await action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/_utils.py", line 99, in inner
+    return call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/__init__.py", line 400, in <lambda>
+    self._add_action_func(lambda rs: rs.outcome.result())
+                                     ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 464, in _run_with_retry
+    await self.configure_age(connection, graph_name)
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 505, in configure_age
+    await connection.execute(  # type: ignore
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/asyncpg/connection.py", line 354, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 369, in query
+asyncpg.exceptions.UndefinedFunctionError: function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+
+2026-01-22 05:41:04,688 - uvicorn.error - ERROR - Application startup failed. Exiting.
+2026-01-22 05:41:59,136 - lightrag - INFO - OpenAI LLM Options: {}
+2026-01-22 05:41:59,234 - lightrag - INFO - Embedding config: binding=openai model=BAAI/bge-m3 embedding_dim=1024 max_token_size=8192
+2026-01-22 05:41:59,234 - lightrag - INFO - Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=openai)
+2026-01-22 05:41:59,234 - lightrag - INFO - Embedding max_token_size: 8192 (from openai provider default)
+2026-01-22 05:41:59,234 - lightrag - INFO - Reranking is disabled
+2026-01-22 05:41:59,509 - lightrag - INFO - [novel] Created new empty graph file: /Users/luhui/Desktop/novel/lightrag/rag_storage/novel/graph_chunk_entity_relation.graphml
+2026-01-22 05:41:59,510 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 05:41:59,510 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 05:41:59,510 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 05:41:59,540 - lightrag - INFO - WebUI assets mounted at /webui
+2026-01-22 05:41:59,551 - uvicorn.error - INFO - Started server process [58643]
+2026-01-22 05:41:59,551 - uvicorn.error - INFO - Waiting for application startup.
+2026-01-22 05:41:59,551 - lightrag - INFO - PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
+2026-01-22 05:41:59,582 - lightrag - INFO - PostgreSQL, VECTOR extension enabled
+2026-01-22 05:41:59,605 - lightrag - INFO - PostgreSQL, Connected to database at localhost:5432/novle without SSL
+2026-01-22 05:41:59,629 - lightrag - INFO - chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:41:59,630 - lightrag - INFO - cache_type column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:41:59,630 - lightrag - INFO - queryparam column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:41:59,630 - lightrag - INFO - mode column does not exist in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:41:59,632 - lightrag - INFO - chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:41:59,633 - lightrag - INFO - llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+2026-01-22 05:41:59,638 - lightrag - INFO - track_id column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:41:59,638 - lightrag - INFO - Index on track_id column already exists for LIGHTRAG_DOC_STATUS table
+2026-01-22 05:41:59,640 - lightrag - INFO - metadata column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:41:59,641 - lightrag - INFO - error_msg column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:41:59,646 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_entity_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 05:41:59,647 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:41:59,648 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_relation_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 05:41:59,649 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:41:59,650 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 05:41:59,651 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:41:59,651 - uvicorn.error - INFO - Application startup complete.
+2026-01-22 05:41:59,652 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:9621 (Press CTRL+C to quit)
+2026-01-22 05:42:51,175 - uvicorn.access - INFO - 127.0.0.1:53189 - "POST /documents/upload HTTP/1.1" 401
+2026-01-22 05:44:23,441 - uvicorn.access - INFO - 127.0.0.1:54142 - "POST /documents/upload HTTP/1.1" 401
+2026-01-22 05:45:07,568 - uvicorn.access - INFO - 127.0.0.1:54467 - "POST /documents/upload HTTP/1.1" 403
+2026-01-22 05:45:17,729 - uvicorn.access - INFO - 127.0.0.1:54604 - "POST /documents/upload HTTP/1.1" 401
+2026-01-22 05:45:30,171 - uvicorn.error - INFO - Shutting down
+2026-01-22 05:45:30,273 - uvicorn.error - INFO - Waiting for application shutdown.
+2026-01-22 05:45:30,286 - lightrag - INFO - Closed PostgreSQL database connection pool
+2026-01-22 05:45:30,286 - lightrag - INFO - Successfully finalized 12 storages
+2026-01-22 05:45:30,286 - uvicorn.error - INFO - Application shutdown complete.
+2026-01-22 05:45:30,286 - uvicorn.error - INFO - Finished server process [58643]
+2026-01-22 05:45:37,330 - lightrag - INFO - OpenAI LLM Options: {}
+2026-01-22 05:45:37,428 - lightrag - INFO - Embedding config: binding=openai model=BAAI/bge-m3 embedding_dim=1024 max_token_size=8192
+2026-01-22 05:45:37,429 - lightrag - INFO - Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=openai)
+2026-01-22 05:45:37,429 - lightrag - INFO - Embedding max_token_size: 8192 (from openai provider default)
+2026-01-22 05:45:37,429 - lightrag - INFO - Reranking is disabled
+2026-01-22 05:45:37,679 - lightrag - INFO - [novel] Created new empty graph file: /Users/luhui/Desktop/novel/lightrag/rag_storage/novel/graph_chunk_entity_relation.graphml
+2026-01-22 05:45:37,680 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 05:45:37,680 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 05:45:37,680 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 05:45:37,707 - lightrag - INFO - WebUI assets mounted at /webui
+2026-01-22 05:45:37,717 - uvicorn.error - INFO - Started server process [59561]
+2026-01-22 05:45:37,717 - uvicorn.error - INFO - Waiting for application startup.
+2026-01-22 05:45:37,718 - lightrag - INFO - PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
+2026-01-22 05:45:37,735 - lightrag - INFO - PostgreSQL, VECTOR extension enabled
+2026-01-22 05:45:37,751 - lightrag - INFO - PostgreSQL, Connected to database at localhost:5432/novle without SSL
+2026-01-22 05:45:37,774 - lightrag - INFO - chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:45:37,774 - lightrag - INFO - cache_type column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:45:37,774 - lightrag - INFO - queryparam column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:45:37,774 - lightrag - INFO - mode column does not exist in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:45:37,778 - lightrag - INFO - chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:45:37,780 - lightrag - INFO - llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+2026-01-22 05:45:37,785 - lightrag - INFO - track_id column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:45:37,785 - lightrag - INFO - Index on track_id column already exists for LIGHTRAG_DOC_STATUS table
+2026-01-22 05:45:37,787 - lightrag - INFO - metadata column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:45:37,788 - lightrag - INFO - error_msg column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:45:37,792 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_entity_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 05:45:37,793 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:45:37,794 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_relation_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 05:45:37,795 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:45:37,796 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 05:45:37,797 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:45:37,797 - uvicorn.error - INFO - Application startup complete.
+2026-01-22 05:45:37,797 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:9621 (Press CTRL+C to quit)
+2026-01-22 05:46:15,532 - uvicorn.access - INFO - 127.0.0.1:55253 - "POST /documents/upload HTTP/1.1" 401
+2026-01-22 05:46:34,677 - uvicorn.error - INFO - Shutting down
+2026-01-22 05:46:34,779 - uvicorn.error - INFO - Waiting for application shutdown.
+2026-01-22 05:46:34,785 - lightrag - INFO - Closed PostgreSQL database connection pool
+2026-01-22 05:46:34,785 - lightrag - INFO - Successfully finalized 12 storages
+2026-01-22 05:46:34,785 - uvicorn.error - INFO - Application shutdown complete.
+2026-01-22 05:46:34,785 - uvicorn.error - INFO - Finished server process [59561]
+2026-01-22 05:46:37,048 - lightrag - INFO - OpenAI LLM Options: {}
+2026-01-22 05:46:37,146 - lightrag - INFO - Embedding config: binding=openai model=BAAI/bge-m3 embedding_dim=1024 max_token_size=8192
+2026-01-22 05:46:37,146 - lightrag - INFO - Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=openai)
+2026-01-22 05:46:37,146 - lightrag - INFO - Embedding max_token_size: 8192 (from openai provider default)
+2026-01-22 05:46:37,146 - lightrag - INFO - Reranking is disabled
+2026-01-22 05:46:37,369 - lightrag - INFO - [novel] Created new empty graph file: /Users/luhui/Desktop/novel/lightrag/rag_storage/novel/graph_chunk_entity_relation.graphml
+2026-01-22 05:46:37,369 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 05:46:37,369 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 05:46:37,369 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 05:46:37,402 - lightrag - INFO - WebUI assets mounted at /webui
+2026-01-22 05:46:37,412 - uvicorn.error - INFO - Started server process [59778]
+2026-01-22 05:46:37,412 - uvicorn.error - INFO - Waiting for application startup.
+2026-01-22 05:46:37,412 - lightrag - INFO - PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
+2026-01-22 05:46:37,435 - lightrag - INFO - PostgreSQL, VECTOR extension enabled
+2026-01-22 05:46:37,450 - lightrag - INFO - PostgreSQL, Connected to database at localhost:5432/novle without SSL
+2026-01-22 05:46:37,474 - lightrag - INFO - chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:46:37,474 - lightrag - INFO - cache_type column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:46:37,474 - lightrag - INFO - queryparam column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:46:37,474 - lightrag - INFO - mode column does not exist in LIGHTRAG_LLM_CACHE table
+2026-01-22 05:46:37,479 - lightrag - INFO - chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:46:37,481 - lightrag - INFO - llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+2026-01-22 05:46:37,488 - lightrag - INFO - track_id column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:46:37,489 - lightrag - INFO - Index on track_id column already exists for LIGHTRAG_DOC_STATUS table
+2026-01-22 05:46:37,490 - lightrag - INFO - metadata column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:46:37,491 - lightrag - INFO - error_msg column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 05:46:37,496 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_entity_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 05:46:37,497 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:46:37,498 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_relation_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 05:46:37,498 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:46:37,499 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 05:46:37,500 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 05:46:37,500 - uvicorn.error - INFO - Application startup complete.
+2026-01-22 05:46:37,500 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:9621 (Press CTRL+C to quit)
+2026-01-22 05:46:55,639 - uvicorn.access - INFO - 127.0.0.1:55590 - "POST /documents/upload HTTP/1.1" 422
+2026-01-22 05:47:13,114 - uvicorn.access - INFO - 127.0.0.1:55749 - "POST /documents/upload HTTP/1.1" 422
+2026-01-22 05:55:35,797 - uvicorn.access - INFO - 127.0.0.1:59701 - "POST /documents/upload HTTP/1.1" 401
+2026-01-22 05:59:57,089 - uvicorn.access - INFO - 127.0.0.1:61472 - "POST /documents/upload HTTP/1.1" 422
+2026-01-22 06:01:56,133 - uvicorn.access - INFO - 127.0.0.1:62372 - "POST /documents/text HTTP/1.1" 200
+2026-01-22 06:01:56,187 - lightrag - INFO - Processing 1 document(s)
+2026-01-22 06:01:56,187 - lightrag - INFO - Extracting stage 1/1: no-file-path
+2026-01-22 06:01:56,187 - lightrag - INFO - Processing d-id: doc-90ae4c954f4a3549ac6c7afeab87d3ec
+2026-01-22 06:01:56,194 - lightrag - INFO - Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+2026-01-22 06:01:56,803 - lightrag - INFO - LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+2026-01-22 06:02:23,917 - lightrag - INFO -  == LLM cache == saving: default:extract:2a1d92e2abbd9e03d6d830db37ad6914
+2026-01-22 06:02:25,850 - lightrag - INFO -  == LLM cache == saving: default:extract:84c816f7dcd7f48d742b79a7650ff987
+2026-01-22 06:02:30,209 - lightrag - INFO -  == LLM cache == saving: default:extract:1eb5736b0361b9fee27653f7d721d578
+2026-01-22 06:02:33,581 - lightrag - INFO -  == LLM cache == saving: default:extract:2d7d9c0278570ed918bff9555f5d613f
+2026-01-22 06:02:33,609 - lightrag - INFO - Chunk 1 of 5 extracted 12 Ent + 12 Rel chunk-f0aa9b653ea90d701131557f450183bb
+2026-01-22 06:02:38,383 - lightrag - INFO -  == LLM cache == saving: default:extract:12c25feae88ff65e339d421f3fb9f643
+2026-01-22 06:02:38,619 - lightrag - INFO -  == LLM cache == saving: default:extract:f72aee2468028d7d9f842386b32627a7
+2026-01-22 06:02:38,635 - lightrag - INFO - Chunk 2 of 5 extracted 16 Ent + 15 Rel chunk-a6d2f0134600942e429136b0385d0f51
+2026-01-22 06:02:44,633 - lightrag - INFO -  == LLM cache == saving: default:extract:f7f75402edf0647a2f83e7422737b100
+2026-01-22 06:02:44,648 - lightrag - INFO - Chunk 3 of 5 extracted 20 Ent + 17 Rel chunk-05dd71c2ca7ea9fa5c835192ace048e4
+2026-01-22 06:03:02,708 - lightrag - INFO -  == LLM cache == saving: default:extract:656b96606a2b7d14493fd8e9dbd128a9
+2026-01-22 06:03:08,587 - lightrag - INFO -  == LLM cache == saving: default:extract:bbc47cac14afe6105cc539487d24a05f
+2026-01-22 06:03:08,599 - lightrag - INFO - Chunk 4 of 5 extracted 29 Ent + 27 Rel chunk-13e24528b45d6e9901e867385e2cb2f1
+2026-01-22 06:03:14,717 - lightrag - INFO -  == LLM cache == saving: default:extract:4c8732d4ead3a47a942633da1cc95f12
+2026-01-22 06:03:14,738 - lightrag - INFO - Chunk 5 of 5 extracted 15 Ent + 15 Rel chunk-63cefb830bc8a5918475486e39c7722b
+2026-01-22 06:03:14,739 - lightrag - INFO - Merging stage 1/1: no-file-path
+2026-01-22 06:03:14,739 - lightrag - INFO - Phase 1: Processing 78 entities from doc-90ae4c954f4a3549ac6c7afeab87d3ec (async: 8)
+2026-01-22 06:03:15,349 - lightrag - ERROR - Embedding func: Error in decorated function for task 4510175040_24365.804: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,349 - lightrag - WARNING - VDB entity_upsert attempt 1 failed for 三角函数公式: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,351 - lightrag - ERROR - Embedding func: Error in decorated function for task 4510173888_24365.771: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,352 - lightrag - ERROR - Embedding func: Error in decorated function for task 4510174656_24365.781: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,352 - lightrag - ERROR - Embedding func: Error in decorated function for task 4510096768_24365.827: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,352 - lightrag - WARNING - VDB entity_upsert attempt 1 failed for 修仙界: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,352 - lightrag - WARNING - VDB entity_upsert attempt 1 failed for 地球: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,352 - lightrag - WARNING - VDB entity_upsert attempt 1 failed for 化神期: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,353 - lightrag - ERROR - Embedding func: Error in decorated function for task 4510175232_24365.818: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,353 - lightrag - WARNING - VDB entity_upsert attempt 1 failed for 末法时代: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,355 - lightrag - ERROR - Embedding func: Error in decorated function for task 4401988224_24365.822: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,355 - lightrag - WARNING - VDB entity_upsert attempt 1 failed for 灵气: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,588 - lightrag - ERROR - Embedding func: Error in decorated function for task 4401988224_24366.053: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,588 - lightrag - WARNING - VDB entity_upsert attempt 1 failed for 自爆元婴: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,608 - lightrag - ERROR - Embedding func: Error in decorated function for task 4510175424_24366.063: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,609 - lightrag - WARNING - VDB entity_upsert attempt 1 failed for 三大宗门七大散修: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,701 - lightrag - ERROR - Embedding func: Error in decorated function for task 4509053376_24366.134: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,701 - lightrag - ERROR - Embedding func: Error in decorated function for task 4509052032_24366.134: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,701 - lightrag - ERROR - Embedding func: Error in decorated function for task 4509056064_24366.134: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,703 - lightrag - ERROR - Embedding func: Error in decorated function for task 4510175040_24366.125: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,703 - lightrag - ERROR - Embedding func: Error in decorated function for task 4509056640_24366.134: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,704 - lightrag - WARNING - VDB entity_upsert attempt 2 failed for 灵气: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,704 - lightrag - WARNING - VDB entity_upsert attempt 2 failed for 化神期: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,704 - lightrag - WARNING - VDB entity_upsert attempt 2 failed for 末法时代: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,704 - lightrag - WARNING - VDB entity_upsert attempt 2 failed for 三角函数公式: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,704 - lightrag - WARNING - VDB entity_upsert attempt 2 failed for 地球: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,705 - lightrag - ERROR - Embedding func: Error in decorated function for task 4510096768_24366.134: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,705 - lightrag - WARNING - VDB entity_upsert attempt 2 failed for 修仙界: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,932 - lightrag - ERROR - Embedding func: Error in decorated function for task 4401988224_24366.365: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,933 - lightrag - ERROR - Embedding func: Error in decorated function for task 4510175424_24366.385: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:15,933 - lightrag - WARNING - VDB entity_upsert attempt 2 failed for 自爆元婴: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:15,933 - lightrag - WARNING - VDB entity_upsert attempt 2 failed for 三大宗门七大散修: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+2026-01-22 06:03:16,062 - lightrag - ERROR - Embedding func: Error in decorated function for task 4509049728_24366.515: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:16,062 - lightrag - WARNING - VDB entity_upsert failed for 修仙界 after 3 attempts: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:16,062 - lightrag - ERROR - Error processing entity `修仙界`: VDB entity_upsert failed for 修仙界 after 3 attempts: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:16,073 - lightrag - ERROR - Traceback (most recent call last):
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/utils.py", line 161, in safe_vdb_operation_with_exception
+    await operation()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 2961, in upsert
+    embeddings_list = await asyncio.gather(*embedding_tasks)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/utils.py", line 503, in __call__
+    result = await self.func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/utils.py", line 1016, in wait_func
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/utils.py", line 720, in worker
+    result = await asyncio.wait_for(
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/api/lightrag_server.py", line 864, in optimized_embedding_function
+    return await actual_func(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 189, in async_wrapped
+    return await copy(fn, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 111, in __call__
+    do = await self.iter(retry_state=retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 153, in iter
+    result = await action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/_utils.py", line 99, in inner
+    return call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/__init__.py", line 400, in <lambda>
+    self._add_action_func(lambda rs: rs.outcome.result())
+                                     ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 114, in __call__
+    result = await fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/llm/openai.py", line 831, in openai_embed
+    response = await openai_async_client.embeddings.create(**api_params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/openai/resources/embeddings.py", line 251, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/openai/_base_client.py", line 1797, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/openai/_base_client.py", line 1597, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.PermissionDeniedError: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/operate.py", line 2499, in _locked_process_entity_name
+    entity_data = await _merge_nodes_then_upsert(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/operate.py", line 1861, in _merge_nodes_then_upsert
+    await safe_vdb_operation_with_exception(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/utils.py", line 167, in safe_vdb_operation_with_exception
+    raise Exception(error_msg) from e
+Exception: VDB entity_upsert failed for 修仙界 after 3 attempts: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/lightrag.py", line 1986, in process_document
+    await merge_nodes_and_edges(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/operate.py", line 2574, in merge_nodes_and_edges
+    raise first_exception
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/operate.py", line 2555, in merge_nodes_and_edges
+    result = task.result()
+             ^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/operate.py", line 2535, in _locked_process_entity_name
+    raise prefixed_exception from e
+Exception: `修仙界`: VDB entity_upsert failed for 修仙界 after 3 attempts: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+
+2026-01-22 06:03:16,073 - lightrag - ERROR - Merging stage failed in document 1/1: no-file-path
+2026-01-22 06:03:16,075 - lightrag - ERROR - Embedding func: Error in decorated function for task 4509055680_24366.479: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:16,075 - lightrag - ERROR - Embedding func: Error in decorated function for task 4509052032_24366.479: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:16,075 - lightrag - ERROR - Embedding func: Error in decorated function for task 4509056640_24366.479: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:16,075 - lightrag - ERROR - Embedding func: Error in decorated function for task 4510089856_24366.479: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:16,077 - lightrag - ERROR - Embedding func: Error in decorated function for task 4509056064_24366.479: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:16,080 - lightrag - INFO - Enqueued document processing pipeline stopped
+2026-01-22 06:03:16,240 - lightrag - ERROR - Embedding func: Error in decorated function for task 4401988224_24366.71: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+2026-01-22 06:03:16,246 - lightrag - ERROR - Embedding func: Error in decorated function for task 4510175424_24366.71: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.

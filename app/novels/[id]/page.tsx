@@ -66,6 +66,12 @@ export default async function NovelDetailPage({ params }: { params: Promise<{ id
             <div className="flex items-center gap-3">
               <ExportButton novelId={id} />
               <Link
+                href={`/novels/${id}/knowledge-graph`}
+                className="px-4 py-2 bg-purple-700 dark:bg-purple-600 text-white font-medium hover:bg-purple-800 dark:hover:bg-purple-700 transition-colors"
+              >
+                知识图谱
+              </Link>
+              <Link
                 href={`/novels/${id}/memory`}
                 className="px-4 py-2 bg-amber-700 dark:bg-amber-600 text-white font-medium hover:bg-amber-800 dark:hover:bg-amber-700 transition-colors"
               >

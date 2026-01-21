@@ -1,6 +1,6 @@
 WARNING:root:>> Forcing workers=1 in uvicorn mode(Ignoring workers=2)
 
-LightRAG log file: /Users/luhui/Desktop/novel/lightrag.log
+LightRAG log file: /Users/luhui/Desktop/novel/lightrag/lightrag.log
 
 [36m
     ╔══════════════════════════════════════════════════════════════╗
@@ -19,12 +19,12 @@ LightRAG log file: /Users/luhui/Desktop/novel/lightrag.log
 [37m    ├─ Ollama Emulating Model: [0m[33mlightrag:latest[0m
 [37m    ├─ Log Level: [0m[33mINFO[0m
 [37m    ├─ Verbose Debug: [0m[33mFalse[0m
-[37m    ├─ API Key: [0m[33mSet[0m
+[37m    ├─ API Key: [0m[33mNot Set[0m
 [37m    └─ JWT Auth: [0m[33mDisabled[0m
 [35m
 📂 Directory Configuration:[0m
-[37m    ├─ Working Directory: [0m[33m/Users/luhui/Desktop/novel/rag_storage[0m
-[37m    └─ Input Directory: [0m[33m/Users/luhui/Desktop/novel/inputs[0m
+[37m    ├─ Working Directory: [0m[33m/Users/luhui/Desktop/novel/lightrag/rag_storage[0m
+[37m    └─ Input Directory: [0m[33m/Users/luhui/Desktop/novel/lightrag/inputs[0m
 [35m
 🤖 LLM Configuration:[0m
 [37m    ├─ Binding: [0m[33mopenai[0m
@@ -54,7 +54,7 @@ LightRAG log file: /Users/luhui/Desktop/novel/lightrag.log
 💾 Storage Configuration:[0m
 [37m    ├─ KV Storage: [0m[33mPGKVStorage[0m
 [37m    ├─ Vector Storage: [0m[33mPGVectorStorage[0m
-[37m    ├─ Graph Storage: [0m[33mPGGraphStorage[0m
+[37m    ├─ Graph Storage: [0m[33mNetworkXStorage[0m
 [37m    ├─ Document Status Storage: [0m[33mPGDocStatusStorage[0m
 [37m    └─ Workspace: [0m[33mnovel[0m
 [32m
@@ -75,21 +75,17 @@ LightRAG log file: /Users/luhui/Desktop/novel/lightrag.log
       • Windows: Run 'ipconfig' in terminal
       • Linux/Mac: Run 'ifconfig' or 'ip addr' in terminal
     [0m
-[33m
-⚠️  Security Notice:[0m
-[37m    API Key authentication is enabled.
-    Make sure to include the X-API-Key header in all your requests.
-    [0m
 INFO: OpenAI LLM Options: {}
 INFO: Embedding config: binding=openai model=BAAI/bge-m3 embedding_dim=1024 max_token_size=8192
 INFO: Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=openai)
 INFO: Embedding max_token_size: 8192 (from openai provider default)
 INFO: Reranking is disabled
+INFO: [novel] Created new empty graph file: /Users/luhui/Desktop/novel/lightrag/rag_storage/novel/graph_chunk_entity_relation.graphml
 INFO: PostgreSQL table: LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
 INFO: PostgreSQL table: LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
 INFO: PostgreSQL table: LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
 INFO: WebUI assets mounted at /webui
-INFO: Started server process [29849]
+INFO: Started server process [59778]
 INFO: Waiting for application startup.
 INFO: PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
 INFO: PostgreSQL, VECTOR extension enabled
@@ -110,59 +106,97 @@ INFO: HNSW vector index idx_lightrag_vdb_relation_baai_bge_m3_1024d_hnsw_cosine 
 WARNING: PostgreSQL: workspace data in table 'LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
 INFO: HNSW vector index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
 WARNING: PostgreSQL: workspace data in table 'LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
-INFO: [novel] PostgreSQL Graph initialized: graph_name='novel_chunk_entity_relation'
-WARNING: Could not create AGE extension: extension "age" is not available
-DETAIL:  Could not open extension control file "/usr/share/postgresql/16/extension/age.control": No such file or directory.
-HINT:  The extension must first be installed on the system where PostgreSQL is running.
-ERROR: PostgreSQL database,
-sql:SELECT create_graph('novel_chunk_entity_relation'),
-data:None,
-error:function create_graph(unknown) does not exist
-HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+INFO: Application startup complete.
+INFO: Uvicorn running on http://0.0.0.0:9621 (Press CTRL+C to quit)
+INFO: 127.0.0.1:55590 - "POST /documents/upload HTTP/1.1" 422
+INFO: 127.0.0.1:55749 - "POST /documents/upload HTTP/1.1" 422
+INFO: 127.0.0.1:59701 - "POST /documents/upload HTTP/1.1" 401
+INFO: 127.0.0.1:61472 - "POST /documents/upload HTTP/1.1" 422
+INFO: 127.0.0.1:62372 - "POST /documents/text HTTP/1.1" 200
+INFO: Processing 1 document(s)
+INFO: Extracting stage 1/1: no-file-path
+INFO: Processing d-id: doc-90ae4c954f4a3549ac6c7afeab87d3ec
+INFO: Embedding func: 8 new workers initialized (Timeouts: Func: 30s, Worker: 60s, Health Check: 75s)
+INFO: LLM func: 4 new workers initialized (Timeouts: Func: 180s, Worker: 360s, Health Check: 375s)
+INFO:  == LLM cache == saving: default:extract:2a1d92e2abbd9e03d6d830db37ad6914
+INFO:  == LLM cache == saving: default:extract:84c816f7dcd7f48d742b79a7650ff987
+INFO:  == LLM cache == saving: default:extract:1eb5736b0361b9fee27653f7d721d578
+INFO:  == LLM cache == saving: default:extract:2d7d9c0278570ed918bff9555f5d613f
+INFO: Chunk 1 of 5 extracted 12 Ent + 12 Rel chunk-f0aa9b653ea90d701131557f450183bb
+INFO:  == LLM cache == saving: default:extract:12c25feae88ff65e339d421f3fb9f643
+INFO:  == LLM cache == saving: default:extract:f72aee2468028d7d9f842386b32627a7
+INFO: Chunk 2 of 5 extracted 16 Ent + 15 Rel chunk-a6d2f0134600942e429136b0385d0f51
+INFO:  == LLM cache == saving: default:extract:f7f75402edf0647a2f83e7422737b100
+INFO: Chunk 3 of 5 extracted 20 Ent + 17 Rel chunk-05dd71c2ca7ea9fa5c835192ace048e4
+INFO:  == LLM cache == saving: default:extract:656b96606a2b7d14493fd8e9dbd128a9
+INFO:  == LLM cache == saving: default:extract:bbc47cac14afe6105cc539487d24a05f
+INFO: Chunk 4 of 5 extracted 29 Ent + 27 Rel chunk-13e24528b45d6e9901e867385e2cb2f1
+INFO:  == LLM cache == saving: default:extract:4c8732d4ead3a47a942633da1cc95f12
+INFO: Chunk 5 of 5 extracted 15 Ent + 15 Rel chunk-63cefb830bc8a5918475486e39c7722b
+INFO: Merging stage 1/1: no-file-path
+INFO: Phase 1: Processing 78 entities from doc-90ae4c954f4a3549ac6c7afeab87d3ec (async: 8)
+ERROR: Embedding func: Error in decorated function for task 4510175040_24365.804: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+WARNING: VDB entity_upsert attempt 1 failed for 三角函数公式: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+ERROR: Embedding func: Error in decorated function for task 4510173888_24365.771: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+ERROR: Embedding func: Error in decorated function for task 4510174656_24365.781: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+ERROR: Embedding func: Error in decorated function for task 4510096768_24365.827: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+WARNING: VDB entity_upsert attempt 1 failed for 修仙界: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+WARNING: VDB entity_upsert attempt 1 failed for 地球: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+WARNING: VDB entity_upsert attempt 1 failed for 化神期: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+ERROR: Embedding func: Error in decorated function for task 4510175232_24365.818: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+WARNING: VDB entity_upsert attempt 1 failed for 末法时代: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+ERROR: Embedding func: Error in decorated function for task 4401988224_24365.822: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+WARNING: VDB entity_upsert attempt 1 failed for 灵气: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+ERROR: Embedding func: Error in decorated function for task 4401988224_24366.053: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+WARNING: VDB entity_upsert attempt 1 failed for 自爆元婴: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+ERROR: Embedding func: Error in decorated function for task 4510175424_24366.063: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+WARNING: VDB entity_upsert attempt 1 failed for 三大宗门七大散修: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+ERROR: Embedding func: Error in decorated function for task 4509053376_24366.134: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+ERROR: Embedding func: Error in decorated function for task 4509052032_24366.134: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+ERROR: Embedding func: Error in decorated function for task 4509056064_24366.134: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+ERROR: Embedding func: Error in decorated function for task 4510175040_24366.125: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+ERROR: Embedding func: Error in decorated function for task 4509056640_24366.134: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+WARNING: VDB entity_upsert attempt 2 failed for 灵气: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+WARNING: VDB entity_upsert attempt 2 failed for 化神期: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+WARNING: VDB entity_upsert attempt 2 failed for 末法时代: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+WARNING: VDB entity_upsert attempt 2 failed for 三角函数公式: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+WARNING: VDB entity_upsert attempt 2 failed for 地球: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+ERROR: Embedding func: Error in decorated function for task 4510096768_24366.134: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+WARNING: VDB entity_upsert attempt 2 failed for 修仙界: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+ERROR: Embedding func: Error in decorated function for task 4401988224_24366.365: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+ERROR: Embedding func: Error in decorated function for task 4510175424_24366.385: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+WARNING: VDB entity_upsert attempt 2 failed for 自爆元婴: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+WARNING: VDB entity_upsert attempt 2 failed for 三大宗门七大散修: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction., retrying...
+ERROR: Embedding func: Error in decorated function for task 4509049728_24366.515: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+WARNING: VDB entity_upsert failed for 修仙界 after 3 attempts: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+ERROR: Error processing entity `修仙界`: VDB entity_upsert failed for 修仙界 after 3 attempts: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
 ERROR: Traceback (most recent call last):
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/starlette/routing.py", line 694, in lifespan
-    async with self.lifespan_context(app) as maybe_state:
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
-    return await anext(self.gen)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
-    async with original_context(app) as maybe_original_state:
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
-    return await anext(self.gen)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
-    async with original_context(app) as maybe_original_state:
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
-    return await anext(self.gen)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
-    async with original_context(app) as maybe_original_state:
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
-    return await anext(self.gen)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
-    async with original_context(app) as maybe_original_state:
-               ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
-    return await anext(self.gen)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/api/lightrag_server.py", line 358, in lifespan
-    await rag.initialize_storages()
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/lightrag.py", line 705, in initialize_storages
-    await storage.initialize()
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 3968, in initialize
-    await self.db.execute(
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 1688, in execute
-    await self._run_with_retry(
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 452, in _run_with_retry
-    async for attempt in AsyncRetrying(
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 166, in __anext__
-    do = await self.iter(retry_state=self._retry_state)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/utils.py", line 161, in safe_vdb_operation_with_exception
+    await operation()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 2961, in upsert
+    embeddings_list = await asyncio.gather(*embedding_tasks)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/utils.py", line 503, in __call__
+    result = await self.func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/utils.py", line 1016, in wait_func
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/utils.py", line 720, in worker
+    result = await asyncio.wait_for(
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/api/lightrag_server.py", line 864, in optimized_embedding_function
+    return await actual_func(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 189, in async_wrapped
+    return await copy(fn, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 111, in __call__
+    do = await self.iter(retry_state=retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 153, in iter
     result = await action(retry_state)
              ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -177,16 +211,54 @@ ERROR: Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^
   File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
     raise self._exception
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 464, in _run_with_retry
-    await self.configure_age(connection, graph_name)
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 505, in configure_age
-    await connection.execute(  # type: ignore
-  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/asyncpg/connection.py", line 354, in execute
-    result = await self._protocol.query(query, timeout)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "asyncpg/protocol/protocol.pyx", line 369, in query
-asyncpg.exceptions.UndefinedFunctionError: function create_graph(unknown) does not exist
-HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 114, in __call__
+    result = await fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/llm/openai.py", line 831, in openai_embed
+    response = await openai_async_client.embeddings.create(**api_params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/openai/resources/embeddings.py", line 251, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/openai/_base_client.py", line 1797, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/openai/_base_client.py", line 1597, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.PermissionDeniedError: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
 
-ERROR: Application startup failed. Exiting.
-Starting Uvicorn server in single-process mode on 0.0.0.0:9621
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/operate.py", line 2499, in _locked_process_entity_name
+    entity_data = await _merge_nodes_then_upsert(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/operate.py", line 1861, in _merge_nodes_then_upsert
+    await safe_vdb_operation_with_exception(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/utils.py", line 167, in safe_vdb_operation_with_exception
+    raise Exception(error_msg) from e
+Exception: VDB entity_upsert failed for 修仙界 after 3 attempts: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/lightrag.py", line 1986, in process_document
+    await merge_nodes_and_edges(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/operate.py", line 2574, in merge_nodes_and_edges
+    raise first_exception
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/operate.py", line 2555, in merge_nodes_and_edges
+    result = task.result()
+             ^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/operate.py", line 2535, in _locked_process_entity_name
+    raise prefixed_exception from e
+Exception: `修仙界`: VDB entity_upsert failed for 修仙界 after 3 attempts: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+
+ERROR: Merging stage failed in document 1/1: no-file-path
+ERROR: Embedding func: Error in decorated function for task 4509055680_24366.479: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+ERROR: Embedding func: Error in decorated function for task 4509052032_24366.479: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+ERROR: Embedding func: Error in decorated function for task 4509056640_24366.479: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+ERROR: Embedding func: Error in decorated function for task 4510089856_24366.479: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+ERROR: Embedding func: Error in decorated function for task 4509056064_24366.479: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+INFO: Enqueued document processing pipeline stopped
+ERROR: Embedding func: Error in decorated function for task 4401988224_24366.71: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
+ERROR: Embedding func: Error in decorated function for task 4510175424_24366.71: Error code: 403 - RPM limit exceeded. Please complete identity verification to lift the restriction.
