@@ -3,6 +3,7 @@ import { query, queryOne } from '@/lib/db';
 import { getAIService } from '@/lib/ai/factory';
 import { Novel, Chapter, Character, WorldSetting, Foreshadowing } from '@/lib/types';
 import { getLightRAGClient } from '@/lib/lightrag/client';
+import { countWords } from '@/lib/utils/text';
 
 export async function POST(
   request: Request,
@@ -105,14 +106,33 @@ export async function POST(
       });
     }
 
-    // 添加待揭示伏笔
-    const relevantForeshadowing = foreshadowing.filter(
+    // 添加伏笔(分为铺垫和揭示两个阶段)
+    const BUILDUP_CHAPTERS = 5; // 提前5章开始铺垫
+
+    // 需要开始铺垫的伏笔
+    const buildupForeshadowing = foreshadowing.filter(
+      f => f.planned_reveal_chapter &&
+           chapter.number >= f.planned_reveal_chapter - BUILDUP_CHAPTERS &&
+           chapter.number < f.planned_reveal_chapter
+    );
+
+    // 待揭示的伏笔
+    const revealForeshadowing = foreshadowing.filter(
       f => f.planned_reveal_chapter && f.planned_reveal_chapter <= chapter.number
     );
-    if (relevantForeshadowing.length > 0) {
+
+    if (buildupForeshadowing.length > 0) {
       promptParts.push('');
-      promptParts.push('待揭示伏笔:');
-      relevantForeshadowing.forEach(f => {
+      promptParts.push('需要开始铺垫的伏笔(自然提及,不要揭示):');
+      buildupForeshadowing.forEach(f => {
+        promptParts.push(`- ${f.content} (计划第${f.planned_reveal_chapter}章揭示)`);
+      });
+    }
+
+    if (revealForeshadowing.length > 0) {
+      promptParts.push('');
+      promptParts.push('待揭示的伏笔(本章应该揭示或推进):');
+      revealForeshadowing.forEach(f => {
         promptParts.push(`- ${f.content} (计划第${f.planned_reveal_chapter}章揭示)`);
       });
     }
@@ -160,13 +180,16 @@ export async function POST(
       maxTokens: 4000,
     });
 
+    // 计算字数
+    const wordCount = countWords(response.content);
+
     // 更新章节
     const [updatedChapter] = await query<Chapter>(
       `UPDATE chapters
-       SET content = $1, updated_at = NOW()
-       WHERE id = $2 AND novel_id = $3
+       SET content = $1, word_count = $2
+       WHERE id = $3 AND novel_id = $4
        RETURNING *`,
-      [response.content, chapterId, id]
+      [response.content, wordCount, chapterId, id]
     );
 
     return NextResponse.json(updatedChapter);
