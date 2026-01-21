@@ -1,0 +1,192 @@
+WARNING:root:>> Forcing workers=1 in uvicorn mode(Ignoring workers=2)
+
+LightRAG log file: /Users/luhui/Desktop/novel/lightrag.log
+
+[36m
+    ╔══════════════════════════════════════════════════════════════╗
+    ║               LightRAG Server vv1.4.9.11/0268                ║
+    ║         Fast, Lightweight RAG Server Implementation          ║
+    ╚══════════════════════════════════════════════════════════════╝
+    [0m
+[35m
+📡 Server Configuration:[0m
+[37m    ├─ Host: [0m[33m0.0.0.0[0m
+[37m    ├─ Port: [0m[33m9621[0m
+[37m    ├─ Workers: [0m[33m1[0m
+[37m    ├─ Timeout: [0m[33m150[0m
+[37m    ├─ CORS Origins: [0m[33m*[0m
+[37m    ├─ SSL Enabled: [0m[33mFalse[0m
+[37m    ├─ Ollama Emulating Model: [0m[33mlightrag:latest[0m
+[37m    ├─ Log Level: [0m[33mINFO[0m
+[37m    ├─ Verbose Debug: [0m[33mFalse[0m
+[37m    ├─ API Key: [0m[33mSet[0m
+[37m    └─ JWT Auth: [0m[33mDisabled[0m
+[35m
+📂 Directory Configuration:[0m
+[37m    ├─ Working Directory: [0m[33m/Users/luhui/Desktop/novel/rag_storage[0m
+[37m    └─ Input Directory: [0m[33m/Users/luhui/Desktop/novel/inputs[0m
+[35m
+🤖 LLM Configuration:[0m
+[37m    ├─ Binding: [0m[33mopenai[0m
+[37m    ├─ Host: [0m[33mhttps://api.deepseek.com/v1[0m
+[37m    ├─ Model: [0m[33mdeepseek-chat[0m
+[37m    ├─ Max Async for LLM: [0m[33m4[0m
+[37m    ├─ Summary Context Size: [0m[33m12000[0m
+[37m    ├─ LLM Cache Enabled: [0m[33mTrue[0m
+[37m    └─ LLM Cache for Extraction Enabled: [0m[33mTrue[0m
+[35m
+📊 Embedding Configuration:[0m
+[37m    ├─ Binding: [0m[33mopenai[0m
+[37m    ├─ Host: [0m[33mhttps://api.siliconflow.cn/v1[0m
+[37m    ├─ Model: [0m[33mBAAI/bge-m3[0m
+[37m    └─ Dimensions: [0m[33m1024[0m
+[35m
+⚙️ RAG Configuration:[0m
+[37m    ├─ Summary Language: [0m[33mEnglish[0m
+[37m    ├─ Entity Types: [0m[33m['Person', 'Creature', 'Organization', 'Location', 'Event', 'Concept', 'Method', 'Content', 'Data', 'Artifact', 'NaturalObject'][0m
+[37m    ├─ Max Parallel Insert: [0m[33m2[0m
+[37m    ├─ Chunk Size: [0m[33m1200[0m
+[37m    ├─ Chunk Overlap Size: [0m[33m100[0m
+[37m    ├─ Cosine Threshold: [0m[33m0.2[0m
+[37m    ├─ Top-K: [0m[33m40[0m
+[37m    └─ Force LLM Summary on Merge: [0m[33m8[0m
+[35m
+💾 Storage Configuration:[0m
+[37m    ├─ KV Storage: [0m[33mPGKVStorage[0m
+[37m    ├─ Vector Storage: [0m[33mPGVectorStorage[0m
+[37m    ├─ Graph Storage: [0m[33mPGGraphStorage[0m
+[37m    ├─ Document Status Storage: [0m[33mPGDocStatusStorage[0m
+[37m    └─ Workspace: [0m[33mnovel[0m
+[32m
+✨ Server starting up...
+[0m
+[35m
+🌐 Server Access Information:[0m
+[37m    ├─ WebUI (local): [0m[33mhttp://localhost:9621[0m
+[37m    ├─ Remote Access: [0m[33mhttp://<your-ip-address>:9621[0m
+[37m    ├─ API Documentation (local): [0m[33mhttp://localhost:9621/docs[0m
+[37m    └─ Alternative Documentation (local): [0m[33mhttp://localhost:9621/redoc[0m
+[35m
+📝 Note:[0m
+[36m    Since the server is running on 0.0.0.0:
+    - Use 'localhost' or '127.0.0.1' for local access
+    - Use your machine's IP address for remote access
+    - To find your IP address:
+      • Windows: Run 'ipconfig' in terminal
+      • Linux/Mac: Run 'ifconfig' or 'ip addr' in terminal
+    [0m
+[33m
+⚠️  Security Notice:[0m
+[37m    API Key authentication is enabled.
+    Make sure to include the X-API-Key header in all your requests.
+    [0m
+INFO: OpenAI LLM Options: {}
+INFO: Embedding config: binding=openai model=BAAI/bge-m3 embedding_dim=1024 max_token_size=8192
+INFO: Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=openai)
+INFO: Embedding max_token_size: 8192 (from openai provider default)
+INFO: Reranking is disabled
+INFO: PostgreSQL table: LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+INFO: PostgreSQL table: LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+INFO: PostgreSQL table: LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+INFO: WebUI assets mounted at /webui
+INFO: Started server process [29849]
+INFO: Waiting for application startup.
+INFO: PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
+INFO: PostgreSQL, VECTOR extension enabled
+INFO: PostgreSQL, Connected to database at localhost:5432/novle without SSL
+INFO: chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+INFO: cache_type column already exists in LIGHTRAG_LLM_CACHE table
+INFO: queryparam column already exists in LIGHTRAG_LLM_CACHE table
+INFO: mode column does not exist in LIGHTRAG_LLM_CACHE table
+INFO: chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+INFO: llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+INFO: track_id column already exists in LIGHTRAG_DOC_STATUS table
+INFO: Index on track_id column already exists for LIGHTRAG_DOC_STATUS table
+INFO: metadata column already exists in LIGHTRAG_DOC_STATUS table
+INFO: error_msg column already exists in LIGHTRAG_DOC_STATUS table
+INFO: HNSW vector index idx_lightrag_vdb_entity_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+WARNING: PostgreSQL: workspace data in table 'LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+INFO: HNSW vector index idx_lightrag_vdb_relation_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+WARNING: PostgreSQL: workspace data in table 'LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+INFO: HNSW vector index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+WARNING: PostgreSQL: workspace data in table 'LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+INFO: [novel] PostgreSQL Graph initialized: graph_name='novel_chunk_entity_relation'
+WARNING: Could not create AGE extension: extension "age" is not available
+DETAIL:  Could not open extension control file "/usr/share/postgresql/16/extension/age.control": No such file or directory.
+HINT:  The extension must first be installed on the system where PostgreSQL is running.
+ERROR: PostgreSQL database,
+sql:SELECT create_graph('novel_chunk_entity_relation'),
+data:None,
+error:function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+ERROR: Traceback (most recent call last):
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/api/lightrag_server.py", line 358, in lifespan
+    await rag.initialize_storages()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/lightrag.py", line 705, in initialize_storages
+    await storage.initialize()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 3968, in initialize
+    await self.db.execute(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 1688, in execute
+    await self._run_with_retry(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 452, in _run_with_retry
+    async for attempt in AsyncRetrying(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 166, in __anext__
+    do = await self.iter(retry_state=self._retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 153, in iter
+    result = await action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/_utils.py", line 99, in inner
+    return call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/__init__.py", line 400, in <lambda>
+    self._add_action_func(lambda rs: rs.outcome.result())
+                                     ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 464, in _run_with_retry
+    await self.configure_age(connection, graph_name)
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 505, in configure_age
+    await connection.execute(  # type: ignore
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/asyncpg/connection.py", line 354, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 369, in query
+asyncpg.exceptions.UndefinedFunctionError: function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+
+ERROR: Application startup failed. Exiting.
+Starting Uvicorn server in single-process mode on 0.0.0.0:9621

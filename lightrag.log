@@ -1,0 +1,473 @@
+2026-01-22 02:51:29,070 - lightrag - INFO - Ollama LLM Options: {}
+2026-01-22 02:51:29,070 - lightrag - INFO - Ollama Embedding Options: {}
+2026-01-22 02:51:30,414 - lightrag - INFO - Embedding config: binding=ollama model=None embedding_dim=1024 max_token_size=8192
+2026-01-22 02:51:30,414 - lightrag - INFO - Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=ollama)
+2026-01-22 02:51:30,414 - lightrag - INFO - Embedding max_token_size: 8192 (from ollama provider default)
+2026-01-22 02:51:30,414 - lightrag - INFO - Reranking is disabled
+2026-01-22 02:51:37,054 - lightrag - INFO - [novel] Created new empty graph file: /Users/luhui/Desktop/novel/rag_storage/novel/graph_chunk_entity_relation.graphml
+2026-01-22 02:51:37,121 - lightrag - INFO - WebUI assets mounted at /webui
+2026-01-22 02:51:37,143 - uvicorn.error - INFO - Started server process [28809]
+2026-01-22 02:51:37,143 - uvicorn.error - INFO - Waiting for application startup.
+2026-01-22 02:51:37,144 - lightrag - INFO - [novel] Process 28809 KV load full_docs with 0 records
+2026-01-22 02:51:37,144 - lightrag - INFO - [novel] Process 28809 KV load text_chunks with 0 records
+2026-01-22 02:51:37,144 - lightrag - INFO - [novel] Process 28809 KV load full_entities with 0 records
+2026-01-22 02:51:37,144 - lightrag - INFO - [novel] Process 28809 KV load full_relations with 0 records
+2026-01-22 02:51:37,144 - lightrag - INFO - [novel] Process 28809 KV load entity_chunks with 0 records
+2026-01-22 02:51:37,144 - lightrag - INFO - [novel] Process 28809 KV load relation_chunks with 0 records
+2026-01-22 02:51:37,144 - lightrag - INFO - [novel] Process 28809 KV load llm_response_cache with 0 records
+2026-01-22 02:51:37,144 - lightrag - INFO - [novel] Process 28809 doc status load doc_status with 0 records
+2026-01-22 02:51:37,145 - uvicorn.error - INFO - Application startup complete.
+2026-01-22 02:51:37,146 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:9621 (Press CTRL+C to quit)
+2026-01-22 02:52:03,801 - uvicorn.error - INFO - Shutting down
+2026-01-22 02:52:03,903 - uvicorn.error - INFO - Waiting for application shutdown.
+2026-01-22 02:52:03,904 - lightrag - INFO - Successfully finalized 12 storages
+2026-01-22 02:52:03,904 - uvicorn.error - INFO - Application shutdown complete.
+2026-01-22 02:52:03,904 - uvicorn.error - INFO - Finished server process [28809]
+2026-01-22 02:52:14,201 - lightrag - INFO - OpenAI LLM Options: {}
+2026-01-22 02:52:14,330 - lightrag - INFO - Embedding config: binding=openai model=BAAI/bge-m3 embedding_dim=1024 max_token_size=8192
+2026-01-22 02:52:14,330 - lightrag - INFO - Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=openai)
+2026-01-22 02:52:14,330 - lightrag - INFO - Embedding max_token_size: 8192 (from openai provider default)
+2026-01-22 02:52:14,330 - lightrag - INFO - Reranking is disabled
+2026-01-22 02:52:17,773 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 02:52:17,773 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 02:52:17,773 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 02:52:17,833 - lightrag - INFO - WebUI assets mounted at /webui
+2026-01-22 02:52:17,847 - uvicorn.error - INFO - Started server process [28976]
+2026-01-22 02:52:17,847 - uvicorn.error - INFO - Waiting for application startup.
+2026-01-22 02:52:17,847 - lightrag - INFO - PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
+2026-01-22 02:52:17,864 - lightrag - INFO - PostgreSQL, VECTOR extension enabled
+2026-01-22 02:52:17,880 - lightrag - INFO - PostgreSQL, Connected to database at localhost:5432/novle without SSL
+2026-01-22 02:52:17,882 - lightrag - ERROR - PostgreSQL database, error:relation "lightrag_doc_full" does not exist
+2026-01-22 02:52:17,882 - lightrag - INFO - PostgreSQL, Try Creating table LIGHTRAG_DOC_FULL in database
+2026-01-22 02:52:17,897 - lightrag - INFO - PostgreSQL, Creation success table LIGHTRAG_DOC_FULL in PostgreSQL database
+2026-01-22 02:52:17,898 - lightrag - ERROR - PostgreSQL database, error:relation "lightrag_doc_chunks" does not exist
+2026-01-22 02:52:17,898 - lightrag - INFO - PostgreSQL, Try Creating table LIGHTRAG_DOC_CHUNKS in database
+2026-01-22 02:52:17,904 - lightrag - INFO - PostgreSQL, Creation success table LIGHTRAG_DOC_CHUNKS in PostgreSQL database
+2026-01-22 02:52:17,905 - lightrag - ERROR - PostgreSQL database, error:relation "lightrag_llm_cache" does not exist
+2026-01-22 02:52:17,905 - lightrag - INFO - PostgreSQL, Try Creating table LIGHTRAG_LLM_CACHE in database
+2026-01-22 02:52:17,910 - lightrag - INFO - PostgreSQL, Creation success table LIGHTRAG_LLM_CACHE in PostgreSQL database
+2026-01-22 02:52:17,911 - lightrag - ERROR - PostgreSQL database, error:relation "lightrag_doc_status" does not exist
+2026-01-22 02:52:17,911 - lightrag - INFO - PostgreSQL, Try Creating table LIGHTRAG_DOC_STATUS in database
+2026-01-22 02:52:17,916 - lightrag - INFO - PostgreSQL, Creation success table LIGHTRAG_DOC_STATUS in PostgreSQL database
+2026-01-22 02:52:17,917 - lightrag - ERROR - PostgreSQL database, error:relation "lightrag_full_entities" does not exist
+2026-01-22 02:52:17,917 - lightrag - INFO - PostgreSQL, Try Creating table LIGHTRAG_FULL_ENTITIES in database
+2026-01-22 02:52:17,924 - lightrag - INFO - PostgreSQL, Creation success table LIGHTRAG_FULL_ENTITIES in PostgreSQL database
+2026-01-22 02:52:17,924 - lightrag - ERROR - PostgreSQL database, error:relation "lightrag_full_relations" does not exist
+2026-01-22 02:52:17,924 - lightrag - INFO - PostgreSQL, Try Creating table LIGHTRAG_FULL_RELATIONS in database
+2026-01-22 02:52:17,930 - lightrag - INFO - PostgreSQL, Creation success table LIGHTRAG_FULL_RELATIONS in PostgreSQL database
+2026-01-22 02:52:17,931 - lightrag - ERROR - PostgreSQL database, error:relation "lightrag_entity_chunks" does not exist
+2026-01-22 02:52:17,931 - lightrag - INFO - PostgreSQL, Try Creating table LIGHTRAG_ENTITY_CHUNKS in database
+2026-01-22 02:52:17,936 - lightrag - INFO - PostgreSQL, Creation success table LIGHTRAG_ENTITY_CHUNKS in PostgreSQL database
+2026-01-22 02:52:17,937 - lightrag - ERROR - PostgreSQL database, error:relation "lightrag_relation_chunks" does not exist
+2026-01-22 02:52:17,937 - lightrag - INFO - PostgreSQL, Try Creating table LIGHTRAG_RELATION_CHUNKS in database
+2026-01-22 02:52:17,943 - lightrag - INFO - PostgreSQL, Creation success table LIGHTRAG_RELATION_CHUNKS in PostgreSQL database
+2026-01-22 02:52:17,953 - lightrag - INFO - PostgreSQL, Creating index idx_lightrag_doc_full_id on table LIGHTRAG_DOC_FULL
+2026-01-22 02:52:17,957 - lightrag - INFO - PostgreSQL, Creating composite index idx_lightrag_doc_full_workspace_id on table LIGHTRAG_DOC_FULL
+2026-01-22 02:52:17,960 - lightrag - INFO - PostgreSQL, Creating index idx_lightrag_doc_chunks_id on table LIGHTRAG_DOC_CHUNKS
+2026-01-22 02:52:17,962 - lightrag - INFO - PostgreSQL, Creating composite index idx_lightrag_doc_chunks_workspace_id on table LIGHTRAG_DOC_CHUNKS
+2026-01-22 02:52:17,966 - lightrag - INFO - PostgreSQL, Creating index idx_lightrag_llm_cache_id on table LIGHTRAG_LLM_CACHE
+2026-01-22 02:52:17,970 - lightrag - INFO - PostgreSQL, Creating composite index idx_lightrag_llm_cache_workspace_id on table LIGHTRAG_LLM_CACHE
+2026-01-22 02:52:17,975 - lightrag - INFO - PostgreSQL, Creating index idx_lightrag_doc_status_id on table LIGHTRAG_DOC_STATUS
+2026-01-22 02:52:17,978 - lightrag - INFO - PostgreSQL, Creating composite index idx_lightrag_doc_status_workspace_id on table LIGHTRAG_DOC_STATUS
+2026-01-22 02:52:17,981 - lightrag - INFO - PostgreSQL, Creating index idx_lightrag_full_entities_id on table LIGHTRAG_FULL_ENTITIES
+2026-01-22 02:52:17,984 - lightrag - INFO - PostgreSQL, Creating composite index idx_lightrag_full_entities_workspace_id on table LIGHTRAG_FULL_ENTITIES
+2026-01-22 02:52:17,986 - lightrag - INFO - PostgreSQL, Creating index idx_lightrag_full_relations_id on table LIGHTRAG_FULL_RELATIONS
+2026-01-22 02:52:17,989 - lightrag - INFO - PostgreSQL, Creating composite index idx_lightrag_full_relations_workspace_id on table LIGHTRAG_FULL_RELATIONS
+2026-01-22 02:52:17,992 - lightrag - INFO - PostgreSQL, Creating index idx_lightrag_entity_chunks_id on table LIGHTRAG_ENTITY_CHUNKS
+2026-01-22 02:52:17,996 - lightrag - INFO - PostgreSQL, Creating composite index idx_lightrag_entity_chunks_workspace_id on table LIGHTRAG_ENTITY_CHUNKS
+2026-01-22 02:52:17,999 - lightrag - INFO - PostgreSQL, Creating index idx_lightrag_relation_chunks_id on table LIGHTRAG_RELATION_CHUNKS
+2026-01-22 02:52:18,002 - lightrag - INFO - PostgreSQL, Creating composite index idx_lightrag_relation_chunks_workspace_id on table LIGHTRAG_RELATION_CHUNKS
+2026-01-22 02:52:18,019 - lightrag - INFO - chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:52:18,019 - lightrag - INFO - cache_type column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:52:18,019 - lightrag - INFO - queryparam column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:52:18,019 - lightrag - INFO - mode column does not exist in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:52:18,022 - lightrag - INFO - chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:52:18,024 - lightrag - INFO - llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+2026-01-22 02:52:18,028 - lightrag - INFO - track_id column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:52:18,028 - lightrag - INFO - Creating index on track_id column for LIGHTRAG_DOC_STATUS table
+2026-01-22 02:52:18,031 - lightrag - INFO - Successfully created index on track_id column for LIGHTRAG_DOC_STATUS table
+2026-01-22 02:52:18,032 - lightrag - INFO - metadata column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:52:18,033 - lightrag - INFO - error_msg column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:52:18,034 - lightrag - INFO - Creating pagination index: Composite index for workspace + status + updated_at pagination
+2026-01-22 02:52:18,038 - lightrag - INFO - Successfully created index: idx_lightrag_doc_status_workspace_status_updated_at
+2026-01-22 02:52:18,038 - lightrag - INFO - Creating pagination index: Composite index for workspace + status + created_at pagination
+2026-01-22 02:52:18,043 - lightrag - INFO - Successfully created index: idx_lightrag_doc_status_workspace_status_created_at
+2026-01-22 02:52:18,044 - lightrag - INFO - Creating pagination index: Index for workspace + updated_at pagination (all statuses)
+2026-01-22 02:52:18,050 - lightrag - INFO - Successfully created index: idx_lightrag_doc_status_workspace_updated_at
+2026-01-22 02:52:18,051 - lightrag - INFO - Creating pagination index: Index for workspace + created_at pagination (all statuses)
+2026-01-22 02:52:18,054 - lightrag - INFO - Successfully created index: idx_lightrag_doc_status_workspace_created_at
+2026-01-22 02:52:18,055 - lightrag - INFO - Creating pagination index: Index for workspace + file_path sorting
+2026-01-22 02:52:18,062 - lightrag - INFO - Successfully created index: idx_lightrag_doc_status_workspace_file_path
+2026-01-22 02:52:18,069 - lightrag - INFO - PostgreSQL, Creating index idx_lightrag_vdb_entity_baai_bge_m3_1024d_id on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 02:52:18,071 - lightrag - INFO - PostgreSQL, Creating composite index idx_lightrag_vdb_entity_baai_bge_m3_1024d_workspace_id on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 02:52:18,076 - lightrag - INFO - PostgreSQL: New table 'LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d' created successfully
+2026-01-22 02:52:18,078 - lightrag - INFO - Creating HNSW index idx_lightrag_vdb_entity_baai_bge_m3_1024d_hnsw_cosine on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 02:52:18,079 - lightrag - INFO - Successfully created vector index idx_lightrag_vdb_entity_baai_bge_m3_1024d_hnsw_cosine on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 02:52:18,079 - lightrag - INFO - Ensure this new table creation is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 02:52:18,084 - lightrag - INFO - PostgreSQL, Creating index idx_lightrag_vdb_relation_baai_bge_m3_1024d_id on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 02:52:18,087 - lightrag - INFO - PostgreSQL, Creating composite index idx_lightrag_vdb_relation_baai_bge_m3_1024d_workspace_id on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 02:52:18,090 - lightrag - INFO - PostgreSQL: New table 'LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d' created successfully
+2026-01-22 02:52:18,092 - lightrag - INFO - Creating HNSW index idx_lightrag_vdb_relation_baai_bge_m3_1024d_hnsw_cosine on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 02:52:18,094 - lightrag - INFO - Successfully created vector index idx_lightrag_vdb_relation_baai_bge_m3_1024d_hnsw_cosine on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 02:52:18,094 - lightrag - INFO - Ensure this new table creation is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 02:52:18,097 - lightrag - INFO - PostgreSQL, Creating index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_id on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 02:52:18,099 - lightrag - INFO - PostgreSQL, Creating composite index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_workspace_id on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 02:52:18,102 - lightrag - INFO - PostgreSQL: New table 'LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d' created successfully
+2026-01-22 02:52:18,104 - lightrag - INFO - Creating HNSW index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_hnsw_cosine on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 02:52:18,106 - lightrag - INFO - Successfully created vector index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_hnsw_cosine on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 02:52:18,106 - lightrag - INFO - Ensure this new table creation is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 02:52:18,106 - lightrag - INFO - [novel] PostgreSQL Graph initialized: graph_name='novel_chunk_entity_relation'
+2026-01-22 02:52:18,110 - lightrag - WARNING - Could not create AGE extension: extension "age" is not available
+DETAIL:  Could not open extension control file "/usr/share/postgresql/16/extension/age.control": No such file or directory.
+HINT:  The extension must first be installed on the system where PostgreSQL is running.
+2026-01-22 02:52:18,111 - lightrag - ERROR - PostgreSQL database,
+sql:SELECT create_graph('novel_chunk_entity_relation'),
+data:None,
+error:function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2026-01-22 02:52:18,122 - uvicorn.error - ERROR - Traceback (most recent call last):
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/api/lightrag_server.py", line 358, in lifespan
+    await rag.initialize_storages()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/lightrag.py", line 705, in initialize_storages
+    await storage.initialize()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 3968, in initialize
+    await self.db.execute(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 1688, in execute
+    await self._run_with_retry(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 452, in _run_with_retry
+    async for attempt in AsyncRetrying(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 166, in __anext__
+    do = await self.iter(retry_state=self._retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 153, in iter
+    result = await action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/_utils.py", line 99, in inner
+    return call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/__init__.py", line 400, in <lambda>
+    self._add_action_func(lambda rs: rs.outcome.result())
+                                     ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 464, in _run_with_retry
+    await self.configure_age(connection, graph_name)
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 505, in configure_age
+    await connection.execute(  # type: ignore
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/asyncpg/connection.py", line 354, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 369, in query
+asyncpg.exceptions.UndefinedFunctionError: function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+
+2026-01-22 02:52:18,122 - uvicorn.error - ERROR - Application startup failed. Exiting.
+2026-01-22 02:53:07,015 - lightrag - INFO - Ollama LLM Options: {}
+2026-01-22 02:53:07,015 - lightrag - INFO - Ollama Embedding Options: {}
+2026-01-22 02:53:07,058 - lightrag - INFO - Embedding config: binding=ollama model=None embedding_dim=1024 max_token_size=8192
+2026-01-22 02:53:07,059 - lightrag - INFO - Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=ollama)
+2026-01-22 02:53:07,059 - lightrag - INFO - Embedding max_token_size: 8192 (from ollama provider default)
+2026-01-22 02:53:07,059 - lightrag - INFO - Reranking is disabled
+2026-01-22 02:53:07,262 - lightrag - INFO - [novel] Created new empty graph file: /Users/luhui/Desktop/novel/rag_storage/novel/graph_chunk_entity_relation.graphml
+2026-01-22 02:53:07,323 - lightrag - INFO - WebUI assets mounted at /webui
+2026-01-22 02:53:07,334 - uvicorn.error - INFO - Started server process [29186]
+2026-01-22 02:53:07,334 - uvicorn.error - INFO - Waiting for application startup.
+2026-01-22 02:53:07,335 - lightrag - INFO - [novel] Process 29186 KV load full_docs with 0 records
+2026-01-22 02:53:07,335 - lightrag - INFO - [novel] Process 29186 KV load text_chunks with 0 records
+2026-01-22 02:53:07,335 - lightrag - INFO - [novel] Process 29186 KV load full_entities with 0 records
+2026-01-22 02:53:07,335 - lightrag - INFO - [novel] Process 29186 KV load full_relations with 0 records
+2026-01-22 02:53:07,335 - lightrag - INFO - [novel] Process 29186 KV load entity_chunks with 0 records
+2026-01-22 02:53:07,335 - lightrag - INFO - [novel] Process 29186 KV load relation_chunks with 0 records
+2026-01-22 02:53:07,335 - lightrag - INFO - [novel] Process 29186 KV load llm_response_cache with 0 records
+2026-01-22 02:53:07,335 - lightrag - INFO - [novel] Process 29186 doc status load doc_status with 0 records
+2026-01-22 02:53:07,335 - uvicorn.error - INFO - Application startup complete.
+2026-01-22 02:53:07,336 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:9621 (Press CTRL+C to quit)
+2026-01-22 02:53:56,268 - uvicorn.error - INFO - Shutting down
+2026-01-22 02:53:56,370 - uvicorn.error - INFO - Waiting for application shutdown.
+2026-01-22 02:53:56,371 - lightrag - INFO - Successfully finalized 12 storages
+2026-01-22 02:53:56,371 - uvicorn.error - INFO - Application shutdown complete.
+2026-01-22 02:53:56,371 - uvicorn.error - INFO - Finished server process [29186]
+2026-01-22 02:55:02,965 - lightrag - INFO - OpenAI LLM Options: {}
+2026-01-22 02:55:03,101 - lightrag - INFO - Embedding config: binding=openai model=BAAI/bge-m3 embedding_dim=1024 max_token_size=8192
+2026-01-22 02:55:03,101 - lightrag - INFO - Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=openai)
+2026-01-22 02:55:03,101 - lightrag - INFO - Embedding max_token_size: 8192 (from openai provider default)
+2026-01-22 02:55:03,101 - lightrag - INFO - Reranking is disabled
+2026-01-22 02:55:03,251 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 02:55:03,251 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 02:55:03,251 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 02:55:03,305 - lightrag - INFO - WebUI assets mounted at /webui
+2026-01-22 02:55:03,316 - uvicorn.error - INFO - Started server process [29626]
+2026-01-22 02:55:03,316 - uvicorn.error - INFO - Waiting for application startup.
+2026-01-22 02:55:03,316 - lightrag - INFO - PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
+2026-01-22 02:55:03,351 - lightrag - INFO - PostgreSQL, VECTOR extension enabled
+2026-01-22 02:55:03,372 - lightrag - INFO - PostgreSQL, Connected to database at localhost:5432/novle without SSL
+2026-01-22 02:55:03,397 - lightrag - INFO - chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:55:03,397 - lightrag - INFO - cache_type column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:55:03,397 - lightrag - INFO - queryparam column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:55:03,397 - lightrag - INFO - mode column does not exist in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:55:03,400 - lightrag - INFO - chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:55:03,401 - lightrag - INFO - llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+2026-01-22 02:55:03,405 - lightrag - INFO - track_id column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:55:03,406 - lightrag - INFO - Index on track_id column already exists for LIGHTRAG_DOC_STATUS table
+2026-01-22 02:55:03,407 - lightrag - INFO - metadata column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:55:03,408 - lightrag - INFO - error_msg column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:55:03,413 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_entity_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 02:55:03,416 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 02:55:03,417 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_relation_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 02:55:03,417 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 02:55:03,418 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 02:55:03,419 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 02:55:03,419 - lightrag - INFO - [novel] PostgreSQL Graph initialized: graph_name='novel_chunk_entity_relation'
+2026-01-22 02:55:03,419 - lightrag - WARNING - Could not create AGE extension: extension "age" is not available
+DETAIL:  Could not open extension control file "/usr/share/postgresql/16/extension/age.control": No such file or directory.
+HINT:  The extension must first be installed on the system where PostgreSQL is running.
+2026-01-22 02:55:03,420 - lightrag - ERROR - PostgreSQL database,
+sql:SELECT create_graph('novel_chunk_entity_relation'),
+data:None,
+error:function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2026-01-22 02:55:03,426 - uvicorn.error - ERROR - Traceback (most recent call last):
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/api/lightrag_server.py", line 358, in lifespan
+    await rag.initialize_storages()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/lightrag.py", line 705, in initialize_storages
+    await storage.initialize()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 3968, in initialize
+    await self.db.execute(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 1688, in execute
+    await self._run_with_retry(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 452, in _run_with_retry
+    async for attempt in AsyncRetrying(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 166, in __anext__
+    do = await self.iter(retry_state=self._retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 153, in iter
+    result = await action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/_utils.py", line 99, in inner
+    return call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/__init__.py", line 400, in <lambda>
+    self._add_action_func(lambda rs: rs.outcome.result())
+                                     ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 464, in _run_with_retry
+    await self.configure_age(connection, graph_name)
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 505, in configure_age
+    await connection.execute(  # type: ignore
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/asyncpg/connection.py", line 354, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 369, in query
+asyncpg.exceptions.UndefinedFunctionError: function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+
+2026-01-22 02:55:03,426 - uvicorn.error - ERROR - Application startup failed. Exiting.
+2026-01-22 02:56:02,213 - lightrag - INFO - OpenAI LLM Options: {}
+2026-01-22 02:56:02,312 - lightrag - INFO - Embedding config: binding=openai model=BAAI/bge-m3 embedding_dim=1024 max_token_size=8192
+2026-01-22 02:56:02,312 - lightrag - INFO - Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=openai)
+2026-01-22 02:56:02,312 - lightrag - INFO - Embedding max_token_size: 8192 (from openai provider default)
+2026-01-22 02:56:02,312 - lightrag - INFO - Reranking is disabled
+2026-01-22 02:56:02,454 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 02:56:02,454 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 02:56:02,454 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 02:56:02,509 - lightrag - INFO - WebUI assets mounted at /webui
+2026-01-22 02:56:02,520 - uvicorn.error - INFO - Started server process [29849]
+2026-01-22 02:56:02,520 - uvicorn.error - INFO - Waiting for application startup.
+2026-01-22 02:56:02,520 - lightrag - INFO - PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
+2026-01-22 02:56:02,537 - lightrag - INFO - PostgreSQL, VECTOR extension enabled
+2026-01-22 02:56:02,554 - lightrag - INFO - PostgreSQL, Connected to database at localhost:5432/novle without SSL
+2026-01-22 02:56:02,583 - lightrag - INFO - chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:56:02,583 - lightrag - INFO - cache_type column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:56:02,583 - lightrag - INFO - queryparam column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:56:02,583 - lightrag - INFO - mode column does not exist in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:56:02,586 - lightrag - INFO - chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:56:02,587 - lightrag - INFO - llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+2026-01-22 02:56:02,591 - lightrag - INFO - track_id column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:56:02,592 - lightrag - INFO - Index on track_id column already exists for LIGHTRAG_DOC_STATUS table
+2026-01-22 02:56:02,593 - lightrag - INFO - metadata column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:56:02,594 - lightrag - INFO - error_msg column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:56:02,598 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_entity_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 02:56:02,599 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 02:56:02,600 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_relation_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 02:56:02,601 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 02:56:02,602 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 02:56:02,602 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 02:56:02,602 - lightrag - INFO - [novel] PostgreSQL Graph initialized: graph_name='novel_chunk_entity_relation'
+2026-01-22 02:56:02,603 - lightrag - WARNING - Could not create AGE extension: extension "age" is not available
+DETAIL:  Could not open extension control file "/usr/share/postgresql/16/extension/age.control": No such file or directory.
+HINT:  The extension must first be installed on the system where PostgreSQL is running.
+2026-01-22 02:56:02,603 - lightrag - ERROR - PostgreSQL database,
+sql:SELECT create_graph('novel_chunk_entity_relation'),
+data:None,
+error:function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+2026-01-22 02:56:02,605 - uvicorn.error - ERROR - Traceback (most recent call last):
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/starlette/routing.py", line 694, in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/fastapi/routing.py", line 153, in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/contextlib.py", line 210, in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/api/lightrag_server.py", line 358, in lifespan
+    await rag.initialize_storages()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/lightrag.py", line 705, in initialize_storages
+    await storage.initialize()
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 3968, in initialize
+    await self.db.execute(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 1688, in execute
+    await self._run_with_retry(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 452, in _run_with_retry
+    async for attempt in AsyncRetrying(
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 166, in __anext__
+    do = await self.iter(retry_state=self._retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/asyncio/__init__.py", line 153, in iter
+    result = await action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/_utils.py", line 99, in inner
+    return call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/tenacity/__init__.py", line 400, in <lambda>
+    self._add_action_func(lambda rs: rs.outcome.result())
+                                     ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 464, in _run_with_retry
+    await self.configure_age(connection, graph_name)
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/lightrag/kg/postgres_impl.py", line 505, in configure_age
+    await connection.execute(  # type: ignore
+  File "/Users/luhui/.asdf/installs/python/3.12.7/lib/python3.12/site-packages/asyncpg/connection.py", line 354, in execute
+    result = await self._protocol.query(query, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "asyncpg/protocol/protocol.pyx", line 369, in query
+asyncpg.exceptions.UndefinedFunctionError: function create_graph(unknown) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+
+2026-01-22 02:56:02,605 - uvicorn.error - ERROR - Application startup failed. Exiting.
+2026-01-22 02:56:33,827 - lightrag - INFO - OpenAI LLM Options: {}
+2026-01-22 02:56:33,925 - lightrag - INFO - Embedding config: binding=openai model=BAAI/bge-m3 embedding_dim=1024 max_token_size=8192
+2026-01-22 02:56:33,925 - lightrag - INFO - Send embedding dimension: False by env var (dimensions=1024, has_param=True, binding=openai)
+2026-01-22 02:56:33,925 - lightrag - INFO - Embedding max_token_size: 8192 (from openai provider default)
+2026-01-22 02:56:33,925 - lightrag - INFO - Reranking is disabled
+2026-01-22 02:56:34,181 - lightrag - INFO - [novel] Created new empty graph file: /Users/luhui/Desktop/novel/rag_storage/novel/graph_chunk_entity_relation.graphml
+2026-01-22 02:56:34,181 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 02:56:34,181 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 02:56:34,181 - lightrag - INFO - PostgreSQL table: LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 02:56:34,215 - lightrag - INFO - WebUI assets mounted at /webui
+2026-01-22 02:56:34,225 - uvicorn.error - INFO - Started server process [29966]
+2026-01-22 02:56:34,225 - uvicorn.error - INFO - Waiting for application startup.
+2026-01-22 02:56:34,225 - lightrag - INFO - PostgreSQL, Retry config: attempts=10, backoff=3.0s, backoff_max=30.0s, pool_close_timeout=5.0s
+2026-01-22 02:56:34,248 - lightrag - INFO - PostgreSQL, VECTOR extension enabled
+2026-01-22 02:56:34,266 - lightrag - INFO - PostgreSQL, Connected to database at localhost:5432/novle without SSL
+2026-01-22 02:56:34,290 - lightrag - INFO - chunk_id column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:56:34,290 - lightrag - INFO - cache_type column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:56:34,290 - lightrag - INFO - queryparam column already exists in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:56:34,290 - lightrag - INFO - mode column does not exist in LIGHTRAG_LLM_CACHE table
+2026-01-22 02:56:34,294 - lightrag - INFO - chunks_list column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:56:34,296 - lightrag - INFO - llm_cache_list column already exists in LIGHTRAG_DOC_CHUNKS table
+2026-01-22 02:56:34,301 - lightrag - INFO - track_id column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:56:34,301 - lightrag - INFO - Index on track_id column already exists for LIGHTRAG_DOC_STATUS table
+2026-01-22 02:56:34,303 - lightrag - INFO - metadata column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:56:34,304 - lightrag - INFO - error_msg column already exists in LIGHTRAG_DOC_STATUS table
+2026-01-22 02:56:34,308 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_entity_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d
+2026-01-22 02:56:34,311 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_ENTITY_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 02:56:34,312 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_relation_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d
+2026-01-22 02:56:34,313 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_RELATION_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 02:56:34,314 - lightrag - INFO - HNSW vector index idx_lightrag_vdb_chunks_baai_bge_m3_1024d_hnsw_cosine already exists on table LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d
+2026-01-22 02:56:34,314 - lightrag - WARNING - PostgreSQL: workspace data in table 'LIGHTRAG_VDB_CHUNKS_baai_bge_m3_1024d' is empty. Ensure it is caused by new workspace setup and not an unexpected embedding model change.
+2026-01-22 02:56:34,315 - uvicorn.error - INFO - Application startup complete.
+2026-01-22 02:56:34,315 - uvicorn.error - INFO - Uvicorn running on http://0.0.0.0:9621 (Press CTRL+C to quit)
