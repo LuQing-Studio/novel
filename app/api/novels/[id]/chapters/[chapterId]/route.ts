@@ -32,19 +32,50 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: Promise<{ id: string; chapterId: string }> }
+  { params }: { params: Promise<{ id: string; chapterId }> }
 ) {
   try {
     const { chapterId } = await params;
     const body = await request.json();
     const { number, title, content, outline } = body;
 
+    const updates: string[] = [];
+    const values: any[] = [];
+    let paramIndex = 1;
+
+    if (number !== undefined) {
+      updates.push(`number = $${paramIndex++}`);
+      values.push(number);
+    }
+
+    if (title !== undefined) {
+      updates.push(`title = $${paramIndex++}`);
+      values.push(title);
+    }
+
+    if (content !== undefined) {
+      updates.push(`content = $${paramIndex++}`);
+      values.push(content);
+    }
+
+    if (outline !== undefined) {
+      updates.push(`outline = $${paramIndex++}`);
+      values.push(outline);
+    }
+
+    if (updates.length === 0) {
+      return NextResponse.json({ error: 'No fields to update' }, { status: 400 });
+    }
+
+    updates.push(`updated_at = NOW()`);
+    values.push(chapterId);
+
     const [chapter] = await query<Chapter>(
       `UPDATE chapters
-       SET number = $1, title = $2, content = $3, outline = $4, updated_at = NOW()
-       WHERE id = $5
+       SET ${updates.join(', ')}
+       WHERE id = $${paramIndex}
        RETURNING *`,
-      [number, title, content, outline, chapterId]
+      values
     );
 
     if (!chapter) {
