@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface ReviewIssue {
   type: string;
@@ -15,7 +16,9 @@ interface ReviewResult {
 }
 
 export function ReviewChapterButton({ novelId, chapterId }: { novelId: string; chapterId: string }) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [regenerating, setRegenerating] = useState(false);
   const [result, setResult] = useState<ReviewResult | null>(null);
 
   const handleReview = async () => {
@@ -32,6 +35,28 @@ export function ReviewChapterButton({ novelId, chapterId }: { novelId: string; c
       console.error('Failed to review chapter:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRegenerate = async () => {
+    if (!result || result.issues.length === 0) return;
+
+    setRegenerating(true);
+    try {
+      const suggestions = result.issues.map(issue => issue.suggestion);
+      const res = await fetch(`/api/novels/${novelId}/chapters/${chapterId}/regenerate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ suggestions }),
+      });
+      if (res.ok) {
+        router.refresh();
+        setResult(null);
+      }
+    } catch (error) {
+      console.error('Failed to regenerate chapter:', error);
+    } finally {
+      setRegenerating(false);
     }
   };
 
@@ -65,27 +90,37 @@ export function ReviewChapterButton({ novelId, chapterId }: { novelId: string; c
           </div>
 
           {result.issues.length > 0 && (
-            <div className="space-y-4">
-              <h4 className="font-medium text-gray-900 dark:text-amber-50">发现的问题:</h4>
-              {result.issues.map((issue, index) => (
-                <div key={index} className="border border-gray-200 dark:border-gray-800 p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className={`px-2 py-1 text-xs font-medium ${getSeverityColor(issue.severity)}`}>
-                      {issue.severity}
-                    </span>
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {issue.type}
-                    </span>
+            <>
+              <div className="space-y-4 mb-6">
+                <h4 className="font-medium text-gray-900 dark:text-amber-50">发现的问题:</h4>
+                {result.issues.map((issue, index) => (
+                  <div key={index} className="border border-gray-200 dark:border-gray-800 p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className={`px-2 py-1 text-xs font-medium ${getSeverityColor(issue.severity)}`}>
+                        {issue.severity}
+                      </span>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        {issue.type}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      {issue.description}
+                    </p>
+                    <p className="text-sm text-purple-700 dark:text-purple-400">
+                      💡 {issue.suggestion}
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                    {issue.description}
-                  </p>
-                  <p className="text-sm text-purple-700 dark:text-purple-400">
-                    💡 {issue.suggestion}
-                  </p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+
+              <button
+                onClick={handleRegenerate}
+                disabled={regenerating}
+                className="w-full px-6 py-3 bg-amber-700 dark:bg-amber-600 text-white font-medium hover:bg-amber-800 dark:hover:bg-amber-700 transition-colors disabled:opacity-50"
+              >
+                {regenerating ? '重新生成中...' : '✨ 应用建议并重新生成'}
+              </button>
+            </>
           )}
         </div>
       )}
