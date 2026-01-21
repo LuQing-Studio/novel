@@ -3,20 +3,21 @@ import { notFound } from 'next/navigation';
 import { mockNovels, mockChapters } from '@/lib/data/mock';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
-export default function ChapterPage({
+export default async function ChapterPage({
   params,
 }: {
-  params: { id: string; chapterId: string };
+  params: Promise<{ id: string; chapterId: string }>;
 }) {
-  const novel = mockNovels.find(n => n.id === params.id);
-  const chapter = mockChapters.find(c => c.id === params.chapterId);
+  const { id, chapterId } = await params;
+  const novel = mockNovels.find(n => n.id === id);
+  const chapter = mockChapters.find(c => c.id === chapterId);
 
   if (!novel || !chapter) {
     notFound();
   }
 
-  const chapters = mockChapters.filter(c => c.novelId === params.id);
-  const currentIndex = chapters.findIndex(c => c.id === params.chapterId);
+  const chapters = mockChapters.filter(c => c.novelId === id);
+  const currentIndex = chapters.findIndex(c => c.id === chapterId);
   const prevChapter = currentIndex > 0 ? chapters[currentIndex - 1] : null;
   const nextChapter = currentIndex < chapters.length - 1 ? chapters[currentIndex + 1] : null;
 
@@ -30,7 +31,7 @@ export default function ChapterPage({
         {/* Navigation Header */}
         <div className="flex items-center justify-between mb-8">
           <Link
-            href={`/novels/${params.id}`}
+            href={`/novels/${id}`}
             className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-amber-700 dark:hover:text-amber-500 transition-colors"
           >
             <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -69,7 +70,7 @@ export default function ChapterPage({
         <div className="flex items-center justify-between gap-4">
           {prevChapter ? (
             <Link
-              href={`/novels/${params.id}/chapters/${prevChapter.id}`}
+              href={`/novels/${id}/chapters/${prevChapter.id}`}
               className="flex-1 p-4 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 hover:border-amber-700 dark:hover:border-amber-500 transition-all group"
             >
               <div className="text-sm text-gray-500 dark:text-gray-500 mb-1">上一章</div>
@@ -85,7 +86,7 @@ export default function ChapterPage({
 
           {nextChapter ? (
             <Link
-              href={`/novels/${params.id}/chapters/${nextChapter.id}`}
+              href={`/novels/${id}/chapters/${nextChapter.id}`}
               className="flex-1 p-4 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 hover:border-amber-700 dark:hover:border-amber-500 transition-all group text-right"
             >
               <div className="text-sm text-gray-500 dark:text-gray-500 mb-1">下一章</div>

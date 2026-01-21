@@ -3,14 +3,15 @@ import { notFound } from 'next/navigation';
 import { mockNovels, mockChapters } from '@/lib/data/mock';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
-export default function NovelDetailPage({ params }: { params: { id: string } }) {
-  const novel = mockNovels.find(n => n.id === params.id);
+export default async function NovelDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const novel = mockNovels.find(n => n.id === id);
 
   if (!novel) {
     notFound();
   }
 
-  const chapters = mockChapters.filter(c => c.novelId === params.id);
+  const chapters = mockChapters.filter(c => c.novelId === id);
 
   return (
     <div className="min-h-screen bg-[#faf8f5] dark:bg-[#1a1816] transition-colors relative">
@@ -62,7 +63,7 @@ export default function NovelDetailPage({ params }: { params: { id: string } }) 
             {chapters.map((chapter) => (
               <Link
                 key={chapter.id}
-                href={`/novels/${params.id}/chapters/${chapter.id}`}
+                href={`/novels/${id}/chapters/${chapter.id}`}
                 className="block p-4 border border-gray-200 dark:border-gray-800 hover:border-amber-700 dark:hover:border-amber-500 transition-all group"
               >
                 <div className="flex items-center justify-between">
