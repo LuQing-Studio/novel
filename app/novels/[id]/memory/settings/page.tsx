@@ -1,17 +1,41 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { mockNovels, mockWorldSettings } from '@/lib/data/mock';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { Novel, WorldSetting } from '@/lib/types';
+
+async function getNovel(id: string): Promise<Novel | null> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${id}`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return null;
+    return res.json();
+  } catch (error) {
+    return null;
+  }
+}
+
+async function getWorldSettings(novelId: string): Promise<WorldSetting[]> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${novelId}/world-settings`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch (error) {
+    return [];
+  }
+}
 
 export default async function SettingsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const novel = mockNovels.find(n => n.id === id);
+  const novel = await getNovel(id);
 
   if (!novel) {
     notFound();
   }
 
-  const settings = mockWorldSettings.filter(s => s.novelId === id);
+  const settings = await getWorldSettings(id);
   const categories = {
     rule: '规则',
     geography: '地理',

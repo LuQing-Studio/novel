@@ -1,19 +1,67 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { mockNovels, mockCharacters, mockForeshadowing, mockWorldSettings } from '@/lib/data/mock';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { Novel, Character, Foreshadowing, WorldSetting } from '@/lib/types';
+
+async function getNovel(id: string): Promise<Novel | null> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${id}`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return null;
+    return res.json();
+  } catch (error) {
+    return null;
+  }
+}
+
+async function getCharacters(novelId: string): Promise<Character[]> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${novelId}/characters`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch (error) {
+    return [];
+  }
+}
+
+async function getForeshadowing(novelId: string): Promise<Foreshadowing[]> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${novelId}/foreshadowing`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch (error) {
+    return [];
+  }
+}
+
+async function getWorldSettings(novelId: string): Promise<WorldSetting[]> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${novelId}/world-settings`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch (error) {
+    return [];
+  }
+}
 
 export default async function MemoryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const novel = mockNovels.find(n => n.id === id);
+  const novel = await getNovel(id);
 
   if (!novel) {
     notFound();
   }
 
-  const characters = mockCharacters.filter(c => c.novelId === id);
-  const foreshadowing = mockForeshadowing.filter(f => f.novelId === id);
-  const settings = mockWorldSettings.filter(s => s.novelId === id);
+  const characters = await getCharacters(id);
+  const foreshadowing = await getForeshadowing(id);
+  const settings = await getWorldSettings(id);
 
   return (
     <div className="min-h-screen bg-[#faf8f5] dark:bg-[#1a1816] transition-colors relative">

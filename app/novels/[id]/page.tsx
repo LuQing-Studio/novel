@@ -1,17 +1,41 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { mockNovels, mockChapters } from '@/lib/data/mock';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { Novel, Chapter } from '@/lib/types';
+
+async function getNovel(id: string): Promise<Novel | null> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${id}`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return null;
+    return res.json();
+  } catch (error) {
+    return null;
+  }
+}
+
+async function getChapters(novelId: string): Promise<Chapter[]> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${novelId}/chapters`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch (error) {
+    return [];
+  }
+}
 
 export default async function NovelDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const novel = mockNovels.find(n => n.id === id);
+  const novel = await getNovel(id);
 
   if (!novel) {
     notFound();
   }
 
-  const chapters = mockChapters.filter(c => c.novelId === id);
+  const chapters = await getChapters(id);
 
   return (
     <div className="min-h-screen bg-[#faf8f5] dark:bg-[#1a1816] transition-colors relative">
@@ -55,9 +79,9 @@ export default async function NovelDetailPage({ params }: { params: Promise<{ id
           </p>
 
           <div className="flex items-center gap-6 text-sm text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-gray-800 pt-4">
-            <span className="font-mono">{novel.chapterCount} 章</span>
-            <span className="font-mono">{(novel.wordCount / 10000).toFixed(1)} 万字</span>
-            <span className="font-mono">更新于 {novel.updatedAt.toLocaleDateString('zh-CN')}</span>
+            <span className="font-mono">{novel.chapter_count || 0} 章</span>
+            <span className="font-mono">{((novel.word_count || 0) / 10000).toFixed(1)} 万字</span>
+            <span className="font-mono">更新于 {new Date(novel.updated_at).toLocaleDateString('zh-CN')}</span>
           </div>
         </div>
 

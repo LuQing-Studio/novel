@@ -1,7 +1,43 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { mockNovels, mockChapters } from '@/lib/data/mock';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { Novel, Chapter } from '@/lib/types';
+
+async function getNovel(id: string): Promise<Novel | null> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${id}`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return null;
+    return res.json();
+  } catch (error) {
+    return null;
+  }
+}
+
+async function getChapter(novelId: string, chapterId: string): Promise<Chapter | null> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${novelId}/chapters/${chapterId}`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return null;
+    return res.json();
+  } catch (error) {
+    return null;
+  }
+}
+
+async function getChapters(novelId: string): Promise<Chapter[]> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${novelId}/chapters`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch (error) {
+    return [];
+  }
+}
 
 export default async function ChapterPage({
   params,
@@ -9,14 +45,14 @@ export default async function ChapterPage({
   params: Promise<{ id: string; chapterId: string }>;
 }) {
   const { id, chapterId } = await params;
-  const novel = mockNovels.find(n => n.id === id);
-  const chapter = mockChapters.find(c => c.id === chapterId);
+  const novel = await getNovel(id);
+  const chapter = await getChapter(id, chapterId);
 
   if (!novel || !chapter) {
     notFound();
   }
 
-  const chapters = mockChapters.filter(c => c.novelId === id);
+  const chapters = await getChapters(id);
   const currentIndex = chapters.findIndex(c => c.id === chapterId);
   const prevChapter = currentIndex > 0 ? chapters[currentIndex - 1] : null;
   const nextChapter = currentIndex < chapters.length - 1 ? chapters[currentIndex + 1] : null;
@@ -53,8 +89,8 @@ export default async function ChapterPage({
               {chapter.title}
             </h1>
             <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-500 font-mono">
-              <span>{chapter.wordCount} 字</span>
-              <span>{chapter.createdAt.toLocaleDateString('zh-CN')}</span>
+              <span>{chapter.word_count || 0} 字</span>
+              <span>{new Date(chapter.created_at).toLocaleDateString('zh-CN')}</span>
             </div>
           </header>
 

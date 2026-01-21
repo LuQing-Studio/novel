@@ -1,8 +1,22 @@
 import Link from 'next/link';
-import { mockNovels } from '@/lib/data/mock';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { Novel } from '@/lib/types';
 
-export default function Home() {
+async function getNovels(): Promise<Novel[]> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch (error) {
+    console.error('Failed to fetch novels:', error);
+    return [];
+  }
+}
+
+export default async function Home() {
+  const novels = await getNovels();
   return (
     <div className="min-h-screen bg-[#faf8f5] dark:bg-[#1a1816] transition-colors relative">
       {/* Paper texture overlay */}
@@ -33,7 +47,12 @@ export default function Home() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {mockNovels.map((novel) => (
+            {novels.length === 0 ? (
+              <div className="col-span-full text-center py-12 text-gray-500 dark:text-gray-400">
+                暂无小说,点击"创建新小说"开始创作
+              </div>
+            ) : (
+              novels.map((novel) => (
               <Link
                 key={novel.id}
                 href={`/novels/${novel.id}`}
@@ -59,17 +78,18 @@ export default function Home() {
 
                   <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-500 border-t border-gray-200 dark:border-gray-800 pt-4">
                     <div className="flex items-center gap-4">
-                      <span className="font-mono">{novel.chapterCount} 章</span>
-                      <span className="font-mono">{(novel.wordCount / 10000).toFixed(1)}万字</span>
+                      <span className="font-mono">{novel.chapter_count || 0} 章</span>
+                      <span className="font-mono">{((novel.word_count || 0) / 10000).toFixed(1)}万字</span>
                     </div>
                   </div>
 
                   <div className="mt-3 text-xs text-gray-400 dark:text-gray-600 font-mono">
-                    {novel.updatedAt.toLocaleDateString('zh-CN')}
+                    {new Date(novel.updated_at).toLocaleDateString('zh-CN')}
                   </div>
                 </div>
               </Link>
-            ))}
+              ))
+            )}
           </div>
         </div>
 

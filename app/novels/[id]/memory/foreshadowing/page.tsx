@@ -1,17 +1,41 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { mockNovels, mockForeshadowing } from '@/lib/data/mock';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { Novel, Foreshadowing } from '@/lib/types';
+
+async function getNovel(id: string): Promise<Novel | null> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${id}`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return null;
+    return res.json();
+  } catch (error) {
+    return null;
+  }
+}
+
+async function getForeshadowing(novelId: string): Promise<Foreshadowing[]> {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${novelId}/foreshadowing`, {
+      cache: 'no-store'
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch (error) {
+    return [];
+  }
+}
 
 export default async function ForeshadowingPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const novel = mockNovels.find(n => n.id === id);
+  const novel = await getNovel(id);
 
   if (!novel) {
     notFound();
   }
 
-  const foreshadowing = mockForeshadowing.filter(f => f.novelId === id);
+  const foreshadowing = await getForeshadowing(id);
 
   return (
     <div className="min-h-screen bg-[#faf8f5] dark:bg-[#1a1816] transition-colors relative">
