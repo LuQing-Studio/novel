@@ -37,9 +37,17 @@ export default async function NovelDetailPage({ params }: { params: Promise<{ id
             <h1 className="text-4xl font-serif font-bold text-gray-900 dark:text-amber-50">
               {novel.title}
             </h1>
-            <span className="px-4 py-2 bg-amber-100 dark:bg-amber-900/50 text-amber-900 dark:text-amber-200 font-medium border border-amber-300 dark:border-amber-700">
-              {novel.genre}
-            </span>
+            <div className="flex items-center gap-3">
+              <Link
+                href={`/novels/${id}/memory`}
+                className="px-4 py-2 bg-amber-700 dark:bg-amber-600 text-white font-medium hover:bg-amber-800 dark:hover:bg-amber-700 transition-colors"
+              >
+                记忆系统
+              </Link>
+              <span className="px-4 py-2 bg-amber-100 dark:bg-amber-900/50 text-amber-900 dark:text-amber-200 font-medium border border-amber-300 dark:border-amber-700">
+                {novel.genre}
+              </span>
+            </div>
           </div>
 
           <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
