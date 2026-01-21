@@ -4,6 +4,7 @@ import { getAIService } from '@/lib/ai/factory';
 import { Novel, Chapter, Character, WorldSetting, Foreshadowing } from '@/lib/types';
 import { getLightRAGClient } from '@/lib/lightrag/client';
 import { countWords } from '@/lib/utils/text';
+import { extractCharactersFromChapter, addExtractedCharacters } from '@/lib/ai/character-extractor';
 
 export async function POST(
   request: Request,
@@ -179,6 +180,14 @@ export async function POST(
       'UPDATE novels SET chapter_count = chapter_count + 1, word_count = word_count + $2, updated_at = NOW() WHERE id = $1',
       [id, wordCount]
     );
+
+    // 自动提取人物
+    try {
+      const characters = await extractCharactersFromChapter(id, chapter.id, nextChapterNumber, response.content);
+      await addExtractedCharacters(id, nextChapterNumber, characters);
+    } catch (error) {
+      console.warn('Auto character extraction failed:', error);
+    }
 
     return NextResponse.json(chapter);
   } catch (error) {
