@@ -29,13 +29,13 @@ export async function POST(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { category, content, related_chapters } = body;
+    const { category, title, content, related_chapters } = body;
 
     const [setting] = await query<WorldSetting>(
-      `INSERT INTO world_settings (novel_id, category, content, related_chapters)
-       VALUES ($1, $2, $3, $4)
+      `INSERT INTO world_settings (novel_id, category, title, content, related_chapters)
+       VALUES ($1, $2, $3, $4, $5)
        RETURNING *`,
-      [id, category, content, related_chapters]
+      [id, category, title, content, related_chapters]
     );
 
     return NextResponse.json(setting, { status: 201 });
