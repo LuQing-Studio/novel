@@ -88,14 +88,16 @@ export default async function SettingsPage({ params }: { params: Promise<{ id: s
                 {setting.content}
               </p>
 
-              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-500 font-mono">
-                <span>相关章节:</span>
-                {setting.relatedChapters.map((chapter, index) => (
-                  <span key={index}>
-                    第 {chapter} 章{index < setting.relatedChapters.length - 1 ? ',' : ''}
-                  </span>
-                ))}
-              </div>
+              {setting.relatedChapters && setting.relatedChapters.length > 0 && (
+                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-500 font-mono">
+                  <span>相关章节:</span>
+                  {setting.relatedChapters.map((chapter, index) => (
+                    <span key={index}>
+                      第 {chapter} 章{index < setting.relatedChapters.length - 1 ? ',' : ''}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
