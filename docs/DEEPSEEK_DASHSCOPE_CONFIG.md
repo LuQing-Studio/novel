@@ -1,10 +1,10 @@
-# DeepSeek + 魔搭 Embedding 配置指南
+# DeepSeek + 硅基流动 Embedding 配置指南
 
 ## 配置方案
 
 本项目使用:
 - **LLM**: DeepSeek API (OpenAI 兼容格式)
-- **Embedding**: 阿里云 DashScope text-embedding-v4 (推荐)
+- **Embedding**: 硅基流动 SiliconFlow - BAAI/bge-m3
 
 ## 1. 获取 API Key
 
@@ -14,16 +14,16 @@
 3. 在控制台创建 API Key
 4. 复制 API Key (格式: `sk-xxxxx`)
 
-### 阿里云 DashScope API Key
-1. 访问 [阿里云 DashScope](https://dashscope.aliyun.com/)
-2. 注册/登录阿里云账号
-3. 开通 DashScope 服务
-4. 在控制台创建 API Key
-5. 复制 API Key
+### 硅基流动 SiliconFlow API Key
+1. 访问 [硅基流动](https://siliconflow.cn/)
+2. 注册/登录账号
+3. 在控制台创建 API Key
+4. 复制 API Key
 
-**免费额度**:
-- text-embedding-v4: 1M tokens (90天)
-- 价格: $0.07/百万tokens
+**特点**:
+- bge-m3: 多语言 Embedding 模型
+- 1024 维向量
+- 价格实惠
 
 ## 2. 配置文件
 
@@ -42,12 +42,12 @@ LLM_MODEL=deepseek-chat
 LLM_BINDING_HOST=https://api.deepseek.com/v1
 LLM_BINDING_API_KEY=sk-xxxxx  # 你的 DeepSeek API Key
 
-# Embedding - 阿里云 DashScope
+# Embedding - 硅基流动 SiliconFlow
 EMBEDDING_BINDING=openai
-EMBEDDING_MODEL=text-embedding-v4
+EMBEDDING_MODEL=BAAI/bge-m3
 EMBEDDING_DIM=1024
-EMBEDDING_BINDING_HOST=https://dashscope.aliyuncs.com/compatible-mode/v1
-EMBEDDING_BINDING_API_KEY=sk-xxxxx  # 你的 DashScope API Key
+EMBEDDING_BINDING_HOST=https://api.siliconflow.cn/v1
+EMBEDDING_BINDING_API_KEY=sk-xxxxx  # 你的硅基流动 API Key
 
 # 服务密钥(自己设置)
 LIGHTRAG_API_KEY=my-secure-lightrag-key-123
