@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { GenerateChapterButton } from '@/components/GenerateChapterButton';
+import { ExportButton } from '@/components/ExportButton';
 import { Novel, Chapter } from '@/lib/types';
 
 async function getNovel(id: string): Promise<Novel | null> {
@@ -63,6 +64,7 @@ export default async function NovelDetailPage({ params }: { params: Promise<{ id
               {novel.title}
             </h1>
             <div className="flex items-center gap-3">
+              <ExportButton novelId={id} />
               <Link
                 href={`/novels/${id}/memory`}
                 className="px-4 py-2 bg-amber-700 dark:bg-amber-600 text-white font-medium hover:bg-amber-800 dark:hover:bg-amber-700 transition-colors"
