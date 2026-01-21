@@ -35,7 +35,7 @@ export const mockChapters: Chapter[] = [
 
 他开始在脑海中构建一个修炼模型:
 
-```
+【代码】
 function cultivate() {
   while (true) {
     const qi = absorbQi(); // 吸收灵气
@@ -46,7 +46,7 @@ function cultivate() {
     }
   }
 }
-```
+【/代码】
 
 "对,就是这样!"李明兴奋地说道,"修炼就是一个循环过程,不断优化这个循环,就能提升效率!"
 
