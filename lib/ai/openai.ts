@@ -8,7 +8,9 @@ export class OpenAIService implements AIService {
   }
 
   async generate(request: AIRequest): Promise<AIResponse> {
-    const response = await fetch(this.config.baseURL || 'https://api.openai.com/v1/chat/completions', {
+    const baseURL = this.config.baseURL || 'https://api.openai.com/v1';
+    const url = `${baseURL}/chat/completions`;
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
