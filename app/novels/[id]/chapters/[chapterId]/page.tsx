@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { ReviewChapterButton } from '@/components/ReviewChapterButton';
 import { Novel, Chapter } from '@/lib/types';
 
 async function getNovel(id: string): Promise<Novel | null> {
@@ -101,6 +102,11 @@ export default async function ChapterPage({
             </div>
           </div>
         </article>
+
+        {/* Review Section */}
+        <div className="mb-8">
+          <ReviewChapterButton novelId={id} chapterId={chapterId} />
+        </div>
 
         {/* Chapter Navigation */}
         <div className="flex items-center justify-between gap-4">

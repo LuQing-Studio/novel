@@ -41,9 +41,12 @@ export default async function Home() {
             <h2 className="text-3xl font-serif font-semibold text-gray-900 dark:text-amber-50 border-l-4 border-amber-700 dark:border-amber-500 pl-4">
               我的小说
             </h2>
-            <button className="px-6 py-3 bg-amber-700 dark:bg-amber-600 text-white font-medium border-2 border-amber-900 dark:border-amber-700 hover:bg-amber-800 dark:hover:bg-amber-700 transition-all shadow-md hover:shadow-lg">
+            <Link
+              href="/novels/new"
+              className="px-6 py-3 bg-amber-700 dark:bg-amber-600 text-white font-medium border-2 border-amber-900 dark:border-amber-700 hover:bg-amber-800 dark:hover:bg-amber-700 transition-all shadow-md hover:shadow-lg"
+            >
               + 创建新小说
-            </button>
+            </Link>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

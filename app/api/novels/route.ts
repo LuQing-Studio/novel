@@ -20,13 +20,13 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { title, description, genre, tags } = body;
+    const { title, description, genre } = body;
 
     const [novel] = await query<Novel>(
-      `INSERT INTO novels (title, description, genre, tags)
-       VALUES ($1, $2, $3, $4)
+      `INSERT INTO novels (title, description, genre)
+       VALUES ($1, $2, $3)
        RETURNING *`,
-      [title, description, genre, tags]
+      [title, description, genre]
     );
 
     return NextResponse.json(novel, { status: 201 });

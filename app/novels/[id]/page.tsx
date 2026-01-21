@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { GenerateChapterButton } from '@/components/GenerateChapterButton';
 import { Novel, Chapter } from '@/lib/types';
 
 async function getNovel(id: string): Promise<Novel | null> {
@@ -90,6 +91,10 @@ export default async function NovelDetailPage({ params }: { params: Promise<{ id
           <h2 className="text-2xl font-serif font-semibold text-gray-900 dark:text-amber-50 mb-6 border-l-4 border-amber-700 dark:border-amber-500 pl-4">
             章节列表
           </h2>
+
+          <div className="mb-6">
+            <GenerateChapterButton novelId={id} />
+          </div>
 
           <div className="space-y-2">
             {chapters.map((chapter) => (
