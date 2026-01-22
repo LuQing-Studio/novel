@@ -58,7 +58,7 @@ async function main() {
         console.log('等待5秒后继续...');
         await new Promise(resolve => setTimeout(resolve, 5000));
       }
-    } catch (error) {
+    } catch {
       console.error('生成过程中出错,停止执行');
       process.exit(1);
     }

@@ -1,4 +1,4 @@
-import { AIService, AIRequest, AIResponse, AIProviderConfig, Message } from './types';
+import { AIService, AIRequest, AIResponse, AIProviderConfig } from './types';
 
 export class AnthropicService implements AIService {
   private config: AIProviderConfig;

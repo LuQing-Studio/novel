@@ -14,7 +14,7 @@ async function getNovel(id: string): Promise<Novel | null> {
     });
     if (!res.ok) return null;
     return res.json();
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -26,7 +26,7 @@ async function getChapter(novelId: string, chapterId: string): Promise<Chapter |
     });
     if (!res.ok) return null;
     return res.json();
-  } catch (error) {
+  } catch {
     return null;
   }
 }
@@ -38,7 +38,7 @@ async function getChapters(novelId: string): Promise<Chapter[]> {
     });
     if (!res.ok) return [];
     return res.json();
-  } catch (error) {
+  } catch {
     return [];
   }
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface Version {
@@ -22,13 +22,7 @@ export function VersionHistoryButton({ novelId, chapterId }: {
   const [loading, setLoading] = useState(false);
   const [selectedVersion, setSelectedVersion] = useState<Version | null>(null);
 
-  useEffect(() => {
-    if (showHistory) {
-      loadVersions();
-    }
-  }, [showHistory]);
-
-  const loadVersions = async () => {
+  const loadVersions = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/novels/${novelId}/chapters/${chapterId}/versions`);
@@ -41,7 +35,13 @@ export function VersionHistoryButton({ novelId, chapterId }: {
     } finally {
       setLoading(false);
     }
-  };
+  }, [novelId, chapterId]);
+
+  useEffect(() => {
+    if (showHistory) {
+      loadVersions();
+    }
+  }, [showHistory, loadVersions]);
 
   const handleRestore = async (versionId: string) => {
     if (!confirm('确定要恢复到此版本吗?当前内容将被替换。')) return;
