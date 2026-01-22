@@ -147,10 +147,10 @@ export default function KnowledgeGraphPage({ params }: { params: Promise<{ id: s
                 onNodeClick={handleNodeClick}
                 backgroundColor="transparent"
                 nodeThreeObject={(node: any) => {
-                  // 动态导入 SpriteText
-                  const SpriteText = require('three-spritetext');
+                  // 动态导入 SpriteText (默认导出)
+                  const SpriteText = require('three-spritetext').default || require('three-spritetext');
                   const sprite = new SpriteText(node.label);
-                  sprite.color = node.color;
+                  sprite.color = node.color || '#ffffff';
                   sprite.textHeight = 8;
                   return sprite;
                 }}

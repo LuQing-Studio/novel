@@ -9,6 +9,15 @@ export async function GET(
   try {
     const { id } = await params;
 
+    // 验证 UUID 格式
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(id)) {
+      return NextResponse.json(
+        { error: 'Invalid novel ID format. Expected UUID.' },
+        { status: 400 }
+      );
+    }
+
     // 获取所有人物
     const characters = await query<Character>(
       'SELECT * FROM characters WHERE novel_id = $1',
