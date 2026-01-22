@@ -1,31 +1,48 @@
 # Novel AI - Claude 开发指南
 
+## ⚠️ AI 必读提醒
+
+**在开始任何工作前，AI 必须：**
+
+1. 📖 阅读本文件的完整内容
+2. ✅ 在完成功能后，严格执行「功能完成标准」
+3. 🔄 自动提交代码并更新进度文档
+4. 📝 记录 Git 提交哈希到进度文档
+5. 🎯 使用 TodoWrite 工具追踪任务进度
+
+**另请阅读：** `~/.claude/PROJECT_RULES.md` (全局开发规范)
+
+---
+
 ## 项目概述
 
 Novel AI 是一个 AI 驱动的小说创作助手,专注于解决长篇小说创作中的长期一致性问题。
 
 **PRD 文档**: [docs/prd/2026-01-22-novel.md](docs/prd/2026-01-22-novel.md)
 **进度跟踪**: [docs/progress/2026-01-22-novel.md](docs/progress/2026-01-22-novel.md)
+**提示词整理**: [docs/prompts/README.md](docs/prompts/README.md)
 
 ## 开发流程规范
 
-### 1. 必须使用 project-kickstart Skill
+### 1. 项目文档管理
 
-在开发过程中,**必须**使用 `project-kickstart` skill 来管理开发进度:
+项目使用三个核心文档来指导开发：
 
-```bash
-# 初始化项目跟踪
-/project-kickstart init
+**PRD 文档** (`docs/prd/YYYY-MM-DD-<project>.md`)
+- 定义项目目标、功能需求、验收标准
+- 作为项目的"北极星"，避免开发跑偏
+- 在项目启动时创建，需求变更时更新
 
-# 开始新功能开发
-/project-kickstart start <功能名称>
+**进度跟踪文档** (`docs/progress/YYYY-MM-DD-<project>.md`)
+- 记录每个 Phase 的完成情况
+- 记录关键决策、技术细节、问题解决方案
+- 每完成一个功能后更新
+- **必须记录 Git 提交哈希**，便于追踪代码变更
 
-# 完成功能开发
-/project-kickstart complete <功能名称>
-
-# 更新进度
-/project-kickstart update
-```
+**提示词整理** (`docs/prompts/`)
+- 记录开发过程中使用的提示词
+- 按开发阶段组织
+- 作为经验总结和模板参考
 
 ### 2. 功能完成标准
 
@@ -71,8 +88,9 @@ Chrome DevTools MCP 验证通过后,在移动端进行最终验收:
 - 在"已完成功能"部分添加详细记录
 - 更新"总体进度"百分比
 - 记录关键决策和问题解决方案
+- 记录 Git 提交哈希
 
-### 5. Git 提交规范
+### 6. Git 提交规范
 
 提交信息格式:
 
@@ -100,7 +118,10 @@ Co-Authored-By: Happy <yesreply@happy.engineering>
 
 - **前端**: Next.js 15 + React 19 + TypeScript + Tailwind CSS
 - **后端**: Next.js API Routes
-- **AI**: Claude API (Anthropic)
+- **AI 服务**:
+  - LLM: DeepSeek API (兼容 OpenAI 格式)
+  - Embedding: 硅基流动 bge-m3 (1024维)
+  - 知识图谱: LightRAG (NetworkXStorage + PGVectorStorage)
 - **数据库**: PostgreSQL + pgvector
 - **部署**: Vercel
 - **版本控制**: GitHub (LuQing-Studio/novel)
@@ -114,24 +135,16 @@ npm install
 # 启动开发服务器
 npm run dev
 
+# 启动 LightRAG 服务
+cd lightrag
+python server.py
+
 # 本地访问
 http://localhost:3000
 
 # 局域网访问(移动端测试)
 http://192.168.1.191:3000
 ```
-
-## 当前开发阶段
-
-**Milestone 1: MVP** (Week 1-4)
-
-当前进度: Phase 1 完成 (基础架构搭建)
-
-下一步:
-- [ ] 创建小说详情页面和章节阅读
-- [ ] 创建记忆系统 UI(人物卡、伏笔、设定)
-- [ ] 配置 PostgreSQL + pgvector
-- [ ] 集成 Claude API
 
 ## 代码规范
 
@@ -168,6 +181,7 @@ http://192.168.1.191:3000
 
 - [PRD 文档](docs/prd/2026-01-22-novel.md)
 - [进度跟踪](docs/progress/2026-01-22-novel.md)
+- [提示词整理](docs/prompts/README.md)
 - [Next.js 文档](https://nextjs.org/docs)
 - [Tailwind CSS 文档](https://tailwindcss.com/docs)
-- [Claude API 文档](https://docs.anthropic.com/)
+- [DeepSeek API 文档](https://platform.deepseek.com/docs)
