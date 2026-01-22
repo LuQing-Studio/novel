@@ -4,7 +4,7 @@ import { useEffect, useState, use, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
-const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), { ssr: false });
+const ForceGraph3D = dynamic(() => import('react-force-graph-3d'), { ssr: false });
 
 interface GraphNode {
   id: string;
@@ -58,6 +58,21 @@ export default function KnowledgeGraphPage({ params }: { params: Promise<{ id: s
 
   const handleNodeClick = useCallback((node: any) => {
     setSelectedNode(node);
+    // 相机聚焦到节点
+    if (fgRef.current) {
+      const distance = 200;
+      const distRatio = 1 + distance / Math.hypot(node.x || 0, node.y || 0, node.z || 0);
+
+      fgRef.current.cameraPosition(
+        {
+          x: (node.x || 0) * distRatio,
+          y: (node.y || 0) * distRatio,
+          z: (node.z || 0) * distRatio
+        },
+        node,
+        1000
+      );
+    }
   }, []);
 
   if (loading) {
@@ -121,33 +136,25 @@ export default function KnowledgeGraphPage({ params }: { params: Promise<{ id: s
           {/* 图形可视化 */}
           <div className="lg:col-span-3 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 p-6">
             <div className="w-full h-[600px]">
-              <ForceGraph2D
+              <ForceGraph3D
                 ref={fgRef}
                 graphData={{ nodes: graphNodes, links: graphLinks }}
                 nodeLabel="label"
-                nodeColor="color"
-                nodeRelSize={6}
+                nodeAutoColorBy="type"
+                nodeVal={10}
                 linkColor={() => '#9ca3af'}
                 linkWidth={2}
                 onNodeClick={handleNodeClick}
                 backgroundColor="transparent"
-                nodeCanvasObject={(node: any, ctx, globalScale) => {
-                  const label = node.label;
-                  const fontSize = 12/globalScale;
-                  ctx.font = `${fontSize}px Sans-Serif`;
-                  const textWidth = ctx.measureText(label).width;
-                  const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
-
-                  ctx.fillStyle = node.color;
-                  ctx.beginPath();
-                  ctx.arc(node.x, node.y, node.val, 0, 2 * Math.PI, false);
-                  ctx.fill();
-
-                  ctx.textAlign = 'center';
-                  ctx.textBaseline = 'middle';
-                  ctx.fillStyle = '#ffffff';
-                  ctx.fillText(label, node.x, node.y + node.val + fontSize);
+                nodeThreeObject={(node: any) => {
+                  // 动态导入 SpriteText
+                  const SpriteText = require('three-spritetext');
+                  const sprite = new SpriteText(node.label);
+                  sprite.color = node.color;
+                  sprite.textHeight = 8;
+                  return sprite;
                 }}
+                nodeThreeObjectExtend={true}
               />
             </div>
           </div>
