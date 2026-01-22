@@ -9,7 +9,7 @@ export async function POST(
     const { chapterId, versionId } = await params;
 
     // 获取版本内容
-    const version = await queryOne<{ content: string; word_count: number }>(
+    const version = await queryOne<{ content: string; wordCount: number }>(
       'SELECT content, word_count FROM chapter_versions WHERE id = $1 AND chapter_id = $2',
       [versionId, chapterId]
     );
@@ -24,7 +24,7 @@ export async function POST(
     // 更新章节内容
     await query(
       'UPDATE chapters SET content = $1, word_count = $2 WHERE id = $3',
-      [version.content, version.word_count, chapterId]
+      [version.content, version.wordCount, chapterId]
     );
 
     return NextResponse.json({ success: true });

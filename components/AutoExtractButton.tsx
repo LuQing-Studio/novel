@@ -2,12 +2,18 @@
 
 import { useState } from 'react';
 
+interface AutoExtractResult {
+  charactersExtracted?: number;
+  lightragUploaded?: boolean;
+  errors?: string[];
+}
+
 export function AutoExtractButton({ novelId, chapterId }: {
   novelId: string;
   chapterId: string;
 }) {
   const [extracting, setExtracting] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<AutoExtractResult | null>(null);
 
   const handleExtract = async () => {
     setExtracting(true);
@@ -16,7 +22,7 @@ export function AutoExtractButton({ novelId, chapterId }: {
       const res = await fetch(`/api/novels/${novelId}/chapters/${chapterId}/auto-extract`, {
         method: 'POST',
       });
-      const data = await res.json();
+      const data = (await res.json()) as AutoExtractResult;
       setResult(data);
     } catch (error) {
       console.error('Failed to auto extract:', error);

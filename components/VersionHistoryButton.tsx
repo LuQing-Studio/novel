@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation';
 
 interface Version {
   id: string;
-  version_number: number;
+  versionNumber: number;
   content: string;
-  word_count: number;
-  created_at: string;
-  change_description: string | null;
+  wordCount: number;
+  createdAt: string;
+  changeDescription: string | null;
 }
 
 export function VersionHistoryButton({ novelId, chapterId }: {
@@ -101,14 +101,14 @@ export function VersionHistoryButton({ novelId, chapterId }: {
               <div className="flex items-start justify-between mb-2">
                 <div>
                   <div className="font-medium text-gray-900 dark:text-gray-100">
-                    版本 {version.version_number}
+                    版本 {version.versionNumber}
                   </div>
                   <div className="text-sm text-gray-500 dark:text-gray-500">
-                    {new Date(version.created_at).toLocaleString('zh-CN')} · {version.word_count} 字
+                    {new Date(version.createdAt).toLocaleString('zh-CN')} · {version.wordCount} 字
                   </div>
-                  {version.change_description && (
+                  {version.changeDescription && (
                     <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                      {version.change_description}
+                      {version.changeDescription}
                     </div>
                   )}
                 </div>

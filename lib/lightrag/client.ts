@@ -44,13 +44,10 @@ export class LightRAGClient {
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.config.baseURL}${endpoint}`;
-    const headers: HeadersInit = {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    };
-
+    const headers = new Headers(options.headers);
+    headers.set('Content-Type', 'application/json');
     if (this.config.apiKey) {
-      headers['X-API-Key'] = this.config.apiKey;
+      headers.set('X-API-Key', this.config.apiKey);
     }
 
     const response = await fetch(url, {

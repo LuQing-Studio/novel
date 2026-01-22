@@ -4,13 +4,13 @@ import { countWords } from '@/lib/utils/text';
 
 interface ChapterVersion {
   id: string;
-  chapter_id: string;
-  version_number: number;
+  chapterId: string;
+  versionNumber: number;
   content: string;
-  word_count: number;
-  created_at: string;
-  created_by: string;
-  change_description: string | null;
+  wordCount: number;
+  createdAt: string;
+  createdBy: string;
+  changeDescription: string | null;
 }
 
 export async function GET(
@@ -44,11 +44,11 @@ export async function POST(
     const { content, changeDescription } = await request.json();
 
     // 获取当前最大版本号
-    const maxVersionResult = await query<{ max_version: number }>(
+    const maxVersionResult = await query<{ maxVersion: number }>(
       'SELECT COALESCE(MAX(version_number), 0) as max_version FROM chapter_versions WHERE chapter_id = $1',
       [chapterId]
     );
-    const nextVersion = (maxVersionResult[0]?.max_version || 0) + 1;
+    const nextVersion = (maxVersionResult[0]?.maxVersion || 0) + 1;
 
     // 计算字数
     const wordCount = countWords(content);

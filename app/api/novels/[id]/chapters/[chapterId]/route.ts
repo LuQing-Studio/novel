@@ -32,7 +32,7 @@ export async function GET(
 
 export async function PUT(
   request: Request,
-  { params }: { params: Promise<{ id: string; chapterId }> }
+  { params }: { params: Promise<{ id: string; chapterId: string }> }
 ) {
   try {
     const { chapterId } = await params;
@@ -40,7 +40,7 @@ export async function PUT(
     const { number, title, content, outline } = body;
 
     const updates: string[] = [];
-    const values: any[] = [];
+    const values: unknown[] = [];
     let paramIndex = 1;
 
     if (number !== undefined) {

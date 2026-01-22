@@ -61,7 +61,7 @@ export async function POST(
     );
 
     // 构建增强 prompt - 注入所有记忆上下文
-    let promptParts = [
+    const promptParts = [
       `你是一位专业的网文作家。请根据以下信息生成第 ${nextChapterNumber} 章的内容:`,
       '',
       '小说信息:',
@@ -105,21 +105,21 @@ export async function POST(
 
     // 需要开始铺垫的伏笔
     const buildupForeshadowing = foreshadowing.filter(
-      f => f.planned_reveal_chapter &&
-           nextChapterNumber >= f.planned_reveal_chapter - BUILDUP_CHAPTERS &&
-           nextChapterNumber < f.planned_reveal_chapter
+      f => f.plannedRevealChapter &&
+           nextChapterNumber >= f.plannedRevealChapter - BUILDUP_CHAPTERS &&
+           nextChapterNumber < f.plannedRevealChapter
     );
 
     // 待揭示的伏笔
     const revealForeshadowing = foreshadowing.filter(
-      f => f.planned_reveal_chapter && f.planned_reveal_chapter <= nextChapterNumber
+      f => f.plannedRevealChapter && f.plannedRevealChapter <= nextChapterNumber
     );
 
     if (buildupForeshadowing.length > 0) {
       promptParts.push('');
       promptParts.push('需要开始铺垫的伏笔(自然提及,不要揭示):');
       buildupForeshadowing.forEach(f => {
-        promptParts.push(`- ${f.content} (计划第${f.planned_reveal_chapter}章揭示)`);
+        promptParts.push(`- ${f.content} (计划第${f.plannedRevealChapter}章揭示)`);
       });
     }
 
@@ -127,7 +127,7 @@ export async function POST(
       promptParts.push('');
       promptParts.push('待揭示的伏笔(本章应该揭示或推进):');
       revealForeshadowing.forEach(f => {
-        promptParts.push(`- ${f.content} (计划第${f.planned_reveal_chapter}章揭示)`);
+        promptParts.push(`- ${f.content} (计划第${f.plannedRevealChapter}章揭示)`);
       });
     }
 

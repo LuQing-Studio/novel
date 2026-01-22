@@ -88,9 +88,9 @@ export default async function NovelDetailPage({ params }: { params: Promise<{ id
           </p>
 
           <div className="flex items-center gap-6 text-sm text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-gray-800 pt-4">
-            <span className="font-mono">{novel.chapter_count || 0} 章</span>
-            <span className="font-mono">{((novel.word_count || 0) / 10000).toFixed(1)} 万字</span>
-            <span className="font-mono">更新于 {new Date(novel.updated_at).toLocaleDateString('zh-CN')}</span>
+            <span className="font-mono">{novel.chapterCount || 0} 章</span>
+            <span className="font-mono">{((novel.wordCount || 0) / 10000).toFixed(1)} 万字</span>
+            <span className="font-mono">更新于 {new Date(novel.updatedAt).toLocaleDateString('zh-CN')}</span>
           </div>
         </div>
 

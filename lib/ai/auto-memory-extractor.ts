@@ -22,7 +22,12 @@ export async function autoExtractMemories(
 
   try {
     // 1. 提取人物
-    const characters = await extractCharactersFromChapter(chapterContent);
+    const characters = await extractCharactersFromChapter(
+      novelId,
+      chapterId,
+      chapterNumber,
+      chapterContent
+    );
     result.characters = characters;
 
     // 自动添加到数据库

@@ -2,6 +2,12 @@ import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { Character, WorldSetting, Foreshadowing } from '@/lib/types';
 
+function truncateLabel(text: string, maxLength: number): string {
+  const normalized = text.trim().replace(/\s+/g, ' ');
+  if (normalized.length <= maxLength) return normalized;
+  return `${normalized.slice(0, maxLength)}…`;
+}
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -47,30 +53,39 @@ export async function GET(
       ...worldSettings.map(w => ({
         id: `world-${w.id}`,
         type: 'world',
-        label: w.title,
+        label: w.title || truncateLabel(w.content || '未命名设定', 12),
         data: w
       })),
       ...foreshadowing.map(f => ({
         id: `foreshadowing-${f.id}`,
         type: 'foreshadowing',
-        label: f.title,
+        label: truncateLabel(f.content || '未命名伏笔', 16),
         data: f
       }))
     ];
 
     // 构建边(基于描述中的关联)
     const edges: Array<{ source: string; target: string; label?: string }> = [];
+    const edgeKeys = new Set<string>();
+
+    const addEdge = (source: string, target: string, label?: string) => {
+      if (!source || !target || source === target) return;
+      const a = source < target ? source : target;
+      const b = source < target ? target : source;
+      const key = `${a}↔${b}:${label || ''}`;
+      if (edgeKeys.has(key)) return;
+      edgeKeys.add(key);
+      edges.push({ source, target, label });
+    };
 
     // 人物之间的关系
     characters.forEach(char => {
       const desc = char.description?.toLowerCase() || '';
       characters.forEach(other => {
-        if (char.id !== other.id && desc.includes(other.name.toLowerCase())) {
-          edges.push({
-            source: `character-${char.id}`,
-            target: `character-${other.id}`,
-            label: '关联'
-          });
+        const otherName = other.name?.toLowerCase().trim();
+        if (!otherName) return;
+        if (char.id !== other.id && desc.includes(otherName)) {
+          addEdge(`character-${char.id}`, `character-${other.id}`, '关联');
         }
       });
     });
@@ -79,26 +94,22 @@ export async function GET(
     characters.forEach(char => {
       const desc = char.description?.toLowerCase() || '';
       worldSettings.forEach(world => {
-        if (desc.includes(world.title.toLowerCase())) {
-          edges.push({
-            source: `character-${char.id}`,
-            target: `world-${world.id}`,
-            label: '涉及'
-          });
+        const worldTitle = world.title?.toLowerCase().trim();
+        if (!worldTitle) return;
+        if (desc.includes(worldTitle)) {
+          addEdge(`character-${char.id}`, `world-${world.id}`, '涉及');
         }
       });
     });
 
     // 人物与伏笔的关系
     characters.forEach(char => {
+      const charName = char.name?.toLowerCase().trim();
+      if (!charName) return;
       foreshadowing.forEach(fore => {
         const foreDesc = fore.content?.toLowerCase() || '';
-        if (foreDesc.includes(char.name.toLowerCase())) {
-          edges.push({
-            source: `foreshadowing-${fore.id}`,
-            target: `character-${char.id}`,
-            label: '涉及'
-          });
+        if (foreDesc.includes(charName)) {
+          addEdge(`foreshadowing-${fore.id}`, `character-${char.id}`, '涉及');
         }
       });
     });

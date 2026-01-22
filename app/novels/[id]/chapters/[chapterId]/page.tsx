@@ -93,8 +93,8 @@ export default async function ChapterPage({
               {chapter.title}
             </h1>
             <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-500 font-mono">
-              <span>{chapter.word_count || 0} 字</span>
-              <span>{new Date(chapter.created_at).toLocaleDateString('zh-CN')}</span>
+              <span>{chapter.wordCount || 0} 字</span>
+              <span>{new Date(chapter.createdAt).toLocaleDateString('zh-CN')}</span>
             </div>
           </header>
 

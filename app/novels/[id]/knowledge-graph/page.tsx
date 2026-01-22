@@ -1,107 +1,25 @@
-'use client';
-
-import { useEffect, useState, use, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import KnowledgeGraphClient from './KnowledgeGraphClient';
 
-const ForceGraph3D = dynamic(() => import('react-force-graph-3d'), { ssr: false });
-
-interface GraphNode {
-  id: string;
-  type: 'character' | 'world' | 'foreshadowing';
-  label: string;
-  data: any;
-}
-
-interface GraphData {
-  nodes: GraphNode[];
-  edges: Array<{ source: string; target: string; label?: string }>;
-}
-
-export default function KnowledgeGraphPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
-  const [graphData, setGraphData] = useState<GraphData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
-  const fgRef = useRef<any>();
-
-  useEffect(() => {
-    fetch(`/api/novels/${id}/knowledge-graph`)
-      .then(res => res.json())
-      .then(data => {
-        setGraphData(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Failed to load graph:', err);
-        setLoading(false);
-      });
-  }, [id]);
-
-  const getNodeColor = (type: string) => {
-    switch (type) {
-      case 'character': return '#3b82f6';
-      case 'world': return '#10b981';
-      case 'foreshadowing': return '#a855f7';
-      default: return '#6b7280';
-    }
-  };
-
-  const getNodeLabel = (type: string) => {
-    switch (type) {
-      case 'character': return '人物';
-      case 'world': return '世界观';
-      case 'foreshadowing': return '伏笔';
-      default: return '未知';
-    }
-  };
-
-  const handleNodeClick = useCallback((node: any) => {
-    setSelectedNode(node);
-    // 相机聚焦到节点
-    if (fgRef.current) {
-      const distance = 200;
-      const distRatio = 1 + distance / Math.hypot(node.x || 0, node.y || 0, node.z || 0);
-
-      fgRef.current.cameraPosition(
-        {
-          x: (node.x || 0) * distRatio,
-          y: (node.y || 0) * distRatio,
-          z: (node.z || 0) * distRatio
-        },
-        node,
-        1000
-      );
-    }
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#faf8f5] dark:bg-[#1a1816] flex items-center justify-center">
-        <div className="text-gray-600 dark:text-gray-400">加载中...</div>
-      </div>
-    );
-  }
-
-  const graphNodes = graphData?.nodes.map(n => ({
-    ...n,
-    color: getNodeColor(n.type),
-    val: 10
-  })) || [];
-
-  const graphLinks = graphData?.edges.map(e => ({
-    source: e.source,
-    target: e.target,
-    label: e.label
-  })) || [];
+export default async function KnowledgeGraphPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
 
   return (
-    <div className="min-h-screen bg-[#faf8f5] dark:bg-[#1a1816]">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-[#faf8f5] dark:bg-[#1a1816] transition-colors relative">
+      <div className="fixed inset-0 opacity-[0.03] pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOSIgbnVtT2N0YXZlcz0iNCIgLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2UpIiAvPjwvc3ZnPg==')]" />
+
+      <ThemeToggle />
+
+      <div className="container mx-auto px-4 py-8 max-w-6xl relative">
         <div className="flex items-center justify-between mb-8">
           <Link
             href={`/novels/${id}`}
-            className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-amber-700 dark:hover:text-amber-500"
+            className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-amber-700 dark:hover:text-amber-500 transition-colors"
           >
             <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -113,128 +31,7 @@ export default function KnowledgeGraphPage({ params }: { params: Promise<{ id: s
           </h1>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* 图例 */}
-          <div className="lg:col-span-4 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 p-4">
-            <h3 className="font-semibold text-gray-900 dark:text-amber-50 mb-3">图例</h3>
-            <div className="flex gap-6">
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                <span className="text-sm text-gray-700 dark:text-gray-300">人物 ({graphData?.nodes.filter(n => n.type === 'character').length || 0})</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                <span className="text-sm text-gray-700 dark:text-gray-300">世界观 ({graphData?.nodes.filter(n => n.type === 'world').length || 0})</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-purple-500 rounded-full"></div>
-                <span className="text-sm text-gray-700 dark:text-gray-300">伏笔 ({graphData?.nodes.filter(n => n.type === 'foreshadowing').length || 0})</span>
-              </div>
-            </div>
-          </div>
-
-          {/* 图形可视化 */}
-          <div className="lg:col-span-3 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 p-6">
-            <div className="w-full h-[600px]">
-              <ForceGraph3D
-                ref={fgRef}
-                graphData={{ nodes: graphNodes, links: graphLinks }}
-                nodeLabel="label"
-                nodeAutoColorBy="type"
-                nodeVal={10}
-                linkColor={() => '#9ca3af'}
-                linkWidth={2}
-                onNodeClick={handleNodeClick}
-                backgroundColor="transparent"
-                nodeThreeObject={(node: any) => {
-                  // 动态导入 SpriteText (默认导出)
-                  const SpriteText = require('three-spritetext').default || require('three-spritetext');
-                  const sprite = new SpriteText(node.label);
-                  sprite.color = node.color || '#ffffff';
-                  sprite.textHeight = 8;
-                  return sprite;
-                }}
-                nodeThreeObjectExtend={true}
-              />
-            </div>
-          </div>
-
-          {/* 详情面板 */}
-          <div className="lg:col-span-1 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 p-6">
-            {selectedNode ? (
-              <>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-gray-900 dark:text-amber-50 flex items-center gap-2">
-                    <div className={`w-3 h-3 rounded-full`} style={{ backgroundColor: getNodeColor(selectedNode.type) }}></div>
-                    {selectedNode.label}
-                  </h3>
-                  <button
-                    onClick={() => setSelectedNode(null)}
-                    className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-                  >
-                    ✕
-                  </button>
-                </div>
-                <div className="text-sm text-gray-500 dark:text-gray-500 mb-4">
-                  {getNodeLabel(selectedNode.type)}
-                </div>
-                <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
-                  {selectedNode.type === 'character' && (
-                    <>
-                      {selectedNode.data.role && (
-                        <div>
-                          <span className="font-medium">角色:</span> {selectedNode.data.role}
-                        </div>
-                      )}
-                      {selectedNode.data.description && (
-                        <div>
-                          <span className="font-medium">描述:</span> {selectedNode.data.description}
-                        </div>
-                      )}
-                    </>
-                  )}
-                  {selectedNode.type === 'world' && (
-                    <>
-                      {selectedNode.data.category && (
-                        <div>
-                          <span className="font-medium">类别:</span> {selectedNode.data.category}
-                        </div>
-                      )}
-                      {selectedNode.data.description && (
-                        <div>
-                          <span className="font-medium">描述:</span> {selectedNode.data.description}
-                        </div>
-                      )}
-                    </>
-                  )}
-                  {selectedNode.type === 'foreshadowing' && (
-                    <>
-                      {selectedNode.data.description && (
-                        <div>
-                          <span className="font-medium">描述:</span> {selectedNode.data.description}
-                        </div>
-                      )}
-                      {selectedNode.data.planted_chapter && (
-                        <div>
-                          <span className="font-medium">埋下章节:</span> 第{selectedNode.data.planted_chapter}章
-                        </div>
-                      )}
-                      {selectedNode.data.resolved_chapter && (
-                        <div>
-                          <span className="font-medium">揭示章节:</span> 第{selectedNode.data.resolved_chapter}章
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              </>
-            ) : (
-              <div className="text-center text-gray-500 dark:text-gray-500 py-8">
-                点击节点查看详情
-              </div>
-            )}
-          </div>
-        </div>
+        <KnowledgeGraphClient novelId={id} />
       </div>
     </div>
   );

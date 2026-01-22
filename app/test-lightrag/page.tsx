@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import Link from 'next/link';
+import type { DocumentStatusResponse } from '@/lib/lightrag/client';
 
 type QueryMode = 'local' | 'global' | 'hybrid' | 'naive' | 'mix';
 
@@ -18,7 +19,7 @@ export default function LightRAGTestPage() {
   const [uploadError, setUploadError] = useState('');
   const [uploadSuccess, setUploadSuccess] = useState('');
 
-  const [status, setStatus] = useState<any>(null);
+  const [status, setStatus] = useState<DocumentStatusResponse | null>(null);
 
   const handleQuery = async () => {
     if (!query.trim()) return;
