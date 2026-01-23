@@ -58,7 +58,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-novle}
       LIGHTRAG_BASE_URL: http://lightrag:9621
     ports:
-      - "3000:3000"
+      - "${WEB_PORT:-3000}:3000"
     depends_on:
       db:
         condition: service_healthy

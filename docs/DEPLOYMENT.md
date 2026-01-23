@@ -63,6 +63,22 @@ cp lightrag/.env.example lightrag/.env
 docker compose up -d --build
 ```
 
+## 3.1 修改对外端口（可选）
+
+如果服务器的 `3000` 已被占用，可以在根目录 `.env` 里新增：
+
+```env
+WEB_PORT=3001
+```
+
+然后重启：
+
+```bash
+docker compose up -d
+```
+
+此时访问：`http://<server-ip>:3001`
+
 查看状态：
 
 ```bash
@@ -106,4 +122,3 @@ docker compose up -d --build
 
 - `push` 到 `main` 后构建镜像并推送到 GHCR
 - 通过 SSH 到服务器执行 `docker compose pull && docker compose up -d`
-
