@@ -1,0 +1,23 @@
+.git
+.github
+.next
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+.DS_Store
+
+# Env / secrets
+.env
+.env.*
+
+# Local data
+rag_storage
+lightrag/rag_storage
+inputs
+lightrag/inputs
+
+# Editor / tooling
+tsconfig.tsbuildinfo

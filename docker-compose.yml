@@ -1,0 +1,70 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-novle}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./db/migrations/001_add_chapter_versions.sql:/docker-entrypoint-initdb.d/02_001_add_chapter_versions.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  lightrag:
+    build:
+      context: ./docker/lightrag
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./lightrag/.env
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_DATABASE: ${POSTGRES_DB:-novle}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      HOST: 0.0.0.0
+      PORT: 9621
+      WORKSPACE: novel
+    volumes:
+      - lightrag_storage:/data/rag_storage
+      - ./inputs:/data/inputs
+    command: ["sh", "-lc", "lightrag-server --host 0.0.0.0 --port 9621 --working-dir /data/rag_storage --workspace novel"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9621/health > /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-novle}
+      LIGHTRAG_BASE_URL: http://lightrag:9621
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      lightrag:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  lightrag_storage:

@@ -1,4 +1,5 @@
--- Enable pgvector extension (already enabled, but included for completeness)
+-- Enable required extensions (included for completeness)
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE EXTENSION IF NOT EXISTS vector;
 
 -- Novels table
