@@ -61,6 +61,10 @@ LIGHTRAG_BASE_URL=http://localhost:9621
 LIGHTRAG_API_KEY=your-secure-api-key-here
 ```
 
+说明:
+- `/health` 返回里的 `"auth_mode"` 指的是 JWT 登录鉴权(`AUTH_ACCOUNTS`)，不是 API Key。
+- 默认 `WHITELIST_PATHS=/health,/api/*`，所以 `/health` 不会要求 API Key；验证 API Key 需要请求如 `/documents/status_counts` 这类非白名单接口。
+
 ### 5. 验证集成
 
 访问测试页面:
@@ -74,7 +78,7 @@ http://localhost:3000/test-lightrag
 curl http://localhost:9621/health
 
 # 查看文档状态
-curl http://localhost:9621/documents/status
+curl http://localhost:9621/documents/status_counts
 ```
 
 ## API 端点
@@ -91,8 +95,8 @@ curl http://localhost:9621/documents/status
 - `POST /query` - 执行 RAG 查询
 - `POST /documents/upload` - 上传文档进行索引
 - `POST /documents/scan` - 扫描输入目录
-- `GET /documents/status` - 查看索引状态
-- `DELETE /documents/{doc_id}` - 删除文档
+- `GET /documents/status_counts` - 查看索引状态统计
+- `DELETE /documents/delete_document` - 删除文档 (JSON body: `{"doc_ids":["..."]}`)
 
 ## 查询模式
 
@@ -204,7 +208,7 @@ const worldCheck = await fetch('/api/lightrag/query', {
 
 检查:
 - 是否已上传文档
-- 文档是否已完成索引 (查看 `/documents/status`)
+- 文档是否已完成索引 (查看 `/documents/status_counts`)
 - 查询模式是否合适
 
 ### 连接错误

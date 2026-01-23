@@ -34,16 +34,20 @@ lightrag-gunicorn --workers 4
 curl http://localhost:9621/health
 
 # 查看文档状态
-curl http://localhost:9621/documents/status
+curl http://localhost:9621/documents/status_counts
 ```
+
+说明:
+- `/health` 返回里的 `"auth_mode"` 指的是 JWT 登录鉴权(`AUTH_ACCOUNTS`)，不是 API Key。
+- 默认 `WHITELIST_PATHS=/health,/api/*`，所以 `/health` 不会要求 API Key；验证 API Key 需要请求如 `/documents/status_counts` 这类非白名单接口。
 
 ## 5. API 端点
 
 - `POST /documents/upload` - 上传文档进行索引
 - `POST /documents/scan` - 扫描输入目录
-- `GET /documents/status` - 查看索引状态
+- `GET /documents/status_counts` - 查看索引状态统计
 - `POST /query` - 执行 RAG 查询
-- `DELETE /documents/{doc_id}` - 删除文档
+- `DELETE /documents/delete_document` - 删除文档 (JSON body: `{"doc_ids":["..."]}`)
 
 ## 6. 查询模式
 

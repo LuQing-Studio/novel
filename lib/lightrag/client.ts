@@ -32,6 +32,10 @@ export interface DocumentStatusResponse {
   pending_documents: number;
 }
 
+interface StatusCountsResponse {
+  status_counts: Record<string, number>;
+}
+
 export class LightRAGClient {
   private config: LightRAGConfig;
 
@@ -81,15 +85,60 @@ export class LightRAGClient {
   }
 
   async getDocumentStatus(): Promise<DocumentStatusResponse> {
-    return this.request<DocumentStatusResponse>('/documents/status', {
-      method: 'GET',
-    });
+    try {
+      const { status_counts: rawCounts } = await this.request<StatusCountsResponse>(
+        '/documents/status_counts',
+        { method: 'GET' }
+      );
+
+      const counts = Object.fromEntries(
+        Object.entries(rawCounts).map(([key, value]) => [key.toLowerCase(), value])
+      );
+
+      const total =
+        typeof counts.all === 'number'
+          ? counts.all
+          : Object.entries(counts)
+              .filter(([key]) => key !== 'all')
+              .reduce((sum, [, value]) => sum + value, 0);
+
+      const processed = counts.processed ?? 0;
+
+      return {
+        total_documents: total,
+        indexed_documents: processed,
+        pending_documents: Math.max(0, total - processed),
+      };
+    } catch (error) {
+      // Backward compatibility for older LightRAG versions.
+      if (error instanceof Error && error.message.includes('404')) {
+        return this.request<DocumentStatusResponse>('/documents/status', {
+          method: 'GET',
+        });
+      }
+      throw error;
+    }
   }
 
   async deleteDocument(docId: string): Promise<{ message: string }> {
-    return this.request<{ message: string }>(`/documents/${docId}`, {
-      method: 'DELETE',
-    });
+    try {
+      const response = await this.request<{ message?: string; status?: string }>(
+        '/documents/delete_document',
+        {
+          method: 'DELETE',
+          body: JSON.stringify({ doc_ids: [docId] }),
+        }
+      );
+      return { message: response.message || response.status || 'ok' };
+    } catch (error) {
+      // Backward compatibility for older LightRAG versions.
+      if (error instanceof Error && error.message.includes('404')) {
+        return this.request<{ message: string }>(`/documents/${docId}`, {
+          method: 'DELETE',
+        });
+      }
+      throw error;
+    }
   }
 
   async health(): Promise<{ status: string }> {
