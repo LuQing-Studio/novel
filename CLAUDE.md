@@ -59,19 +59,19 @@ Novel AI 是一个 AI 驱动的小说创作助手,专注于解决长篇小说创
 
 ### 4. 功能验证流程
 
-**主要验证工具: Chrome DevTools MCP**
+**主要验证工具: agent-browser (Agent Browser)**
 
-每个功能开发完成后,必须使用 Chrome DevTools MCP 进行验证:
+每个功能开发完成后,必须使用 agent-browser 进行验证:
 
 1. 启动本地开发服务器
-2. 使用 Chrome DevTools MCP 工具进行自动化测试
-3. 点击所有交互元素,验证功能正常
+2. 使用 `agent-browser --headed open http://localhost:3000` 打开应用
+3. 使用 `agent-browser snapshot -i` 获取页面快照并逐一点击/填写交互元素
 4. 检查页面渲染、主题切换、响应式布局
-5. 确认无 404 错误、无 JavaScript 错误
+5. 确认无 404 错误、无控制台 error/warn
 
 **移动端验收测试**
 
-Chrome DevTools MCP 验证通过后,在移动端进行最终验收:
+agent-browser 验证通过后,在移动端进行最终验收:
 
 - 访问 http://192.168.1.191:3000
 - 浏览所有页面,确认功能正常
