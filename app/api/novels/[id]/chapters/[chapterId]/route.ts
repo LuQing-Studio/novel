@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { query, queryOne } from '@/lib/db';
 import { requireApiNovelOwner } from '@/lib/auth/api';
 import { Chapter } from '@/lib/types';
+import { countWords } from '@/lib/utils/text';
 
 export async function GET(
   request: Request,
@@ -46,6 +47,14 @@ export async function PUT(
     const body = await request.json();
     const { number, title, content, outline } = body;
 
+    const existing = await queryOne<{ wordCount: number }>(
+      'SELECT word_count FROM chapters WHERE id = $1 AND novel_id = $2',
+      [chapterId, id]
+    );
+    if (!existing) {
+      return NextResponse.json({ error: 'Chapter not found' }, { status: 404 });
+    }
+
     const updates: string[] = [];
     const values: unknown[] = [];
     let paramIndex = 1;
@@ -61,8 +70,13 @@ export async function PUT(
     }
 
     if (content !== undefined) {
+      const nextContent = String(content);
+      const nextWordCount = countWords(nextContent);
       updates.push(`content = $${paramIndex++}`);
-      values.push(content);
+      values.push(nextContent);
+
+      updates.push(`word_count = $${paramIndex++}`);
+      values.push(nextWordCount);
     }
 
     if (outline !== undefined) {
@@ -74,7 +88,6 @@ export async function PUT(
       return NextResponse.json({ error: 'No fields to update' }, { status: 400 });
     }
 
-    updates.push(`updated_at = NOW()`);
     values.push(chapterId, id);
 
     const [chapter] = await query<Chapter>(
@@ -90,6 +103,19 @@ export async function PUT(
         { error: 'Chapter not found' },
         { status: 404 }
       );
+    }
+
+    // 同步小说更新时间与字数统计（避免编辑后统计不一致）
+    if (content !== undefined) {
+      await query(
+        `UPDATE novels
+         SET word_count = COALESCE((SELECT SUM(word_count) FROM chapters WHERE novel_id = $1), 0),
+             updated_at = NOW()
+         WHERE id = $1`,
+        [id]
+      );
+    } else {
+      await query('UPDATE novels SET updated_at = NOW() WHERE id = $1', [id]);
     }
 
     return NextResponse.json(chapter);

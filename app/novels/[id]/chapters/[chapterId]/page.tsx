@@ -2,9 +2,10 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { ReviewChapterButton } from '@/components/ReviewChapterButton';
-import { EditChapterButton } from '@/components/EditChapterButton';
 import { VersionHistoryButton } from '@/components/VersionHistoryButton';
 import { AutoExtractButton } from '@/components/AutoExtractButton';
+import { InlineChapterEditor } from '@/components/InlineChapterEditor';
+import { ExportChapterButton } from '@/components/ExportChapterButton';
 import { getCurrentUser } from '@/lib/auth/session';
 import { apiFetch } from '@/lib/server/api-fetch';
 import { Novel, Chapter } from '@/lib/types';
@@ -101,15 +102,13 @@ export default async function ChapterPage({
 
           {/* Chapter Text */}
           <div className="prose prose-lg dark:prose-invert max-w-none">
-            <div className="text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-wrap font-serif text-lg">
-              {chapter.content}
-            </div>
+            <InlineChapterEditor novelId={id} chapterId={chapterId} initialContent={chapter.content} />
           </div>
         </article>
 
         {/* Review Section */}
         <div className="mb-8 space-y-4">
-          <EditChapterButton novelId={id} chapterId={chapterId} initialContent={chapter.content} />
+          <ExportChapterButton novelId={id} chapterId={chapterId} />
           <VersionHistoryButton novelId={id} chapterId={chapterId} />
           <AutoExtractButton novelId={id} chapterId={chapterId} />
           <ReviewChapterButton novelId={id} chapterId={chapterId} />

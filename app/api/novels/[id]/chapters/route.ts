@@ -13,7 +13,7 @@ export async function GET(
     if ('response' in auth) return auth.response;
 
     const chapters = await query<Chapter>(
-      'SELECT * FROM chapters WHERE novel_id = $1 ORDER BY number',
+      'SELECT id, novel_id, number, title, outline, word_count, created_at FROM chapters WHERE novel_id = $1 ORDER BY number',
       [id]
     );
     return NextResponse.json(chapters);

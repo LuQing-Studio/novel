@@ -67,7 +67,14 @@ export default async function NovelDetailPage({ params }: { params: Promise<{ id
               {novel.title}
             </h1>
             <div className="flex items-center gap-3">
-              <ExportButton novelId={id} />
+              <ExportButton
+                novelId={id}
+                chapters={chapters.map((chapter) => ({
+                  id: chapter.id,
+                  number: chapter.number,
+                  title: chapter.title,
+                }))}
+              />
               <Link
                 href={`/novels/${id}/knowledge-graph`}
                 className="px-4 py-2 bg-purple-700 dark:bg-purple-600 text-white font-medium hover:bg-purple-800 dark:hover:bg-purple-700 transition-colors"
