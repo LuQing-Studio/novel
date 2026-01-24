@@ -1,17 +1,17 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { ReviewChapterButton } from '@/components/ReviewChapterButton';
 import { EditChapterButton } from '@/components/EditChapterButton';
 import { VersionHistoryButton } from '@/components/VersionHistoryButton';
 import { AutoExtractButton } from '@/components/AutoExtractButton';
+import { getCurrentUser } from '@/lib/auth/session';
+import { apiFetch } from '@/lib/server/api-fetch';
 import { Novel, Chapter } from '@/lib/types';
 
 async function getNovel(id: string): Promise<Novel | null> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${id}`, {
-      cache: 'no-store'
-    });
+    const res = await apiFetch(`/api/novels/${id}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return res.json();
   } catch {
@@ -21,9 +21,7 @@ async function getNovel(id: string): Promise<Novel | null> {
 
 async function getChapter(novelId: string, chapterId: string): Promise<Chapter | null> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${novelId}/chapters/${chapterId}`, {
-      cache: 'no-store'
-    });
+    const res = await apiFetch(`/api/novels/${novelId}/chapters/${chapterId}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return res.json();
   } catch {
@@ -33,9 +31,7 @@ async function getChapter(novelId: string, chapterId: string): Promise<Chapter |
 
 async function getChapters(novelId: string): Promise<Chapter[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${novelId}/chapters`, {
-      cache: 'no-store'
-    });
+    const res = await apiFetch(`/api/novels/${novelId}/chapters`, { cache: 'no-store' });
     if (!res.ok) return [];
     return res.json();
   } catch {
@@ -48,6 +44,11 @@ export default async function ChapterPage({
 }: {
   params: Promise<{ id: string; chapterId: string }>;
 }) {
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect('/login');
+  }
+
   const { id, chapterId } = await params;
   const novel = await getNovel(id);
   const chapter = await getChapter(id, chapterId);

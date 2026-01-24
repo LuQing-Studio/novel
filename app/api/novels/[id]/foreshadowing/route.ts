@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
+import { requireApiNovelOwner } from '@/lib/auth/api';
 import { Foreshadowing } from '@/lib/types';
 
 export async function GET(
@@ -8,6 +9,9 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
+
     const foreshadowing = await query<Foreshadowing>(
       'SELECT * FROM foreshadowing WHERE novel_id = $1 ORDER BY planted_chapter',
       [id]
@@ -28,6 +32,9 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
+
     const body = await request.json();
     const { content, planted_chapter, planned_reveal_chapter, revealed, revealed_chapter } = body;
 

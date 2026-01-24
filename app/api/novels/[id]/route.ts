@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query, queryOne } from '@/lib/db';
+import { requireApiNovel, requireApiUser } from '@/lib/auth/api';
 import { Novel } from '@/lib/types';
 
 export async function GET(
@@ -8,19 +9,9 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const novel = await queryOne<Novel>(
-      'SELECT * FROM novels WHERE id = $1',
-      [id]
-    );
-
-    if (!novel) {
-      return NextResponse.json(
-        { error: 'Novel not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(novel);
+    const auth = await requireApiNovel(id);
+    if ('response' in auth) return auth.response;
+    return NextResponse.json(auth.novel);
   } catch (error) {
     console.error('Failed to fetch novel:', error);
     return NextResponse.json(
@@ -36,15 +27,19 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
+    const auth = await requireApiUser();
+    if ('response' in auth) return auth.response;
+
+    const { user } = auth;
     const body = await request.json();
-    const { title, description, genre, tags } = body;
+    const { title, description, genre } = body;
 
     const [novel] = await query<Novel>(
       `UPDATE novels
-       SET title = $1, description = $2, genre = $3, tags = $4, updated_at = NOW()
-       WHERE id = $5
+       SET title = $1, description = $2, genre = $3, updated_at = NOW()
+       WHERE id = $4 AND user_id = $5
        RETURNING *`,
-      [title, description, genre, tags, id]
+      [title, description, genre, id, user.id]
     );
 
     if (!novel) {
@@ -70,7 +65,17 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    await query('DELETE FROM novels WHERE id = $1', [id]);
+    const auth = await requireApiUser();
+    if ('response' in auth) return auth.response;
+
+    const { user } = auth;
+    const deleted = await queryOne<{ id: string }>(
+      'DELETE FROM novels WHERE id = $1 AND user_id = $2 RETURNING id',
+      [id, user.id]
+    );
+    if (!deleted) {
+      return NextResponse.json({ error: 'Novel not found' }, { status: 404 });
+    }
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Failed to delete novel:', error);

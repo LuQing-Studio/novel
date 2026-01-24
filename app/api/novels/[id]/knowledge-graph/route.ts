@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
+import { requireApiNovelOwner } from '@/lib/auth/api';
 import { Character, WorldSetting, Foreshadowing } from '@/lib/types';
 
 function truncateLabel(text: string, maxLength: number): string {
@@ -14,15 +15,8 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-
-    // 验证 UUID 格式
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    if (!uuidRegex.test(id)) {
-      return NextResponse.json(
-        { error: 'Invalid novel ID format. Expected UUID.' },
-        { status: 400 }
-      );
-    }
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
 
     // 获取所有人物
     const characters = await query<Character>(

@@ -10,6 +10,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
       - ./db/migrations/001_add_chapter_versions.sql:/docker-entrypoint-initdb.d/02_001_add_chapter_versions.sql:ro
+      - ./db/migrations/002_add_auth_and_novel_ownership.sql:/docker-entrypoint-initdb.d/03_002_add_auth_and_novel_ownership.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s

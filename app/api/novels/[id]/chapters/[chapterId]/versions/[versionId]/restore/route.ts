@@ -1,12 +1,23 @@
 import { NextResponse } from 'next/server';
 import { query, queryOne } from '@/lib/db';
+import { requireApiNovelOwner } from '@/lib/auth/api';
 
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string; chapterId: string; versionId: string }> }
 ) {
   try {
-    const { chapterId, versionId } = await params;
+    const { id, chapterId, versionId } = await params;
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
+
+    const chapter = await queryOne<{ id: string }>(
+      'SELECT id FROM chapters WHERE id = $1 AND novel_id = $2',
+      [chapterId, id]
+    );
+    if (!chapter) {
+      return NextResponse.json({ error: 'Chapter not found' }, { status: 404 });
+    }
 
     // 获取版本内容
     const version = await queryOne<{ content: string; wordCount: number }>(
@@ -23,8 +34,8 @@ export async function POST(
 
     // 更新章节内容
     await query(
-      'UPDATE chapters SET content = $1, word_count = $2 WHERE id = $3',
-      [version.content, version.wordCount, chapterId]
+      'UPDATE chapters SET content = $1, word_count = $2 WHERE id = $3 AND novel_id = $4',
+      [version.content, version.wordCount, chapterId, id]
     );
 
     return NextResponse.json({ success: true });

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -29,6 +29,7 @@ interface Setup {
 
 export default function NewNovelPage() {
   const router = useRouter();
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [loading, setLoading] = useState(false);
   const [generatingSetup, setGeneratingSetup] = useState(false);
   const [formData, setFormData] = useState({
@@ -37,6 +38,35 @@ export default function NewNovelPage() {
     genre: '玄幻',
   });
   const [setup, setSetup] = useState<Setup | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          setCheckingAuth(false);
+          return;
+        }
+      } catch {
+        // ignore
+      }
+      router.replace('/login');
+    };
+
+    checkAuth();
+  }, [router]);
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen bg-[#faf8f5] dark:bg-[#1a1816] transition-colors relative">
+        <div className="fixed inset-0 opacity-[0.03] pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOSIgbnVtT2N0YXZlcz0iNCIgLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2UpIiAvPjwvc3ZnPg==')]" />
+        <ThemeToggle />
+        <div className="container mx-auto px-4 py-12 max-w-2xl relative text-gray-600 dark:text-gray-400">
+          正在检查登录状态...
+        </div>
+      </div>
+    );
+  }
 
   const handleGenerateSetup = async () => {
     if (!formData.title || !formData.description) {

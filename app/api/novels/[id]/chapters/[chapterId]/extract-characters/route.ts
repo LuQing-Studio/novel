@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { queryOne } from '@/lib/db';
 import { Chapter } from '@/lib/types';
+import { requireApiNovelOwner } from '@/lib/auth/api';
 import { extractCharactersFromChapter, addExtractedCharacters } from '@/lib/ai/character-extractor';
 
 export async function POST(
@@ -9,6 +10,9 @@ export async function POST(
 ) {
   try {
     const { id, chapterId } = await params;
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
+
     const body = await request.json();
     const { autoAdd = false } = body;
 

@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { getCurrentUser } from '@/lib/auth/session';
 import KnowledgeGraphClient from './KnowledgeGraphClient';
 
 export default async function KnowledgeGraphPage({
@@ -7,6 +9,11 @@ export default async function KnowledgeGraphPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect('/login');
+  }
+
   const { id } = await params;
 
   return (

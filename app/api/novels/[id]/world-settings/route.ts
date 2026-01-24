@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
+import { requireApiNovelOwner } from '@/lib/auth/api';
 import { WorldSetting } from '@/lib/types';
 
 export async function GET(
@@ -8,6 +9,9 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
+
     const settings = await query<WorldSetting>(
       'SELECT * FROM world_settings WHERE novel_id = $1 ORDER BY category, created_at',
       [id]
@@ -28,6 +32,9 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
+
     const body = await request.json();
     const { category, title, content, related_chapters } = body;
 

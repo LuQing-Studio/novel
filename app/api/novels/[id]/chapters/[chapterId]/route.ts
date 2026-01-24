@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query, queryOne } from '@/lib/db';
+import { requireApiNovelOwner } from '@/lib/auth/api';
 import { Chapter } from '@/lib/types';
 
 export async function GET(
@@ -7,10 +8,13 @@ export async function GET(
   { params }: { params: Promise<{ id: string; chapterId: string }> }
 ) {
   try {
-    const { chapterId } = await params;
+    const { id, chapterId } = await params;
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
+
     const chapter = await queryOne<Chapter>(
-      'SELECT * FROM chapters WHERE id = $1',
-      [chapterId]
+      'SELECT * FROM chapters WHERE id = $1 AND novel_id = $2',
+      [chapterId, id]
     );
 
     if (!chapter) {
@@ -35,7 +39,10 @@ export async function PUT(
   { params }: { params: Promise<{ id: string; chapterId: string }> }
 ) {
   try {
-    const { chapterId } = await params;
+    const { id, chapterId } = await params;
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
+
     const body = await request.json();
     const { number, title, content, outline } = body;
 
@@ -68,12 +75,12 @@ export async function PUT(
     }
 
     updates.push(`updated_at = NOW()`);
-    values.push(chapterId);
+    values.push(chapterId, id);
 
     const [chapter] = await query<Chapter>(
       `UPDATE chapters
        SET ${updates.join(', ')}
-       WHERE id = $${paramIndex}
+       WHERE id = $${paramIndex} AND novel_id = $${paramIndex + 1}
        RETURNING *`,
       values
     );
@@ -100,8 +107,17 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string; chapterId: string }> }
 ) {
   try {
-    const { chapterId } = await params;
-    await query('DELETE FROM chapters WHERE id = $1', [chapterId]);
+    const { id, chapterId } = await params;
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
+
+    const deleted = await queryOne<{ id: string }>(
+      'DELETE FROM chapters WHERE id = $1 AND novel_id = $2 RETURNING id',
+      [chapterId, id]
+    );
+    if (!deleted) {
+      return NextResponse.json({ error: 'Chapter not found' }, { status: 404 });
+    }
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Failed to delete chapter:', error);

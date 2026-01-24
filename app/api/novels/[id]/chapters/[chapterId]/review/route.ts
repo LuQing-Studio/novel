@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query, queryOne } from '@/lib/db';
+import { requireApiNovel } from '@/lib/auth/api';
 import { getAIService } from '@/lib/ai/factory';
 import { Novel, Chapter, Character, WorldSetting } from '@/lib/types';
 
@@ -10,12 +11,15 @@ export async function POST(
   try {
     const { id, chapterId } = await params;
 
-    const novel = await queryOne<Novel>('SELECT * FROM novels WHERE id = $1', [id]);
-    if (!novel) {
-      return NextResponse.json({ error: 'Novel not found' }, { status: 404 });
-    }
+    const auth = await requireApiNovel(id);
+    if ('response' in auth) return auth.response;
 
-    const chapter = await queryOne<Chapter>('SELECT * FROM chapters WHERE id = $1', [chapterId]);
+    const { novel } = auth;
+
+    const chapter = await queryOne<Chapter>(
+      'SELECT * FROM chapters WHERE id = $1 AND novel_id = $2',
+      [chapterId, id]
+    );
     if (!chapter) {
       return NextResponse.json({ error: 'Chapter not found' }, { status: 404 });
     }

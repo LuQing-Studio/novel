@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
-import { query, queryOne } from '@/lib/db';
+import { query } from '@/lib/db';
+import { requireApiNovel } from '@/lib/auth/api';
 import { getAIService } from '@/lib/ai/factory';
-import { Novel, Chapter, Character, WorldSetting, Foreshadowing } from '@/lib/types';
+import { Chapter, Character, WorldSetting, Foreshadowing } from '@/lib/types';
 import { getLightRAGClient } from '@/lib/lightrag/client';
 import { countWords } from '@/lib/utils/text';
 import { extractCharactersFromChapter, addExtractedCharacters } from '@/lib/ai/character-extractor';
@@ -15,11 +16,10 @@ export async function POST(
     const body = await request.json();
     const { outline } = body;
 
-    // 获取小说信息
-    const novel = await queryOne<Novel>('SELECT * FROM novels WHERE id = $1', [id]);
-    if (!novel) {
-      return NextResponse.json({ error: 'Novel not found' }, { status: 404 });
-    }
+    const auth = await requireApiNovel(id);
+    if ('response' in auth) return auth.response;
+
+    const { novel } = auth;
 
     // 获取已有章节
     const chapters = await query<Chapter>(

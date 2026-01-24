@@ -1,13 +1,13 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { getCurrentUser } from '@/lib/auth/session';
+import { apiFetch } from '@/lib/server/api-fetch';
 import { Novel, WorldSetting } from '@/lib/types';
 
 async function getNovel(id: string): Promise<Novel | null> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${id}`, {
-      cache: 'no-store'
-    });
+    const res = await apiFetch(`/api/novels/${id}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return res.json();
   } catch {
@@ -17,9 +17,7 @@ async function getNovel(id: string): Promise<Novel | null> {
 
 async function getWorldSettings(novelId: string): Promise<WorldSetting[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels/${novelId}/world-settings`, {
-      cache: 'no-store'
-    });
+    const res = await apiFetch(`/api/novels/${novelId}/world-settings`, { cache: 'no-store' });
     if (!res.ok) return [];
     return res.json();
   } catch {
@@ -28,6 +26,11 @@ async function getWorldSettings(novelId: string): Promise<WorldSetting[]> {
 }
 
 export default async function SettingsPage({ params }: { params: Promise<{ id: string }> }) {
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect('/login');
+  }
+
   const { id } = await params;
   const novel = await getNovel(id);
 

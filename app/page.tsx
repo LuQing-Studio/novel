@@ -1,12 +1,13 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { getCurrentUser } from '@/lib/auth/session';
+import { apiFetch } from '@/lib/server/api-fetch';
 import { Novel } from '@/lib/types';
 
 async function getNovels(): Promise<Novel[]> {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/novels`, {
-      cache: 'no-store'
-    });
+    const res = await apiFetch('/api/novels', { cache: 'no-store' });
     if (!res.ok) return [];
     return res.json();
   } catch (error) {
@@ -16,6 +17,11 @@ async function getNovels(): Promise<Novel[]> {
 }
 
 export default async function Home() {
+  const user = await getCurrentUser();
+  if (!user) {
+    redirect('/login');
+  }
+
   const novels = await getNovels();
   return (
     <div className="min-h-screen bg-[#faf8f5] dark:bg-[#1a1816] transition-colors relative">
@@ -27,12 +33,30 @@ export default async function Home() {
       <div className="container mx-auto px-4 py-12 max-w-6xl relative">
         {/* Header */}
         <header className="mb-16 border-b-2 border-amber-700/20 dark:border-amber-500/20 pb-8">
-          <h1 className="text-6xl md:text-7xl font-serif font-bold text-gray-900 dark:text-amber-50 mb-3 tracking-tight">
-            Novel.AI
-          </h1>
-          <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 font-light max-w-2xl">
-            AI 驱动的小说创作工坊 — 保持长期一致性的智能写作工具
-          </p>
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+            <div>
+              <h1 className="text-6xl md:text-7xl font-serif font-bold text-gray-900 dark:text-amber-50 mb-3 tracking-tight">
+                Novel.AI
+              </h1>
+              <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 font-light max-w-2xl">
+                AI 驱动的小说创作工坊 — 保持长期一致性的智能写作工具
+              </p>
+            </div>
+
+            <div className="md:text-right">
+              <div className="text-sm text-gray-600 dark:text-gray-400 font-mono">
+                {user.email}
+              </div>
+              <form action="/api/auth/logout" method="post" className="mt-3 inline-block">
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-200 hover:border-amber-700 dark:hover:border-amber-500 transition-all"
+                >
+                  退出登录
+                </button>
+              </form>
+            </div>
+          </div>
         </header>
 
         {/* Novel List Section */}

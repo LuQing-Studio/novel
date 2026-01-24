@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { queryOne } from '@/lib/db';
 import { Chapter, Novel } from '@/lib/types';
+import { requireApiNovel } from '@/lib/auth/api';
 import { extractCharactersFromChapter, addExtractedCharacters } from '@/lib/ai/character-extractor';
 import { getLightRAGClient } from '@/lib/lightrag/client';
 
@@ -10,6 +11,9 @@ export async function POST(
 ) {
   try {
     const { id, chapterId } = await params;
+
+    const auth = await requireApiNovel(id);
+    if ('response' in auth) return auth.response;
 
     // 获取章节
     const chapter = await queryOne<Chapter>(
@@ -21,11 +25,7 @@ export async function POST(
       return NextResponse.json({ error: 'Chapter not found' }, { status: 404 });
     }
 
-    // 获取小说信息
-    const novel = await queryOne<Novel>('SELECT * FROM novels WHERE id = $1', [id]);
-    if (!novel) {
-      return NextResponse.json({ error: 'Novel not found' }, { status: 404 });
-    }
+    const { novel } = auth;
 
     const results = {
       charactersExtracted: 0,

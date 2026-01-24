@@ -2,9 +2,29 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE EXTENSION IF NOT EXISTS vector;
 
+-- Users table (for auth)
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Sessions table (cookie-based sessions)
+CREATE TABLE IF NOT EXISTS sessions (
+  id UUID PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  expires_at TIMESTAMP NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS sessions_user_id_idx ON sessions(user_id);
+CREATE INDEX IF NOT EXISTS sessions_expires_at_idx ON sessions(expires_at);
+
 -- Novels table
 CREATE TABLE IF NOT EXISTS novels (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   title VARCHAR(255) NOT NULL,
   description TEXT,
   genre VARCHAR(100),
@@ -13,6 +33,8 @@ CREATE TABLE IF NOT EXISTS novels (
   chapter_count INTEGER DEFAULT 0,
   word_count INTEGER DEFAULT 0
 );
+
+CREATE INDEX IF NOT EXISTS novels_user_id_idx ON novels(user_id);
 
 -- Chapters table
 CREATE TABLE IF NOT EXISTS chapters (

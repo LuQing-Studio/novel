@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getAIService } from '@/lib/ai/factory';
+import { requireApiUser } from '@/lib/auth/api';
 
 export async function POST(request: Request) {
   try {
+    const auth = await requireApiUser();
+    if ('response' in auth) return auth.response;
+
     const body = await request.json();
     const { title, genre, description } = body;
 

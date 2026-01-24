@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { query, queryOne } from '@/lib/db';
-import { Novel, Chapter } from '@/lib/types';
+import { query } from '@/lib/db';
+import { requireApiNovel } from '@/lib/auth/api';
+import { Chapter } from '@/lib/types';
 
 export async function GET(
   request: Request,
@@ -9,11 +10,10 @@ export async function GET(
   try {
     const { id } = await params;
 
-    // 获取小说信息
-    const novel = await queryOne<Novel>('SELECT * FROM novels WHERE id = $1', [id]);
-    if (!novel) {
-      return NextResponse.json({ error: 'Novel not found' }, { status: 404 });
-    }
+    const auth = await requireApiNovel(id);
+    if ('response' in auth) return auth.response;
+
+    const { novel } = auth;
 
     // 获取所有章节
     const chapters = await query<Chapter>(

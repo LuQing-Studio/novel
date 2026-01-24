@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { query } from '@/lib/db';
+import { query, queryOne } from '@/lib/db';
+import { requireApiNovelOwner } from '@/lib/auth/api';
 import { countWords } from '@/lib/utils/text';
 
 interface ChapterVersion {
@@ -18,11 +19,18 @@ export async function GET(
   { params }: { params: Promise<{ id: string; chapterId: string }> }
 ) {
   try {
-    const { chapterId } = await params;
+    const { id, chapterId } = await params;
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
 
     const versions = await query<ChapterVersion>(
-      'SELECT * FROM chapter_versions WHERE chapter_id = $1 ORDER BY version_number DESC',
-      [chapterId]
+      `SELECT cv.*
+       FROM chapter_versions cv
+       JOIN chapters c ON c.id = cv.chapter_id
+       WHERE cv.chapter_id = $1
+         AND c.novel_id = $2
+       ORDER BY cv.version_number DESC`,
+      [chapterId, id]
     );
 
     return NextResponse.json(versions);
@@ -40,7 +48,18 @@ export async function POST(
   { params }: { params: Promise<{ id: string; chapterId: string }> }
 ) {
   try {
-    const { chapterId } = await params;
+    const { id, chapterId } = await params;
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
+
+    const chapter = await queryOne<{ id: string }>(
+      'SELECT id FROM chapters WHERE id = $1 AND novel_id = $2',
+      [chapterId, id]
+    );
+    if (!chapter) {
+      return NextResponse.json({ error: 'Chapter not found' }, { status: 404 });
+    }
+
     const { content, changeDescription } = await request.json();
 
     // 获取当前最大版本号

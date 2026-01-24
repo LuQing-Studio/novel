@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
+import { requireApiNovelOwner } from '@/lib/auth/api';
 import { Character } from '@/lib/types';
 
 export async function GET(
@@ -8,6 +9,9 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
+
     const characters = await query<Character>(
       'SELECT * FROM characters WHERE novel_id = $1 ORDER BY first_appearance',
       [id]
@@ -28,6 +32,9 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
+    const auth = await requireApiNovelOwner(id);
+    if ('response' in auth) return auth.response;
+
     const body = await request.json();
     const { name, description, personality, abilities, status, first_appearance, last_appearance } = body;
 
