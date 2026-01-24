@@ -55,4 +55,11 @@ export class GeminiService implements AIService {
       },
     };
   }
+
+  async *stream(request: AIRequest): AsyncGenerator<string> {
+    const response = await this.generate(request);
+    if (response.content) {
+      yield response.content;
+    }
+  }
 }

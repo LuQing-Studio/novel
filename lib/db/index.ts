@@ -2,6 +2,10 @@ import { Pool } from 'pg';
 
 let pool: Pool | null = null;
 
+declare global {
+  var __novelPgPool: Pool | undefined;
+}
+
 function toCamelCase(key: string): string {
   return key.replace(/_([a-z])/g, (_, letter: string) => letter.toUpperCase());
 }
@@ -21,14 +25,24 @@ function camelizeRow(row: unknown): unknown {
 }
 
 export function getPool(): Pool {
-  if (!pool) {
-    pool = new Pool({
+  const config = {
       connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/novle',
       max: 20,
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 2000,
-    });
+  };
+
+  if (process.env.NODE_ENV !== 'production') {
+    if (!globalThis.__novelPgPool) {
+      globalThis.__novelPgPool = new Pool(config);
+    }
+    return globalThis.__novelPgPool;
   }
+
+  if (!pool) {
+    pool = new Pool(config);
+  }
+
   return pool;
 }
 

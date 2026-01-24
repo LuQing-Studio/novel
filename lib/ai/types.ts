@@ -9,7 +9,7 @@ export interface Message {
 
 // AI Request
 export interface AIRequest {
-  messages: Message[];
+  messages: ReadonlyArray<Message>;
   temperature?: number;
   maxTokens?: number;
 }
@@ -35,4 +35,5 @@ export interface AIProviderConfig {
 // AI Service Interface
 export interface AIService {
   generate(request: AIRequest): Promise<AIResponse>;
+  stream(request: AIRequest): AsyncIterable<string>;
 }
