@@ -1,17 +1,52 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
+
+type Theme = 'light' | 'dark';
+
+const THEME_EVENT = 'novel-theme-change';
+
+function readTheme(): Theme {
+  if (typeof window === 'undefined') return 'light';
+
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark' || savedTheme === 'light') return savedTheme;
+
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return isDark ? 'dark' : 'light';
+}
+
+function subscribeTheme(callback: () => void): () => void {
+  if (typeof window === 'undefined') return () => {};
+
+  const onChange = () => callback();
+
+  window.addEventListener('storage', onChange);
+  window.addEventListener(THEME_EVENT, onChange);
+
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+  if (typeof mq.addEventListener === 'function') {
+    mq.addEventListener('change', onChange);
+  } else {
+    // Safari < 14
+    mq.addListener(onChange);
+  }
+
+  return () => {
+    window.removeEventListener('storage', onChange);
+    window.removeEventListener(THEME_EVENT, onChange);
+    if (typeof mq.removeEventListener === 'function') {
+      mq.removeEventListener('change', onChange);
+    } else {
+      mq.removeListener(onChange);
+    }
+  };
+}
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window === 'undefined') return 'light';
-
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark' || savedTheme === 'light') return savedTheme;
-
-    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    return isDark ? 'dark' : 'light';
-  });
+  // useSyncExternalStore ensures SSR + hydration use the same snapshot (no mismatch),
+  // then updates to the real client value after hydration.
+  const theme = useSyncExternalStore(subscribeTheme, readTheme, () => 'light');
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
@@ -19,7 +54,10 @@ export function ThemeToggle() {
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((t) => (t === 'light' ? 'dark' : 'light'));
+    const nextTheme: Theme = theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('theme', nextTheme);
+    document.documentElement.classList.toggle('dark', nextTheme === 'dark');
+    window.dispatchEvent(new Event(THEME_EVENT));
   };
 
   return (

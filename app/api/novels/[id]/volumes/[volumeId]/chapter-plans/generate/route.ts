@@ -23,6 +23,24 @@ function stripJsonFence(raw: string): string {
   return text.trim();
 }
 
+function extractJsonArray(raw: string): unknown {
+  const text = stripJsonFence(raw);
+  try {
+    return JSON.parse(text) as unknown;
+  } catch {
+    // fall through
+  }
+
+  const start = text.indexOf('[');
+  const end = text.lastIndexOf(']');
+  if (start === -1 || end === -1 || end <= start) {
+    throw new Error('Could not locate JSON array in AI output');
+  }
+
+  const sliced = text.slice(start, end + 1);
+  return JSON.parse(sliced) as unknown;
+}
+
 interface PlanAIItem {
   title: string;
   outline: string;
@@ -135,9 +153,25 @@ export async function POST(
       maxTokens: 2200,
     });
 
-    const parsed = JSON.parse(stripJsonFence(response.content)) as unknown;
+    const isDev = process.env.NODE_ENV !== 'production';
+
+    let parsed: unknown;
+    try {
+      parsed = extractJsonArray(response.content);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown parse error';
+      const rawPreview = stripJsonFence(response.content).slice(0, 1000);
+      return NextResponse.json(
+        isDev ? { error: 'Invalid AI output', detail: { message, rawPreview } } : { error: 'Invalid AI output' },
+        { status: 502 }
+      );
+    }
+
     if (!Array.isArray(parsed)) {
-      return NextResponse.json({ error: 'Invalid AI output' }, { status: 500 });
+      return NextResponse.json(
+        isDev ? { error: 'Invalid AI output', detail: { message: 'Expected a JSON array' } } : { error: 'Invalid AI output' },
+        { status: 502 }
+      );
     }
 
     const items: PlanAIItem[] = parsed
@@ -150,7 +184,7 @@ export async function POST(
       .slice(0, count);
 
     if (items.length === 0) {
-      return NextResponse.json({ error: 'Empty plans from AI' }, { status: 500 });
+      return NextResponse.json({ error: 'Empty plans from AI' }, { status: 502 });
     }
 
     const created: unknown[] = [];
@@ -172,4 +206,3 @@ export async function POST(
     return NextResponse.json({ error: 'Failed to generate chapter plans' }, { status: 500 });
   }
 }
-
