@@ -11,6 +11,7 @@ services:
       - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
       - ./db/migrations/001_add_chapter_versions.sql:/docker-entrypoint-initdb.d/02_001_add_chapter_versions.sql:ro
       - ./db/migrations/002_add_auth_and_novel_ownership.sql:/docker-entrypoint-initdb.d/03_002_add_auth_and_novel_ownership.sql:ro
+      - ./db/migrations/003_inkflow_v2.sql:/docker-entrypoint-initdb.d/04_003_inkflow_v2.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
@@ -32,13 +33,42 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       HOST: 0.0.0.0
       PORT: 9621
-      WORKSPACE: novel
+      WORKSPACE: novel_story
     volumes:
       - lightrag_storage:/data/rag_storage
       - ./inputs:/data/inputs
-    command: ["sh", "-lc", "lightrag-server --host 0.0.0.0 --port 9621 --working-dir /data/rag_storage --workspace novel"]
+    command: ["sh", "-lc", "lightrag-server --host 0.0.0.0 --port 9621 --working-dir /data/rag_storage --workspace novel_story"]
     healthcheck:
       test: ["CMD-SHELL", "curl -fsS http://localhost:9621/health > /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    depends_on:
+      db:
+        condition: service_healthy
+
+  lightrag_tech:
+    build:
+      context: ./docker/lightrag
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./lightrag/.env
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_DATABASE: ${POSTGRES_DB:-novle}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      HOST: 0.0.0.0
+      PORT: 9622
+      WORKSPACE: novel_tech
+    volumes:
+      - lightrag_tech_storage:/data/rag_storage
+      - ./inputs:/data/inputs
+    command: ["sh", "-lc", "lightrag-server --host 0.0.0.0 --port 9622 --working-dir /data/rag_storage --workspace novel_tech"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:9622/health > /dev/null"]
       interval: 10s
       timeout: 5s
       retries: 20
@@ -58,6 +88,7 @@ services:
       PORT: 3000
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-novle}
       LIGHTRAG_BASE_URL: http://lightrag:9621
+      LIGHTRAG_TECH_BASE_URL: http://lightrag_tech:9622
     ports:
       - "${WEB_PORT:-3000}:3000"
     depends_on:
@@ -65,7 +96,10 @@ services:
         condition: service_healthy
       lightrag:
         condition: service_healthy
+      lightrag_tech:
+        condition: service_healthy
 
 volumes:
   postgres_data:
   lightrag_storage:
+  lightrag_tech_storage:

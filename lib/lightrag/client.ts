@@ -26,6 +26,13 @@ export interface DocumentUploadRequest {
   description?: string;
 }
 
+export interface DocumentUploadResponse {
+  message?: string;
+  status?: string;
+  doc_id?: string;
+  docId?: string;
+}
+
 export interface DocumentStatusResponse {
   total_documents: number;
   indexed_documents: number;
@@ -74,8 +81,8 @@ export class LightRAGClient {
     });
   }
 
-  async uploadDocument(request: DocumentUploadRequest): Promise<{ message: string }> {
-    return this.request<{ message: string }>('/documents/text', {
+  async uploadDocument(request: DocumentUploadRequest): Promise<DocumentUploadResponse> {
+    return this.request<DocumentUploadResponse>('/documents/text', {
       method: 'POST',
       body: JSON.stringify({
         text: request.content,
@@ -148,13 +155,36 @@ export class LightRAGClient {
   }
 }
 
-// Helper function to get LightRAG client from environment variables
-export function getLightRAGClient(): LightRAGClient {
-  const baseURL = process.env.LIGHTRAG_BASE_URL || 'http://localhost:9621';
-  const apiKey = process.env.LIGHTRAG_API_KEY;
+function createClientFromEnv(options: {
+  baseUrlEnv: string;
+  apiKeyEnv: string;
+  defaultBaseURL: string;
+}): LightRAGClient {
+  const baseURL = process.env[options.baseUrlEnv] || options.defaultBaseURL;
+  const apiKey = process.env[options.apiKeyEnv];
 
-  return new LightRAGClient({
-    baseURL,
-    apiKey,
+  return new LightRAGClient({ baseURL, apiKey });
+}
+
+// Story RAG (剧情记忆) client
+export function getStoryRAGClient(): LightRAGClient {
+  return createClientFromEnv({
+    baseUrlEnv: 'LIGHTRAG_BASE_URL',
+    apiKeyEnv: 'LIGHTRAG_API_KEY',
+    defaultBaseURL: 'http://localhost:9621',
   });
+}
+
+// Tech RAG (技法库) client
+export function getTechRAGClient(): LightRAGClient {
+  return createClientFromEnv({
+    baseUrlEnv: 'LIGHTRAG_TECH_BASE_URL',
+    apiKeyEnv: 'LIGHTRAG_TECH_API_KEY',
+    defaultBaseURL: 'http://localhost:9622',
+  });
+}
+
+// Backward-compatible alias (defaults to Story RAG)
+export function getLightRAGClient(): LightRAGClient {
+  return getStoryRAGClient();
 }

@@ -26,8 +26,11 @@ CREATE TABLE IF NOT EXISTS novels (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   title VARCHAR(255) NOT NULL,
+  idea TEXT NOT NULL DEFAULT '',
   description TEXT,
   genre VARCHAR(100),
+  overall_outline TEXT NOT NULL DEFAULT '',
+  overall_outline_locked BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   chapter_count INTEGER DEFAULT 0,
@@ -36,10 +39,60 @@ CREATE TABLE IF NOT EXISTS novels (
 
 CREATE INDEX IF NOT EXISTS novels_user_id_idx ON novels(user_id);
 
+-- Volumes table (Fractal Outliner - Book -> Volume)
+CREATE TABLE IF NOT EXISTS volumes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  novel_id UUID NOT NULL REFERENCES novels(id) ON DELETE CASCADE,
+  number INTEGER NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  outline TEXT NOT NULL DEFAULT '',
+  target_chapters INTEGER,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(novel_id, number)
+);
+
+CREATE INDEX IF NOT EXISTS volumes_novel_id_idx ON volumes(novel_id);
+
+-- Chapter plans table (Fractal Outliner - Chapter-level outline)
+CREATE TABLE IF NOT EXISTS chapter_plans (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  novel_id UUID NOT NULL REFERENCES novels(id) ON DELETE CASCADE,
+  volume_id UUID NOT NULL REFERENCES volumes(id) ON DELETE CASCADE,
+  number INTEGER NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  outline TEXT NOT NULL DEFAULT '',
+  status VARCHAR(32) NOT NULL DEFAULT 'draft', -- draft | confirmed | drafted | done
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(novel_id, number)
+);
+
+CREATE INDEX IF NOT EXISTS chapter_plans_novel_id_idx ON chapter_plans(novel_id);
+CREATE INDEX IF NOT EXISTS chapter_plans_volume_id_idx ON chapter_plans(volume_id);
+
+-- Chapter plan versions (strict locking)
+CREATE TABLE IF NOT EXISTS chapter_plan_versions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  chapter_plan_id UUID NOT NULL REFERENCES chapter_plans(id) ON DELETE CASCADE,
+  version_number INTEGER NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  outline TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_by VARCHAR(32) DEFAULT 'user',
+  change_description TEXT,
+  UNIQUE(chapter_plan_id, version_number)
+);
+
+CREATE INDEX IF NOT EXISTS chapter_plan_versions_plan_id_idx ON chapter_plan_versions(chapter_plan_id);
+CREATE INDEX IF NOT EXISTS chapter_plan_versions_created_at_idx ON chapter_plan_versions(created_at DESC);
+
 -- Chapters table
 CREATE TABLE IF NOT EXISTS chapters (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   novel_id UUID NOT NULL REFERENCES novels(id) ON DELETE CASCADE,
+  volume_id UUID REFERENCES volumes(id) ON DELETE SET NULL,
+  plan_id UUID REFERENCES chapter_plans(id) ON DELETE SET NULL,
   number INTEGER NOT NULL,
   title VARCHAR(255) NOT NULL,
   content TEXT NOT NULL,
@@ -47,7 +100,8 @@ CREATE TABLE IF NOT EXISTS chapters (
   word_count INTEGER DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   embedding vector(1536),
-  UNIQUE(novel_id, number)
+  UNIQUE(novel_id, number),
+  UNIQUE(novel_id, plan_id)
 );
 
 -- Characters table
@@ -101,3 +155,52 @@ CREATE INDEX IF NOT EXISTS chapters_novel_id_idx ON chapters(novel_id);
 CREATE INDEX IF NOT EXISTS characters_novel_id_idx ON characters(novel_id);
 CREATE INDEX IF NOT EXISTS foreshadowing_novel_id_idx ON foreshadowing(novel_id);
 CREATE INDEX IF NOT EXISTS world_settings_novel_id_idx ON world_settings(novel_id);
+
+-- Chapter annotations (Reviewer Loop)
+CREATE TABLE IF NOT EXISTS chapter_annotations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  chapter_id UUID NOT NULL REFERENCES chapters(id) ON DELETE CASCADE,
+  status VARCHAR(16) NOT NULL DEFAULT 'open', -- open | applied | dismissed
+  quote TEXT NOT NULL,
+  start_offset INTEGER NOT NULL,
+  end_offset INTEGER NOT NULL,
+  comment TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS chapter_annotations_chapter_id_idx ON chapter_annotations(chapter_id);
+CREATE INDEX IF NOT EXISTS chapter_annotations_status_idx ON chapter_annotations(status);
+
+-- Techniques (global per user)
+CREATE TABLE IF NOT EXISTS techniques (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  tags TEXT[] NOT NULL DEFAULT ARRAY[]::text[],
+  content TEXT NOT NULL,
+  sync_status VARCHAR(16) NOT NULL DEFAULT 'pending', -- pending | synced | failed
+  last_synced_at TIMESTAMP,
+  lightrag_doc_id TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS techniques_user_id_idx ON techniques(user_id);
+CREATE INDEX IF NOT EXISTS techniques_tags_gin_idx ON techniques USING gin(tags);
+
+CREATE TABLE IF NOT EXISTS technique_versions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  technique_id UUID NOT NULL REFERENCES techniques(id) ON DELETE CASCADE,
+  version_number INTEGER NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  tags TEXT[] NOT NULL DEFAULT ARRAY[]::text[],
+  content TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_by VARCHAR(32) DEFAULT 'user',
+  change_description TEXT,
+  UNIQUE(technique_id, version_number)
+);
+
+CREATE INDEX IF NOT EXISTS technique_versions_technique_id_idx ON technique_versions(technique_id);
+CREATE INDEX IF NOT EXISTS technique_versions_created_at_idx ON technique_versions(created_at DESC);
