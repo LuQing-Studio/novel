@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { queryOne } from '@/lib/db';
 import { requireApiNovelOwner } from '@/lib/auth/api';
 import { getAIService } from '@/lib/ai/factory';
+import { getTechRAGClient } from '@/lib/lightrag/client';
 
 interface RewriteRequestBody {
   text: unknown;
@@ -9,10 +10,24 @@ interface RewriteRequestBody {
   preset?: unknown;
   before?: unknown;
   after?: unknown;
+  techniqueTags?: unknown;
 }
 
 function safeString(value: unknown): string {
   return typeof value === 'string' ? value : '';
+}
+
+function safeStringArray(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.map((v) => safeString(v).trim()).filter(Boolean);
+  }
+  if (typeof value === 'string') {
+    return value
+      .split(',')
+      .map((v) => v.trim())
+      .filter(Boolean);
+  }
+  return [];
 }
 
 type RewritePreset =
@@ -65,6 +80,7 @@ export async function POST(
     const preset = normalizePreset(body.preset);
     const before = safeString(body.before);
     const after = safeString(body.after);
+    const techniqueTags = safeStringArray(body.techniqueTags);
 
     if (!text) {
       return NextResponse.json({ error: 'Text is required' }, { status: 400 });
@@ -101,6 +117,24 @@ export async function POST(
     const minLen = Math.max(10, Math.floor(inputLength * minRatio));
     const maxLen = Math.max(40, Math.ceil(inputLength * maxRatio));
 
+    let techRagContext = '';
+    if (techniqueTags.length > 0) {
+      try {
+        const techClient = getTechRAGClient();
+        const techQuery = [
+          `技法标签: ${techniqueTags.join(', ')}`,
+          '任务: 请给出可直接用于写作改写的技法要点（避免空话）。',
+          '',
+          '编辑指令:',
+          instruction,
+        ].join('\n');
+        const rag = await techClient.query({ query: techQuery, mode: 'hybrid' });
+        techRagContext = rag?.response || '';
+      } catch (error) {
+        console.warn('Tech LightRAG query failed:', error);
+      }
+    }
+
     const promptParts = [
       '你是中文网文的资深编辑，擅长对指定片段进行“局部改写/扩写/润色”。',
       '你只需要输出“改写后的片段文本”，不要输出任何解释、标题、要点、markdown 或引号。',
@@ -109,6 +143,8 @@ export async function POST(
       '输出必须只包含改写后的片段本身，不要包含前文/后文的任何句子。',
       '',
       `编辑指令: ${instruction}`,
+      '',
+      techRagContext ? `技法参考(Tech RAG):\n${techRagContext.slice(0, 1200)}` : '技法参考(Tech RAG): (无)',
       '',
       '片段前文(供语气与衔接参考，可不完全照抄):',
       before ? before.slice(-800) : '(无)',

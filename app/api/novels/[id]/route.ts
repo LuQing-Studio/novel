@@ -3,6 +3,10 @@ import { query, queryOne } from '@/lib/db';
 import { requireApiNovel, requireApiUser } from '@/lib/auth/api';
 import { Novel } from '@/lib/types';
 
+function safeString(value: unknown): string {
+  return typeof value === 'string' ? value : '';
+}
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -31,15 +35,48 @@ export async function PUT(
     if ('response' in auth) return auth.response;
 
     const { user } = auth;
-    const body = await request.json();
-    const { title, description, genre } = body;
+    const body = (await request.json()) as Record<string, unknown>;
+    const title = safeString(body.title).trim();
+    const description = safeString(body.description).trim();
+    const genre = safeString(body.genre).trim();
+    const idea = safeString(body.idea).trim();
+    const overallOutline = safeString(body.overall_outline ?? body.overallOutline).trim();
+
+    const updates: string[] = [];
+    const values: unknown[] = [];
+    let paramIndex = 1;
+
+    if (body.title !== undefined) {
+      updates.push(`title = $${paramIndex++}`);
+      values.push(title);
+    }
+    if (body.description !== undefined) {
+      updates.push(`description = $${paramIndex++}`);
+      values.push(description);
+    }
+    if (body.genre !== undefined) {
+      updates.push(`genre = $${paramIndex++}`);
+      values.push(genre);
+    }
+    if (body.idea !== undefined) {
+      updates.push(`idea = $${paramIndex++}`);
+      values.push(idea);
+    }
+    if (body.overall_outline !== undefined || body.overallOutline !== undefined) {
+      updates.push(`overall_outline = $${paramIndex++}`);
+      values.push(overallOutline);
+    }
+
+    if (updates.length === 0) {
+      return NextResponse.json({ error: 'No fields to update' }, { status: 400 });
+    }
 
     const [novel] = await query<Novel>(
       `UPDATE novels
-       SET title = $1, description = $2, genre = $3, updated_at = NOW()
-       WHERE id = $4 AND user_id = $5
+       SET ${updates.join(', ')}, updated_at = NOW()
+       WHERE id = $${paramIndex} AND user_id = $${paramIndex + 1}
        RETURNING *`,
-      [title, description, genre, id, user.id]
+      [...values, id, user.id]
     );
 
     if (!novel) {
