@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import type { ChapterAnnotation } from '@/lib/types';
 
 type RewritePreset =
   | 'rewrite'
@@ -49,10 +50,12 @@ export function InlineChapterEditor({
   novelId,
   chapterId,
   initialContent,
+  techniqueTags,
 }: {
   novelId: string;
   chapterId: string;
   initialContent: string;
+  techniqueTags?: string[];
 }) {
   const router = useRouter();
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -67,6 +70,18 @@ export function InlineChapterEditor({
   const [rewriteLoading, setRewriteLoading] = useState(false);
   const [rewriteError, setRewriteError] = useState<string | null>(null);
   const [suggestion, setSuggestion] = useState<RewriteSuggestion | null>(null);
+
+  const [annotations, setAnnotations] = useState<ChapterAnnotation[]>([]);
+  const [annotationsLoading, setAnnotationsLoading] = useState(false);
+  const [annotationComment, setAnnotationComment] = useState('');
+  const [addingAnnotation, setAddingAnnotation] = useState(false);
+  const [annotationError, setAnnotationError] = useState<string | null>(null);
+  const [activeAnnotation, setActiveAnnotation] = useState<{
+    id: string;
+    replacement: string;
+    loading: boolean;
+    error: string | null;
+  } | null>(null);
 
   useEffect(() => {
     setContent(initialContent);
@@ -85,6 +100,8 @@ export function InlineChapterEditor({
     setEditing(true);
     setRewriteError(null);
     setSuggestion(null);
+    setAnnotationError(null);
+    setActiveAnnotation(null);
     setTimeout(() => textareaRef.current?.focus(), 0);
   };
 
@@ -93,6 +110,8 @@ export function InlineChapterEditor({
     setEditing(false);
     setRewriteError(null);
     setSuggestion(null);
+    setAnnotationError(null);
+    setActiveAnnotation(null);
   };
 
   const handleSave = async () => {
@@ -128,6 +147,7 @@ export function InlineChapterEditor({
       initialContentRef.current = nextContent;
       setEditing(false);
       setSuggestion(null);
+      setActiveAnnotation(null);
       router.refresh();
     } catch (error) {
       console.error('Failed to save chapter:', error);
@@ -140,6 +160,7 @@ export function InlineChapterEditor({
   const handleRewriteSelected = async () => {
     setRewriteError(null);
     setSuggestion(null);
+    setActiveAnnotation(null);
 
     if (!instruction) {
       setRewriteError('请先填写改写指令');
@@ -178,6 +199,7 @@ export function InlineChapterEditor({
           preset: rewritePreset,
           before,
           after,
+          techniqueTags: techniqueTags || [],
         }),
       });
 
@@ -225,6 +247,168 @@ export function InlineChapterEditor({
       textarea.setSelectionRange(start, end);
     }, 0);
   };
+
+  const loadAnnotations = async () => {
+    setAnnotationsLoading(true);
+    setAnnotationError(null);
+    try {
+      const res = await fetch(`/api/novels/${novelId}/chapters/${chapterId}/annotations`);
+      const data = (await res.json()) as ChapterAnnotation[] & { error?: string };
+      if (!res.ok) {
+        throw new Error((data as any)?.error || '加载批注失败');
+      }
+      setAnnotations(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error('Failed to load annotations:', error);
+      setAnnotations([]);
+      setAnnotationError('加载批注失败');
+    } finally {
+      setAnnotationsLoading(false);
+    }
+  };
+
+  const handleAddAnnotation = async () => {
+    setAnnotationError(null);
+    setActiveAnnotation(null);
+
+    if (hasUnsavedChanges) {
+      setAnnotationError('请先保存当前修改后再添加批注');
+      return;
+    }
+
+    const comment = annotationComment.trim();
+    if (!comment) {
+      setAnnotationError('请输入批注内容');
+      return;
+    }
+
+    const textarea = textareaRef.current;
+    if (!textarea) {
+      setAnnotationError('编辑器未就绪');
+      return;
+    }
+
+    const start = textarea.selectionStart ?? 0;
+    const end = textarea.selectionEnd ?? 0;
+    if (start === end) {
+      setAnnotationError('请先选中要批注的片段');
+      return;
+    }
+
+    const quote = content.slice(start, end);
+    if (!quote.trim()) {
+      setAnnotationError('选中片段为空');
+      return;
+    }
+
+    setAddingAnnotation(true);
+    try {
+      const res = await fetch(`/api/novels/${novelId}/chapters/${chapterId}/annotations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          quote,
+          startOffset: start,
+          endOffset: end,
+          comment,
+        }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        setAnnotationError(data?.error || '添加批注失败');
+        return;
+      }
+      setAnnotationComment('');
+      await loadAnnotations();
+    } catch (error) {
+      console.error('Failed to add annotation:', error);
+      setAnnotationError('添加批注失败');
+    } finally {
+      setAddingAnnotation(false);
+    }
+  };
+
+  const handleAiForAnnotation = async (annotationId: string) => {
+    setAnnotationError(null);
+    setActiveAnnotation({ id: annotationId, replacement: '', loading: true, error: null });
+    try {
+      const res = await fetch(
+        `/api/novels/${novelId}/chapters/${chapterId}/annotations/${annotationId}/apply`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ techniqueTags: techniqueTags || [] }),
+        }
+      );
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        setActiveAnnotation({ id: annotationId, replacement: '', loading: false, error: data?.error || 'AI 执行失败' });
+        return;
+      }
+      setActiveAnnotation({
+        id: annotationId,
+        replacement: (data?.replacement || '').trim(),
+        loading: false,
+        error: null,
+      });
+    } catch (error) {
+      console.error('Failed to apply annotation:', error);
+      setActiveAnnotation({ id: annotationId, replacement: '', loading: false, error: 'AI 执行失败' });
+    }
+  };
+
+  const handleApplyAndSaveAnnotation = async () => {
+    if (!activeAnnotation) return;
+    setAnnotationError(null);
+
+    if (hasUnsavedChanges) {
+      setAnnotationError('请先保存当前修改后再应用批注');
+      return;
+    }
+
+    if (!activeAnnotation.replacement) {
+      setAnnotationError('替换文本为空');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const res = await fetch(
+        `/api/novels/${novelId}/chapters/${chapterId}/annotations/${activeAnnotation.id}/apply-and-save`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ replacement: activeAnnotation.replacement }),
+        }
+      );
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        setAnnotationError(data?.error || '应用并保存失败');
+        return;
+      }
+
+      const updated = data?.chapter;
+      if (updated?.content) {
+        setContent(updated.content);
+        initialContentRef.current = updated.content;
+      }
+
+      setActiveAnnotation(null);
+      await loadAnnotations();
+      router.refresh();
+    } catch (error) {
+      console.error('Failed to apply-and-save annotation:', error);
+      setAnnotationError('应用并保存失败');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!editing) return;
+    loadAnnotations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editing, chapterId]);
 
   if (!editing) {
     return (
@@ -310,6 +494,12 @@ export function InlineChapterEditor({
         </div>
       )}
 
+      {annotationError && (
+        <div className="mb-4 text-sm text-red-700 dark:text-red-400">
+          {annotationError}
+        </div>
+      )}
+
       {suggestion && (
         <div className="mb-4 border-2 border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/40 p-4">
           <div className="flex items-center justify-between mb-2">
@@ -348,6 +538,104 @@ export function InlineChapterEditor({
           </div>
         </div>
       )}
+
+      {/* Reviewer Loop: annotations */}
+      <div className="mb-4 border-2 border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">批注（Reviewer Loop）</div>
+          <button
+            type="button"
+            onClick={loadAnnotations}
+            disabled={annotationsLoading || saving}
+            className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-amber-500 dark:hover:border-amber-500 transition-colors disabled:opacity-50"
+          >
+            {annotationsLoading ? '刷新中...' : '刷新'}
+          </button>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-2 mb-3">
+          <input
+            value={annotationComment}
+            onChange={(e) => setAnnotationComment(e.target.value)}
+            placeholder="输入批注（例如：这里太干巴了，加点环境描写，体现绝望感）"
+            disabled={saving || addingAnnotation}
+            className="flex-1 px-3 py-2 border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
+          />
+          <button
+            type="button"
+            onClick={handleAddAnnotation}
+            disabled={saving || addingAnnotation}
+            className="px-4 py-2 bg-gray-700 dark:bg-gray-600 text-white hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+          >
+            {addingAnnotation ? '添加中...' : '📝 添加批注(选中)'}
+          </button>
+        </div>
+
+        {activeAnnotation && (
+          <div className="mb-3 border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/40 p-3">
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">AI 替换建议</div>
+              <button
+                type="button"
+                onClick={() => setActiveAnnotation(null)}
+                className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              >
+                ✕
+              </button>
+            </div>
+            {activeAnnotation.loading ? (
+              <div className="text-sm text-gray-500 dark:text-gray-500">AI 处理中...</div>
+            ) : activeAnnotation.error ? (
+              <div className="text-sm text-red-700 dark:text-red-400">{activeAnnotation.error}</div>
+            ) : (
+              <>
+                <div className="text-sm text-gray-900 dark:text-gray-100 whitespace-pre-wrap border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-3 max-h-48 overflow-auto">
+                  {activeAnnotation.replacement}
+                </div>
+                <div className="mt-2 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={handleApplyAndSaveAnnotation}
+                    disabled={saving}
+                    className="px-3 py-1 text-sm bg-purple-700 dark:bg-purple-600 text-white hover:bg-purple-800 dark:hover:bg-purple-700 transition-colors disabled:opacity-50"
+                  >
+                    应用并保存
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {annotationsLoading ? (
+          <div className="text-sm text-gray-500 dark:text-gray-500">加载批注中...</div>
+        ) : annotations.length === 0 ? (
+          <div className="text-sm text-gray-500 dark:text-gray-500">暂无批注</div>
+        ) : (
+          <div className="space-y-2">
+            {annotations
+              .filter((a) => a.status === 'open')
+              .map((a) => (
+                <div key={a.id} className="border border-gray-200 dark:border-gray-800 p-3">
+                  <div className="text-sm text-gray-700 dark:text-gray-300 mb-1">{a.comment}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-500 line-clamp-2 whitespace-pre-wrap">
+                    {a.quote}
+                  </div>
+                  <div className="mt-2 flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleAiForAnnotation(a.id)}
+                      disabled={saving || annotationsLoading || Boolean(activeAnnotation?.loading)}
+                      className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-purple-500 dark:hover:border-purple-500 transition-colors disabled:opacity-50"
+                    >
+                      ✨ AI 执行修改
+                    </button>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
+      </div>
 
       <textarea
         ref={textareaRef}

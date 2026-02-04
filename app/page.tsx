@@ -82,7 +82,7 @@ export default async function Home() {
               novels.map((novel) => (
               <Link
                 key={novel.id}
-                href={`/novels/${novel.id}`}
+                href={`/novels/${novel.id}/workbench`}
                 className="block group"
               >
                 <div className="bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 hover:border-amber-700 dark:hover:border-amber-500 transition-all p-6 relative overflow-hidden">
