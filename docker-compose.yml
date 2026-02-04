@@ -6,6 +6,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-novle}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "127.0.0.1:${DB_PORT:-15432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
@@ -25,6 +27,8 @@ services:
     restart: unless-stopped
     env_file:
       - ./lightrag/.env
+    ports:
+      - "127.0.0.1:${LIGHTRAG_PORT:-9621}:9621"
     environment:
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
@@ -54,6 +58,8 @@ services:
     restart: unless-stopped
     env_file:
       - ./lightrag/.env
+    ports:
+      - "127.0.0.1:${LIGHTRAG_TECH_PORT:-9622}:9622"
     environment:
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432

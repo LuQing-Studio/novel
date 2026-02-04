@@ -30,7 +30,7 @@
 ### 配置 LightRAG 服务 (`lightrag/.env`)
 
 ```bash
-cd /Users/luhui/Desktop/novel/lightrag
+cd /path/to/novel/lightrag
 ```
 
 编辑 `.env` 文件,填入你的 API Key:
@@ -53,10 +53,10 @@ EMBEDDING_BINDING_API_KEY=sk-xxxxx  # 你的硅基流动 API Key
 LIGHTRAG_API_KEY=my-secure-lightrag-key-123
 ```
 
-### 配置 Next.js 应用 (`.env.local`)
+### 配置 Next.js 应用（本地开发推荐：`.env.local`）
 
 ```bash
-cd /Users/luhui/Desktop/novel
+cd /path/to/novel
 ```
 
 编辑 `.env.local` 文件:
@@ -68,17 +68,39 @@ AI_MODEL=deepseek-chat
 AI_BASE_URL=https://api.deepseek.com/v1
 AI_API_KEY=sk-xxxxx  # 你的 DeepSeek API Key
 
+# Database（本地用 docker compose 启动 db 时，默认映射到 15432；如你改了 DB_PORT 请同步修改）
+DATABASE_URL=postgresql://postgres:postgres@localhost:15432/novle
+
 # LightRAG
 LIGHTRAG_BASE_URL=http://localhost:9621
 LIGHTRAG_API_KEY=my-secure-lightrag-key-123  # 与 lightrag/.env 保持一致
+
+# LightRAG Tech（技法库）
+LIGHTRAG_TECH_BASE_URL=http://localhost:9622
+LIGHTRAG_TECH_API_KEY=my-secure-lightrag-key-123  # 推荐与 lightrag/.env 保持一致
 ```
 
 ## 3. 启动服务
 
-### 启动 LightRAG 服务
+### 启动（推荐：npm dev + Docker 服务）
+
+本仓库自带 `docker-compose.yml`，包含：
+- Postgres（pgvector）
+- LightRAG（剧情 `novel_story`，端口 9621）
+- LightRAG Tech（技法 `novel_tech`，端口 9622）
 
 ```bash
-cd /Users/luhui/Desktop/novel
+cd /path/to/novel
+docker compose up -d db lightrag lightrag_tech
+npm run dev
+```
+
+> 注意：为支持 `npm run dev` 直连 Docker 服务，`db/lightrag/lightrag_tech` 端口会绑定到 `127.0.0.1`。
+
+### 启动 LightRAG 服务（手动方式，可选）
+
+```bash
+cd /path/to/novel
 lightrag-server --host 0.0.0.0 --port 9621 --working-dir ./rag_storage --workspace novel
 ```
 
@@ -95,6 +117,10 @@ npm run dev
 
 ### 测试 LightRAG
 访问: http://localhost:3000/test-lightrag
+
+也可以直接检查 health：
+- http://localhost:9621/health（story）
+- http://localhost:9622/health（tech）
 
 ### 测试数据库
 访问: http://localhost:3000/api/db/test

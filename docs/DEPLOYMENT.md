@@ -1,10 +1,11 @@
 # 部署到自建服务器 (Docker Compose)
 
-本项目包含 3 个服务：
+本项目包含 4 个服务：
 
 - `web`: Next.js 应用 (3000)
 - `db`: PostgreSQL + pgvector
-- `lightrag`: LightRAG 服务 (内部端口 9621，仅 `web` 访问)
+- `lightrag`: LightRAG（剧情）服务 (内部端口 9621，仅 `web` 访问)
+- `lightrag_tech`: LightRAG（技法库）服务 (内部端口 9622，仅 `web` 访问)
 
 ## 0. 服务器准备
 
@@ -38,6 +39,7 @@ cp .env.example .env
 
 - `AI_API_KEY`
 - `LIGHTRAG_API_KEY`（需要与 LightRAG 的 `LIGHTRAG_API_KEY` 保持一致）
+- `LIGHTRAG_TECH_API_KEY`（推荐与 `LIGHTRAG_API_KEY` 保持一致）
 
 可选：
 
@@ -53,7 +55,7 @@ cp lightrag/.env.example lightrag/.env
 编辑 `lightrag/.env`，至少填好：
 
 - `LLM_*` / `EMBEDDING_*`（按你的供应商配置）
-- `LIGHTRAG_API_KEY`（与根目录 `.env` 一致）
+- `LIGHTRAG_API_KEY`（与根目录 `.env` 一致；`lightrag` 与 `lightrag_tech` 会共用这一份配置）
 
 > `POSTGRES_*`/`HOST`/`PORT` 在 `docker-compose.yml` 中会覆盖为容器网络配置，无需改动。
 
