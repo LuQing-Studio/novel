@@ -67,7 +67,7 @@ export async function POST(
       [id, next, technique.title, technique.tags || [], technique.content]
     );
 
-    const [updated] = await query(
+    await query(
       `UPDATE techniques
        SET title = $1, tags = $2, content = $3, sync_status = 'pending', updated_at = NOW()
        WHERE id = $4 AND user_id = $5
@@ -106,4 +106,3 @@ export async function POST(
     return NextResponse.json({ error: 'Failed to restore technique version' }, { status: 500 });
   }
 }
-

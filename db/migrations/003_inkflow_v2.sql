@@ -167,9 +167,9 @@ SET
   volume_id = v.id,
   plan_id = p.id
 FROM volumes v
-JOIN chapter_plans p ON p.novel_id = v.novel_id AND p.number = c.number
+JOIN chapter_plans p ON p.novel_id = v.novel_id
 WHERE
   c.novel_id = v.novel_id
   AND v.number = 1
+  AND p.number = c.number
   AND (c.volume_id IS NULL OR c.plan_id IS NULL);
-

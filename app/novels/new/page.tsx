@@ -13,8 +13,10 @@ interface NovelBlueprint {
 
 type Step = 'idea' | 'choose';
 
-function safeString(value: unknown): string {
-  return typeof value === 'string' ? value : '';
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+  return 'Unknown error';
 }
 
 export default function NewNovelPage() {
@@ -113,8 +115,8 @@ export default function NewNovelPage() {
       setBlueprints(list);
       setSelectedIndex(0);
       setStep('choose');
-    } catch (e: any) {
-      setError(e?.message || '生成失败');
+    } catch (e) {
+      setError(getErrorMessage(e) || '生成失败');
     } finally {
       setLoadingBlueprints(false);
     }
@@ -159,8 +161,8 @@ export default function NewNovelPage() {
       }
 
       router.push(`/novels/${novel.id}/workbench`);
-    } catch (e: any) {
-      setError(e?.message || '创建失败');
+    } catch (e) {
+      setError(getErrorMessage(e) || '创建失败');
     } finally {
       setCreating(false);
     }
@@ -340,4 +342,3 @@ export default function NewNovelPage() {
     </div>
   );
 }
-

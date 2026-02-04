@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { queryOne } from '@/lib/db';
-import { Chapter, Novel } from '@/lib/types';
+import { Chapter } from '@/lib/types';
 import { requireApiNovel } from '@/lib/auth/api';
 import { extractCharactersFromChapter, addExtractedCharacters } from '@/lib/ai/character-extractor';
 import { getLightRAGClient } from '@/lib/lightrag/client';

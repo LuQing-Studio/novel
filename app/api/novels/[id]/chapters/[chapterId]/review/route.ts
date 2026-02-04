@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { query, queryOne } from '@/lib/db';
 import { requireApiNovel } from '@/lib/auth/api';
 import { getAIService } from '@/lib/ai/factory';
-import { Novel, Chapter, Character, WorldSetting } from '@/lib/types';
+import { Chapter, Character, WorldSetting } from '@/lib/types';
 
 export async function POST(
   request: Request,

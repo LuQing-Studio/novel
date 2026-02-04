@@ -4,8 +4,11 @@ export const mockNovels: Novel[] = [
   {
     id: '1',
     title: '修仙世界的程序员',
+    idea: '一个现代程序员穿越到修仙世界,用代码思维修炼并改变命运。',
     description: '一个现代程序员穿越到修仙世界,用代码思维修炼的故事',
     genre: '修仙',
+    overallOutline: '主角穿越修仙世界，以程序员思维拆解修炼体系，逐步优化功法与资源获取路线，参与外门大比并揭开宗门暗线，最终以“可复用的修炼框架”改变修仙界。',
+    overallOutlineLocked: false,
     createdAt: new Date('2026-01-22'),
     updatedAt: new Date('2026-01-22'),
     chapterCount: 3,

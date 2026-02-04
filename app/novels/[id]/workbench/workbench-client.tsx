@@ -21,9 +21,28 @@ function normalizeTagsInput(value: string): string[] {
     .filter(Boolean);
 }
 
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+  return 'Unknown error';
+}
+
+function getErrorFromBody(body: unknown): string | null {
+  if (!body || typeof body !== 'object') return null;
+  if (!('error' in body)) return null;
+  const maybe = (body as { error?: unknown }).error;
+  return typeof maybe === 'string' ? maybe : null;
+}
+
+function isStreamDeltaMessage(msg: unknown): msg is { type: 'delta'; text: string } {
+  if (!msg || typeof msg !== 'object') return false;
+  const maybe = msg as { type?: unknown; text?: unknown };
+  return maybe.type === 'delta' && typeof maybe.text === 'string';
+}
+
 async function readNdjsonStream(
   res: Response,
-  onMessage: (msg: any) => void
+  onMessage: (msg: unknown) => void
 ): Promise<void> {
   const reader = res.body?.getReader();
   if (!reader) return;
@@ -113,6 +132,8 @@ export default function WorkbenchClient({ novelId }: { novelId: string }) {
     return chapterByPlanId.get(plan.id) || null;
   }, [data, selectedPlanId, chapterByPlanId]);
 
+  const selectedChapterId = selectedPlanChapterMeta?.id || null;
+
   const activeTechniqueTags = useMemo(
     () => normalizeTagsInput(activeTechniqueTagsInput),
     [activeTechniqueTagsInput]
@@ -123,19 +144,20 @@ export default function WorkbenchClient({ novelId }: { novelId: string }) {
     setError(null);
     try {
       const res = await fetch(`/api/novels/${novelId}/workbench`);
-      const json = (await res.json()) as any;
+      const json = (await res.json().catch(() => null)) as unknown;
       if (!res.ok) {
-        throw new Error(json?.error || 'Failed to load workbench');
+        throw new Error(getErrorFromBody(json) || 'Failed to load workbench');
       }
-      setData(json as WorkbenchPayload);
+      const payload = json as WorkbenchPayload;
+      setData(payload);
 
       // default selection
-      const firstVolume = (json as WorkbenchPayload).volumes?.[0];
+      const firstVolume = payload.volumes?.[0];
       if (firstVolume && !selectedVolumeId) {
         setSelectedVolumeId(firstVolume.id);
       }
-    } catch (e: any) {
-      setError(e?.message || 'Failed to load');
+    } catch (e) {
+      setError(getErrorMessage(e) || 'Failed to load');
       setData(null);
     } finally {
       setLoading(false);
@@ -162,24 +184,41 @@ export default function WorkbenchClient({ novelId }: { novelId: string }) {
   }, [selectedPlan]);
 
   useEffect(() => {
-    const meta = selectedPlanChapterMeta;
-    if (!meta) {
-      setChapter(null);
-      return;
-    }
-    setChapterLoading(true);
-    fetch(`/api/novels/${novelId}/chapters/${meta.id}`)
-      .then((res) => res.json().then((j) => ({ ok: res.ok, j })))
-      .then(({ ok, j }) => {
-        if (!ok) throw new Error(j?.error || 'Failed to load chapter');
-        setChapter(j as Chapter);
-      })
-      .catch((e) => {
-        console.error(e);
+    let cancelled = false;
+
+    const loadChapter = async () => {
+      if (!selectedChapterId) {
         setChapter(null);
-      })
-      .finally(() => setChapterLoading(false));
-  }, [novelId, selectedPlanChapterMeta?.id]);
+        return;
+      }
+
+      setChapterLoading(true);
+      try {
+        const res = await fetch(`/api/novels/${novelId}/chapters/${selectedChapterId}`);
+        const json = (await res.json().catch(() => null)) as unknown;
+        if (!res.ok) {
+          throw new Error(getErrorFromBody(json) || 'Failed to load chapter');
+        }
+        if (!cancelled) {
+          setChapter(json as Chapter);
+        }
+      } catch (e) {
+        console.error(e);
+        if (!cancelled) {
+          setChapter(null);
+        }
+      } finally {
+        if (!cancelled) {
+          setChapterLoading(false);
+        }
+      }
+    };
+
+    loadChapter();
+    return () => {
+      cancelled = true;
+    };
+  }, [novelId, selectedChapterId]);
 
   const selectVolume = (volumeId: string) => {
     setSelectedVolumeId(volumeId);
@@ -200,11 +239,11 @@ export default function WorkbenchClient({ novelId }: { novelId: string }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ count: 5 }),
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json?.error || '生成卷纲失败');
+      const json = (await res.json().catch(() => null)) as unknown;
+      if (!res.ok) throw new Error(getErrorFromBody(json) || '生成卷纲失败');
       await loadWorkbench();
-    } catch (e: any) {
-      alert(e?.message || '生成卷纲失败');
+    } catch (e) {
+      alert(getErrorMessage(e) || '生成卷纲失败');
     } finally {
       setGeneratingVolumes(false);
     }
@@ -223,11 +262,11 @@ export default function WorkbenchClient({ novelId }: { novelId: string }) {
           targetChapters: volumeForm.targetChapters ? Number(volumeForm.targetChapters) : null,
         }),
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json?.error || '保存失败');
+      const json = (await res.json().catch(() => null)) as unknown;
+      if (!res.ok) throw new Error(getErrorFromBody(json) || '保存失败');
       await loadWorkbench();
-    } catch (e: any) {
-      alert(e?.message || '保存失败');
+    } catch (e) {
+      alert(getErrorMessage(e) || '保存失败');
     } finally {
       setSavingVolume(false);
     }
@@ -246,11 +285,11 @@ export default function WorkbenchClient({ novelId }: { novelId: string }) {
           body: JSON.stringify({ count }),
         }
       );
-      const json = await res.json();
-      if (!res.ok) throw new Error(json?.error || '生成章纲失败');
+      const json = (await res.json().catch(() => null)) as unknown;
+      if (!res.ok) throw new Error(getErrorFromBody(json) || '生成章纲失败');
       await loadWorkbench();
-    } catch (e: any) {
-      alert(e?.message || '生成章纲失败');
+    } catch (e) {
+      alert(getErrorMessage(e) || '生成章纲失败');
     } finally {
       setGeneratingPlans(false);
     }
@@ -269,11 +308,11 @@ export default function WorkbenchClient({ novelId }: { novelId: string }) {
           changeDescription: 'Workbench 编辑章纲',
         }),
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json?.error || '保存失败');
+      const json = (await res.json().catch(() => null)) as unknown;
+      if (!res.ok) throw new Error(getErrorFromBody(json) || '保存失败');
       await loadWorkbench();
-    } catch (e: any) {
-      alert(e?.message || '保存失败');
+    } catch (e) {
+      alert(getErrorMessage(e) || '保存失败');
     } finally {
       setSavingPlan(false);
     }
@@ -286,11 +325,11 @@ export default function WorkbenchClient({ novelId }: { novelId: string }) {
       const res = await fetch(`/api/novels/${novelId}/chapter-plans/${selectedPlan.id}/confirm`, {
         method: 'POST',
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json?.error || '确认失败');
+      const json = (await res.json().catch(() => null)) as unknown;
+      if (!res.ok) throw new Error(getErrorFromBody(json) || '确认失败');
       await loadWorkbench();
-    } catch (e: any) {
-      alert(e?.message || '确认失败');
+    } catch (e) {
+      alert(getErrorMessage(e) || '确认失败');
     } finally {
       setConfirmingPlan(false);
     }
@@ -312,19 +351,19 @@ export default function WorkbenchClient({ novelId }: { novelId: string }) {
       );
 
       if (!res.ok) {
-        const json = await res.json().catch(() => null);
-        throw new Error(json?.error || '生成失败');
+        const json = (await res.json().catch(() => null)) as unknown;
+        throw new Error(getErrorFromBody(json) || '生成失败');
       }
 
       await readNdjsonStream(res, (msg) => {
-        if (msg?.type === 'delta' && typeof msg.text === 'string') {
+        if (isStreamDeltaMessage(msg)) {
           setStreamText((prev) => prev + msg.text);
         }
       });
 
       await loadWorkbench();
-    } catch (e: any) {
-      alert(e?.message || '生成失败');
+    } catch (e) {
+      alert(getErrorMessage(e) || '生成失败');
     } finally {
       setStreaming(false);
     }
@@ -747,4 +786,3 @@ export default function WorkbenchClient({ novelId }: { novelId: string }) {
     </div>
   );
 }
-

@@ -46,6 +46,13 @@ function safeTrim(value: string): string {
   return value.replace(/\s+$/g, '');
 }
 
+function getErrorFromBody(body: unknown): string | null {
+  if (!body || typeof body !== 'object') return null;
+  if (!('error' in body)) return null;
+  const maybe = (body as { error?: unknown }).error;
+  return typeof maybe === 'string' ? maybe : null;
+}
+
 export function InlineChapterEditor({
   novelId,
   chapterId,
@@ -253,11 +260,11 @@ export function InlineChapterEditor({
     setAnnotationError(null);
     try {
       const res = await fetch(`/api/novels/${novelId}/chapters/${chapterId}/annotations`);
-      const data = (await res.json()) as ChapterAnnotation[] & { error?: string };
+      const data = (await res.json().catch(() => null)) as unknown;
       if (!res.ok) {
-        throw new Error((data as any)?.error || '加载批注失败');
+        throw new Error(getErrorFromBody(data) || '加载批注失败');
       }
-      setAnnotations(Array.isArray(data) ? data : []);
+      setAnnotations(Array.isArray(data) ? (data as ChapterAnnotation[]) : []);
     } catch (error) {
       console.error('Failed to load annotations:', error);
       setAnnotations([]);

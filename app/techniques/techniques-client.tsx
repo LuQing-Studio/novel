@@ -18,6 +18,19 @@ function normalizeTags(value: string): string[] {
     .filter(Boolean);
 }
 
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+  return 'Unknown error';
+}
+
+function getErrorFromBody(body: unknown): string | null {
+  if (!body || typeof body !== 'object') return null;
+  if (!('error' in body)) return null;
+  const maybe = (body as { error?: unknown }).error;
+  return typeof maybe === 'string' ? maybe : null;
+}
+
 export default function TechniquesClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -60,14 +73,14 @@ export default function TechniquesClient() {
       if (queryText.trim()) params.set('query', queryText.trim());
       if (tag.trim()) params.set('tag', tag.trim());
       const res = await fetch(`/api/techniques?${params.toString()}`);
-      const json = (await res.json()) as any;
-      if (!res.ok) throw new Error(json?.error || '加载失败');
+      const json = (await res.json().catch(() => null)) as unknown;
+      if (!res.ok) throw new Error(getErrorFromBody(json) || '加载失败');
       setTechniques(Array.isArray(json) ? (json as Technique[]) : []);
       if (!selectedId && Array.isArray(json) && json.length > 0) {
         setSelectedId(json[0].id);
       }
-    } catch (e: any) {
-      setError(e?.message || '加载失败');
+    } catch (e) {
+      setError(getErrorMessage(e) || '加载失败');
       setTechniques([]);
     } finally {
       setLoading(false);
@@ -128,8 +141,8 @@ export default function TechniquesClient() {
       }
 
       await loadTechniques();
-    } catch (e: any) {
-      setError(e?.message || '保存失败');
+    } catch (e) {
+      setError(getErrorMessage(e) || '保存失败');
     } finally {
       setSaving(false);
     }
@@ -147,8 +160,8 @@ export default function TechniquesClient() {
       setSelectedId(null);
       setForm({ title: '', tags: '', content: '' });
       await loadTechniques();
-    } catch (e: any) {
-      setError(e?.message || '删除失败');
+    } catch (e) {
+      setError(getErrorMessage(e) || '删除失败');
     } finally {
       setDeleting(false);
     }
@@ -184,8 +197,8 @@ export default function TechniquesClient() {
       if (!res.ok) throw new Error(json?.error || '恢复失败');
       await loadTechniques();
       await loadVersions();
-    } catch (e: any) {
-      setError(e?.message || '恢复失败');
+    } catch (e) {
+      setError(getErrorMessage(e) || '恢复失败');
     } finally {
       setRestoring(false);
     }
@@ -322,8 +335,14 @@ export default function TechniquesClient() {
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">标题</label>
+            <label
+              htmlFor="technique-title"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
+              标题
+            </label>
             <input
+              id="technique-title"
               value={form.title}
               onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
               className="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
@@ -331,10 +350,14 @@ export default function TechniquesClient() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label
+              htmlFor="technique-tags"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
               标签（逗号分隔）
             </label>
             <input
+              id="technique-tags"
               value={form.tags}
               onChange={(e) => setForm((p) => ({ ...p, tags: e.target.value }))}
               placeholder="例如：恐怖氛围, 黄金三章, 战斗描写"
@@ -343,8 +366,14 @@ export default function TechniquesClient() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">内容</label>
+            <label
+              htmlFor="technique-content"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+            >
+              内容
+            </label>
             <textarea
+              id="technique-content"
               value={form.content}
               onChange={(e) => setForm((p) => ({ ...p, content: e.target.value }))}
               rows={18}
@@ -405,4 +434,3 @@ export default function TechniquesClient() {
     </div>
   );
 }
-

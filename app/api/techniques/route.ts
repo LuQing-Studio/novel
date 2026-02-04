@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { query, queryOne } from '@/lib/db';
+import { query } from '@/lib/db';
 import { requireApiUser } from '@/lib/auth/api';
 import { getTechRAGClient } from '@/lib/lightrag/client';
 
@@ -129,4 +129,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to create technique' }, { status: 500 });
   }
 }
-

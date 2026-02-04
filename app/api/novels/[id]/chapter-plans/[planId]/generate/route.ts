@@ -25,10 +25,6 @@ interface ChapterPlanRow {
   status: string;
 }
 
-interface ChapterCountRow {
-  count: number;
-}
-
 function safeString(value: unknown): string {
   return typeof value === 'string' ? value : '';
 }
@@ -75,6 +71,8 @@ export async function POST(
     if (plan.status !== 'confirmed') {
       return NextResponse.json({ error: 'Chapter plan must be confirmed before generating content' }, { status: 400 });
     }
+
+    const confirmedPlan = plan;
 
     const existingChapter = await queryOne<{ id: string }>(
       'SELECT id FROM chapters WHERE novel_id = $1 AND plan_id = $2',
@@ -302,13 +300,13 @@ export async function POST(
       const trimmed = content.trim();
       const wordCount = countWords(trimmed);
 
-      const chapterTitle = `第${chapterNumber}章 ${plan.title}`.trim();
+      const chapterTitle = `第${chapterNumber}章 ${confirmedPlan.title}`.trim();
 
       const [chapter] = await query<Chapter>(
         `INSERT INTO chapters (novel_id, volume_id, plan_id, number, title, content, outline, word_count)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
          RETURNING *`,
-        [id, plan.volumeId, planId, chapterNumber, chapterTitle, trimmed, outline, wordCount]
+        [id, confirmedPlan.volumeId, planId, chapterNumber, chapterTitle, trimmed, outline, wordCount]
       );
 
       // Mark plan drafted
@@ -343,15 +341,15 @@ export async function POST(
       }
 
       // Auto upload to Story LightRAG
-      try {
-        const storyClient = getStoryRAGClient();
-        await storyClient.uploadDocument({
-          content: trimmed,
-          description: `${novel.title} - 第${chapterNumber}章: ${plan.title}`,
-        });
-      } catch (error) {
-        console.warn('Auto Story LightRAG upload failed:', error);
-      }
+	      try {
+	        const storyClient = getStoryRAGClient();
+	        await storyClient.uploadDocument({
+	          content: trimmed,
+	          description: `${novel.title} - 第${chapterNumber}章: ${confirmedPlan.title}`,
+	        });
+	      } catch (error) {
+	        console.warn('Auto Story LightRAG upload failed:', error);
+	      }
 
       return chapter;
     }
@@ -405,4 +403,3 @@ export async function POST(
     return NextResponse.json({ error: 'Failed to generate chapter' }, { status: 500 });
   }
 }
-

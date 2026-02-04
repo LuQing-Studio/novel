@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { query, queryOne } from '@/lib/db';
 import { requireApiNovel } from '@/lib/auth/api';
 import { getAIService } from '@/lib/ai/factory';
-import { Novel, Chapter, Character, WorldSetting, Foreshadowing } from '@/lib/types';
+import { Chapter, Character, WorldSetting, Foreshadowing } from '@/lib/types';
 import { getLightRAGClient } from '@/lib/lightrag/client';
 import { countWords } from '@/lib/utils/text';
 import { extractCharactersFromChapter, addExtractedCharacters } from '@/lib/ai/character-extractor';

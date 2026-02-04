@@ -103,7 +103,7 @@ export async function PUT(
       [id, versionNumber, existing.title, existing.tags || [], existing.content, changeDescription || '更新前版本快照']
     );
 
-    const [updated] = await query<TechniqueRow>(
+    await query<TechniqueRow>(
       `UPDATE techniques
        SET title = $1, tags = $2, content = $3, sync_status = 'pending', updated_at = NOW()
        WHERE id = $4 AND user_id = $5
@@ -179,4 +179,3 @@ export async function DELETE(
     return NextResponse.json({ error: 'Failed to delete technique' }, { status: 500 });
   }
 }
-

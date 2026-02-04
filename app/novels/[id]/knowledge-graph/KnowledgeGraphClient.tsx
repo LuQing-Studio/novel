@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import type { NodeObject } from 'react-force-graph-2d';
 
 // 完全在客户端加载 2D 图谱组件（避免 SSR 问题）
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
@@ -20,6 +21,11 @@ interface GraphNode {
   data: unknown;
 }
 
+interface GraphNodeWithViz extends GraphNode {
+  color: string;
+  val: number;
+}
+
 interface GraphData {
   nodes: GraphNode[];
   edges: Array<{ source: string; target: string; label?: string }>;
@@ -32,7 +38,7 @@ interface KnowledgeGraphClientProps {
 export default function KnowledgeGraphClient({ novelId }: KnowledgeGraphClientProps) {
   const [graphData, setGraphData] = useState<GraphData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
+  const [selectedNode, setSelectedNode] = useState<GraphNodeWithViz | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [graphWidth, setGraphWidth] = useState(900);
 
@@ -108,7 +114,7 @@ export default function KnowledgeGraphClient({ novelId }: KnowledgeGraphClientPr
     }
   };
 
-  const graphNodes = useMemo(() => {
+  const graphNodes = useMemo<GraphNodeWithViz[]>(() => {
     return (
       graphData?.nodes.map((node) => ({
         ...node,
@@ -118,7 +124,7 @@ export default function KnowledgeGraphClient({ novelId }: KnowledgeGraphClientPr
     );
   }, [graphData]);
 
-  const graphLinks = useMemo(() => {
+  const graphLinks = useMemo<Array<{ source: string; target: string; label?: string }>>(() => {
     return (
       graphData?.edges.map((edge) => ({
         source: edge.source,
@@ -170,32 +176,32 @@ export default function KnowledgeGraphClient({ novelId }: KnowledgeGraphClientPr
 
       {/* 图形可视化 */}
       <div className="lg:col-span-3 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 p-6">
-        <div ref={containerRef} className="w-full h-[600px]">
-          <ForceGraph2D
-            width={graphWidth}
-            height={600}
-            graphData={{ nodes: graphNodes as any, links: graphLinks as any }}
-            nodeRelSize={5}
-            nodeColor={(node: any) => node.color}
-            linkColor={() => 'rgba(148, 163, 184, 0.6)'}
-            linkWidth={1}
-            onNodeClick={(node: any) => setSelectedNode(node as GraphNode)}
-            onBackgroundClick={() => setSelectedNode(null)}
-            nodeLabel={(node: any) => node.label}
-            nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
-              const label = String(node.label || '');
-              const fontSize = Math.max(10, 14 / globalScale);
-              ctx.font = `${fontSize}px ui-sans-serif, system-ui, -apple-system`;
-              const textWidth = ctx.measureText(label).width;
-              const padding = 4;
-              const x = node.x as number;
-              const y = node.y as number;
+	        <div ref={containerRef} className="w-full h-[600px]">
+	          <ForceGraph2D
+	            width={graphWidth}
+	            height={600}
+	            graphData={{ nodes: graphNodes, links: graphLinks }}
+	            nodeRelSize={5}
+	            nodeColor={(node: NodeObject) => (node as GraphNodeWithViz).color}
+	            linkColor={() => 'rgba(148, 163, 184, 0.6)'}
+	            linkWidth={1}
+	            onNodeClick={(node: NodeObject) => setSelectedNode(node as GraphNodeWithViz)}
+	            onBackgroundClick={() => setSelectedNode(null)}
+	            nodeLabel={(node: NodeObject) => String((node as GraphNodeWithViz).label || '')}
+	            nodeCanvasObject={(node: NodeObject, ctx: CanvasRenderingContext2D, globalScale: number) => {
+	              const label = String((node as GraphNodeWithViz).label || '');
+	              const fontSize = Math.max(10, 14 / globalScale);
+	              ctx.font = `${fontSize}px ui-sans-serif, system-ui, -apple-system`;
+	              const textWidth = ctx.measureText(label).width;
+	              const padding = 4;
+	              const x = node.x ?? 0;
+	              const y = node.y ?? 0;
 
-              // node circle
-              ctx.beginPath();
-              ctx.fillStyle = node.color || '#6b7280';
-              ctx.arc(x, y, 5, 0, 2 * Math.PI);
-              ctx.fill();
+	              // node circle
+	              ctx.beginPath();
+	              ctx.fillStyle = String((node as GraphNodeWithViz).color || '#6b7280');
+	              ctx.arc(x, y, 5, 0, 2 * Math.PI);
+	              ctx.fill();
 
               // label background
               ctx.fillStyle = 'rgba(17, 24, 39, 0.65)';
@@ -203,19 +209,19 @@ export default function KnowledgeGraphClient({ novelId }: KnowledgeGraphClientPr
 
               // label text
               ctx.textAlign = 'left';
-              ctx.textBaseline = 'middle';
-              ctx.fillStyle = '#f9fafb';
-              ctx.fillText(label, x + 8 + padding, y);
-            }}
-            nodePointerAreaPaint={(node: any, color: string, ctx: CanvasRenderingContext2D) => {
-              ctx.fillStyle = color;
-              ctx.beginPath();
-              ctx.arc(node.x, node.y, 10, 0, 2 * Math.PI);
-              ctx.fill();
-            }}
-          />
-        </div>
-      </div>
+	              ctx.textBaseline = 'middle';
+	              ctx.fillStyle = '#f9fafb';
+	              ctx.fillText(label, x + 8 + padding, y);
+	            }}
+	            nodePointerAreaPaint={(node: NodeObject, color: string, ctx: CanvasRenderingContext2D) => {
+	              ctx.fillStyle = color;
+	              ctx.beginPath();
+	              ctx.arc(node.x ?? 0, node.y ?? 0, 10, 0, 2 * Math.PI);
+	              ctx.fill();
+	            }}
+	          />
+	        </div>
+	      </div>
 
       {/* 详情面板 */}
       <div className="lg:col-span-1 bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 p-6">
